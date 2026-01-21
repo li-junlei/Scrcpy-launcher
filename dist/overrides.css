@@ -1,0 +1,38 @@
+/* CSS Overrides for App Card Redesign */
+.apps-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+    gap: 15px !important;
+}
+
+.app-card {
+    padding: 20px 15px !important;
+    min-height: 80px !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.app-card .app-name {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+/* Ensure image is hidden (already handled but reinforced) */
+.app-card img {
+    display: none !important;
+}
+
+/* Responsiveness Fixes */
+.form-row {
+    flex-wrap: wrap !important;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row select {
+    min-width: 140px !important;
+}
+
+/* Ensure modal content handles wrapping gracefully */
+.modal-content {
+    overflow-x: hidden !important;
+}

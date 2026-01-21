@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrcpy Launcher</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="overrides.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- ADB 连接区域 -->
+        <section class="card adb-section">
+            <div class="status-row">
+                <span class="status-dot" id="status-dot"></span>
+                <span class="status-text" id="status-text">正在检查 ADB...</span>
+                <div class="spacer"></div>
+                <button class="icon-btn" id="refresh-btn" title="刷新状态">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="input-row">
+                <input type="text" id="ip-input" placeholder="输入无线地址 (IP:5555)">
+                <button class="icon-btn" id="history-btn" title="历史记录">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </button>
+                <div class="history-dropdown" id="history-dropdown"></div>
+                <button class="btn primary" id="connect-btn">连接</button>
+            </div>
+
+            <div class="button-row">
+                <button class="btn teal" id="tcpip-btn">有线转无线</button>
+                <button class="btn danger" id="disconnect-btn">断开连接</button>
+            </div>
+
+            <button class="btn outline full-width" id="kill-btn">关闭所有 Scrcpy 窗口</button>
+        </section>
+
+        <!-- 标签页 -->
+        <div class="tabs">
+            <button class="tab active" data-tab="mirror">直接投屏</button>
+            <button class="tab" data-tab="apps">应用流转</button>
+        </div>
+
+        <!-- 直接投屏标签页 -->
+        <section class="tab-content active" id="tab-mirror">
+            <div class="button-row">
+                <button class="btn outline" id="settings-btn">设置</button>
+                <button class="btn outline" id="advanced-btn">高级设置</button>
+            </div>
+
+            <h3 class="section-title">启动模式</h3>
+
+            <div class="launch-card">
+                <button class="btn primary large" id="mirror-btn">启动屏幕镜像</button>
+                <div class="hint">
+                    纯音频模式仅传输音频，不传输画面
+                </div>
+                <button class="btn outline large" id="audio-btn">启动纯音频模式</button>
+            </div>
+        </section>
+
+        <!-- 应用流转标签页 -->
+        <section class="tab-content" id="tab-apps">
+            <div class="button-row">
+                <button class="btn primary" id="add-app-btn">添加新应用</button>
+                <button class="btn outline" id="sort-btn">排序</button>
+            </div>
+
+            <div class="apps-grid" id="apps-grid">
+                <!-- 应用卡片将动态添加 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- 首次运行对话框 -->
+    <div class="modal" id="first-run-modal">
+        <div class="modal-content">
+            <h2>首次运行配置</h2>
+            <p class="modal-subtitle">请填写您的设备屏幕分辨率信息：</p>
+
+            <div class="form-section">
+                <h4>手机屏幕分辨率</h4>
+                <div class="form-row">
+                    <input type="number" id="phone-long" value="2670" placeholder="长边">
+                    <span>×</span>
+                    <input type="number" id="phone-short" value="1200" placeholder="短边">
+                </div>
+                <div class="form-row">
+                    <input type="number" id="phone-dpi" value="400" placeholder="DPI">
+                    <label class="switch-label">
+                        <input type="checkbox" id="phone-landscape">
+                        <span>手机横屏显示</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>电脑屏幕分辨率</h4>
+                <div class="form-row">
+                    <input type="number" id="pc-long" value="2256" placeholder="长边">
+                    <span>×</span>
+                    <input type="number" id="pc-short" value="1504" placeholder="短边">
+                </div>
+                <div class="form-row">
+                    <input type="number" id="pc-dpi" value="260" placeholder="DPI">
+                    <label class="switch-label">
+                        <input type="checkbox" id="pc-landscape" checked>
+                        <span>电脑横屏显示</span>
+                    </label>
+                </div>
+            </div>
+
+            <p class="hint">提示：这些信息将用于设置默认的分辨率预设</p>
+
+            <div class="modal-actions">
+                <button class="btn primary" id="save-first-run-btn">保存并继续</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置对话框 -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <h2>设置</h2>
+
+            <div class="form-section">
+                <h4>显示设置</h4>
+                <p class="hint">这些设置将作为默认值。DPI仅对'应用流转'模式生效。</p>
+                <div class="form-row">
+                    <label>DPI (密度)</label>
+                    <input type="number" id="global-dpi" value="400">
+                </div>
+                <div class="form-row">
+                    <label>完整分辨率</label>
+                    <input type="text" id="global-res" value="1200x2670" placeholder="如 1200x2670">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>托盘菜单设置</h4>
+                <p class="hint">设置右键托盘图标菜单的内容</p>
+                <div class="form-row">
+                    <label>显示应用数量</label>
+                    <input type="number" id="tray-count" value="4">
+                </div>
+                <div class="form-row">
+                    <label class="switch-label">
+                        <input type="checkbox" id="tray-mirror" checked>
+                        <span>显示屏幕镜像</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="tray-audio" checked>
+                        <span>显示纯音频</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn outline" id="settings-cancel-btn">取消</button>
+                <button class="btn primary" id="settings-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 高级设置对话框 -->
+    <div class="modal" id="advanced-modal">
+        <div class="modal-content large">
+            <h2>🎛 高级设置</h2>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h4>全局参数</h4>
+                    <label class="switch-label">
+                        <input type="checkbox" id="use-custom-args">
+                        <span>自定义模式</span>
+                    </label>
+                </div>
+
+                <div id="global-options-grid" class="options-grid">
+                    <label class="option-tile"><input type="checkbox" id="opt-hid" checked><span>HID 键盘</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-awake" checked><span>保持唤醒</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-screen-off"><span>关闭设备屏幕</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-touches"><span>显示触摸点</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-top"><span>窗口置顶</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-borderless"><span>无边框</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-power-off"><span>退出时关屏</span></label>
+                    <label class="option-tile"><input type="checkbox" id="opt-ime"><span>本地输入法</span></label>
+                </div>
+
+                <div class="form-row">
+                    <input type="number" id="opt-max-size" placeholder="长边限制 (如 1920)">
+                    <input type="number" id="opt-max-fps" placeholder="帧率限制 (如 60)">
+                </div>
+
+                <textarea id="custom-args" class="hidden" placeholder="如: -K --stay-awake -S">-K --stay-awake</textarea>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h4>应用流转专属</h4>
+                    <label class="switch-label">
+                        <input type="checkbox" id="use-app-stream-args">
+                        <span>启用</span>
+                    </label>
+                </div>
+                <p class="hint">启用后，应用流转将使用独立的参数设置</p>
+
+                <div id="app-options-container" class="hidden">
+                    <div class="section-header">
+                        <span></span>
+                        <label class="switch-label">
+                            <input type="checkbox" id="use-app-custom-args">
+                            <span>自定义模式</span>
+                        </label>
+                    </div>
+
+                    <div id="app-options-grid" class="options-grid">
+                        <label class="option-tile"><input type="checkbox" id="app-opt-hid" checked><span>HID
+                                键盘</span></label>
+                        <label class="option-tile"><input type="checkbox" id="app-opt-awake"
+                                checked><span>保持唤醒</span></label>
+                        <label class="option-tile"><input type="checkbox"
+                                id="app-opt-screen-off"><span>关闭设备屏幕</span></label>
+                        <label class="option-tile"><input type="checkbox"
+                                id="app-opt-touches"><span>显示触摸点</span></label>
+                        <label class="option-tile"><input type="checkbox" id="app-opt-top"><span>窗口置顶</span></label>
+                        <label class="option-tile"><input type="checkbox"
+                                id="app-opt-borderless"><span>无边框</span></label>
+                        <label class="option-tile"><input type="checkbox"
+                                id="app-opt-power-off"><span>退出时关屏</span></label>
+                        <label class="option-tile"><input type="checkbox" id="app-opt-ime"
+                                checked><span>本地输入法</span></label>
+                    </div>
+
+                    <div class="form-row">
+                        <input type="number" id="app-opt-max-size" placeholder="长边限制 (如 1920)">
+                        <input type="number" id="app-opt-max-fps" placeholder="帧率限制 (如 60)">
+                    </div>
+
+                    <textarea id="app-custom-args" class="hidden"
+                        placeholder="如: -K --stay-awake -S">-K --stay-awake --display-ime-policy=local</textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn outline" id="advanced-defaults-btn">恢复默认</button>
+                <div class="spacer"></div>
+                <button class="btn outline" id="advanced-cancel-btn">取消</button>
+                <button class="btn primary" id="advanced-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 应用配置对话框 -->
+    <div class="modal" id="app-config-modal">
+        <div class="modal-content">
+            <h2 id="app-config-title">添加应用</h2>
+
+            <div class="app-header">
+                <div class="app-info-inputs">
+                    <input type="text" id="app-name" placeholder="备注名">
+                    <div class="form-row">
+                        <input type="text" id="app-package" placeholder="包名">
+                        <button class="icon-btn" id="browse-apps-btn" title="从手机浏览应用">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-row">
+                    <select id="preset-select">
+                        <option value="">快速填充预设</option>
+                    </select>
+                    <button class="icon-btn" id="manage-presets-btn" title="管理预设">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <label class="switch-label">
+                    <input type="checkbox" id="use-custom-res">
+                    <span>启用专属分辨率配置</span>
+                </label>
+
+                <div id="resolution-fields" class="hidden">
+                    <div class="form-row">
+                        <input type="number" id="app-long" placeholder="长边 (px)">
+                        <span>×</span>
+                        <input type="number" id="app-short" placeholder="短边 (px)">
+                    </div>
+                    <div class="form-row">
+                        <input type="number" id="app-dpi" placeholder="DPI">
+                    </div>
+                    <label class="switch-label">
+                        <input type="checkbox" id="app-landscape">
+                        <span>强制横屏 (长x宽)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="switch-label">
+                    <input type="checkbox" id="use-app-scrcpy-args">
+                    <span>启用专属启动参数</span>
+                </label>
+                <textarea id="app-scrcpy-args" class="hidden" placeholder="Scrcpy 参数"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn outline" id="app-cancel-btn">取消</button>
+                <button class="btn primary" id="app-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 应用浏览对话框 -->
+    <div class="modal" id="browse-apps-modal">
+        <div class="modal-content">
+            <h2>浏览设备应用</h2>
+            <input type="text" id="app-search" placeholder="搜索应用包名...">
+            <div class="apps-list" id="device-apps-list">
+                <p class="hint">点击"加载"按钮从手机获取应用列表</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn outline" id="browse-back-btn">返回</button>
+                <button class="btn primary" id="load-apps-btn">🔄 从手机加载</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预设管理对话框 -->
+    <div class="modal" id="presets-modal">
+        <div class="modal-content">
+            <h2>管理预设</h2>
+            <div class="presets-list" id="presets-list">
+                <!-- 预设列表将动态添加 -->
+            </div>
+            <button class="btn primary full-width" id="add-preset-btn">➕ 添加新预设</button>
+            <div class="modal-actions">
+                <button class="btn outline" id="presets-close-btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑预设对话框 -->
+    <div class="modal" id="preset-edit-modal">
+        <div class="modal-content small">
+            <h2 id="preset-edit-title">添加预设</h2>
+            <input type="text" id="preset-name" placeholder="预设名称">
+            <div class="form-row">
+                <input type="number" id="preset-long" placeholder="长边 (px)">
+                <span>×</span>
+                <input type="number" id="preset-short" placeholder="短边 (px)">
+            </div>
+            <div class="form-row">
+                <input type="number" id="preset-dpi" placeholder="DPI">
+                <label class="switch-label">
+                    <input type="checkbox" id="preset-landscape">
+                    <span>横屏 (长x宽)</span>
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn outline" id="preset-cancel-btn">取消</button>
+                <button class="btn primary" id="preset-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息提示 -->
+    <div class="snackbar" id="snackbar"></div>
+
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle-btn" id="theme-toggle-btn" title="切换深色模式">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
