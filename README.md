@@ -32,55 +32,21 @@
 
 ## 📥 安装
 
-### 方式一：从 Release 安装（推荐）
+### 从 Release 安装
 
 1. **下载安装包**
-   - 访问 [Releases 页面](https://github.com/你的用户名/scrcpy-launcher-rust/releases)
+   - 访问 [Releases 页面](https://github.com/li-junlei/Scrcpy-launcher/releases/)
    - 下载最新版本的安装包（`.exe` 文件）
 
 2. **运行安装程序**
    - 双击下载的 `.exe` 文件
    - 按照安装向导完成安装
-   - 默认安装路径：`C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher-rust\`
+   - 默认安装路径：`C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher\`
 
 3. **启动应用**
    - 安装完成后会在桌面创建快捷方式
    - 或从开始菜单找到 "Scrcpy Launcher" 启动
 
-### 方式二：从源码构建
-
-#### 开发环境要求
-
-- **Rust** (stable 版本)
-- **Node.js** 16+ (用于 Tauri CLI)
-- **Visual Studio C++ Build Tools** (Windows)
-
-#### 构建步骤
-
-```bash
-# 1. 克隆仓库
-git clone https://github.com/你的用户名/scrcpy-launcher-rust.git
-cd scrcpy-launcher-rust/2.0
-
-# 2. 安装 Tauri CLI
-cargo install tauri-cli --version "^2.0.0"
-
-# 3. 构建生产版本
-cargo tauri build
-
-# 4. 查找构建产物
-# - NSIS 安装程序: target/release/bundle/nsis/
-# - MSI 安装程序: target/release/bundle/msi/
-```
-
-#### 开发模式
-
-```bash
-# 运行开发服务器（前端热重载）
-cargo tauri dev
-```
-
----
 
 ## 📖 使用教程
 
@@ -379,6 +345,6 @@ C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher-rust\config.json
 
 **如果觉得有用，请给个 ⭐ Star 支持一下！**
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by Li-Junlei
 
 </div>
