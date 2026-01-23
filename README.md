@@ -12,25 +12,28 @@
 
 </div>
 
-## ✨ 功能特性
+## 功能特性
 
 ### 核心功能
-- ✅ **ADB 无线连接管理** - 支持保存多个设备连接地址，一键连接
-- ✅ **屏幕镜像** - 全屏镜像 Android 设备，支持自定义分辨率
-- ✅ **纯音频传输** - 仅传输音频，不显示视频画面
-- ✅ **应用流转** - 在独立窗口中运行 Android 应用，支持自定义分辨率和 DPI
-- ✅ **系统托盘集成** - 最小化到托盘，快速启动常用应用
+- **ADB 无线连接管理** - 支持保存多个设备连接地址，一键连接
+- **屏幕镜像** - 全屏镜像 Android 设备，支持自定义分辨率
+- **纯音频传输** - 仅传输音频，不显示视频画面
+- **应用流转** - 在独立窗口中运行 Android 应用，支持自定义分辨率和 DPI
+- **系统托盘集成** - 最小化到托盘，快速启动常用应用
+- **文件传输** - 支持将文件直接拖拽至窗口发送到设备，实时显示传输进度
 
 ### 高级特性
-- 🔧 **完整的配置管理** - 为每个应用配置独立的分辨率、DPI 和 Scrcpy 参数
-- 🎨 **深色模式支持** - 护眼的深色主题
-- 📱 **应用自定义配置** - 支持应用专属的自定义 Scrcpy 参数
-- 🎯 **分辨率预设** - 保存和管理常用的分辨率配置
-- ⚡ **Scrcpy 选项配置** - 可视化配置各种 Scrcpy 启动参数
+- **完整的配置管理** - 为每个应用配置独立的分辨率、DPI 和 Scrcpy 参数
+- **深色模式支持** - 护眼的深色主题
+- **应用自定义配置** - 支持应用专属的自定义 Scrcpy 参数
+- **分辨率预设** - 保存和管理常用的分辨率配置
+- **Scrcpy 选项配置** - 可视化配置各种 Scrcpy 启动参数
+- **原生 ADB 协议** - 内置 Rust 实现的 ADB 客户端，提供更稳定精准的文件传输进度反馈
 
 ---
 
-## 📥 安装
+## 安装
+
 
 ### 从 Release 安装
 
@@ -48,7 +51,7 @@
    - 或从开始菜单找到 "Scrcpy Launcher" 启动
 
 
-## 📖 使用教程
+## 使用教程
 
 ### 1. 首次使用 - 连接 Android 设备
 
@@ -181,7 +184,7 @@ adb shell pm list packages | grep 关键词
 
 ---
 
-## ⚙️ 配置文件说明
+## 配置文件说明
 
 配置文件 `config.json` 位于可执行文件同目录，包含以下配置：
 
@@ -235,7 +238,7 @@ adb shell pm list packages | grep 关键词
 
 ---
 
-## 🛠️ 技术栈
+## 技术栈
 
 - **后端**: Rust + Tauri 2.0
 - **前端**: Vanilla JavaScript (无框架)
@@ -246,7 +249,7 @@ adb shell pm list packages | grep 关键词
 
 ---
 
-## 📂 项目结构
+## 项目结构
 
 ```
 ├── src/              # Rust 后端源码
@@ -270,7 +273,7 @@ adb shell pm list packages | grep 关键词
 
 ---
 
-## ❓ 常见问题
+## 常见问题
 
 ### Q: 连接失败怎么办？
 **A**: 检查以下几点：
@@ -315,7 +318,7 @@ C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher-rust\config.json
 
 ---
 
-## 🤝 贡献
+## 贡献
 
 欢迎提交 Issue 和 Pull Request！
 
@@ -329,11 +332,11 @@ C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher-rust\config.json
 
 ---
 
-## 📄 许可证
+## 许可证
 
 本项目仅供学习和个人使用。
 
-## 🙏 致谢
+## 致谢
 
 - [Genymobile/scrcpy](https://github.com/Genymobile/scrcpy) - 核心镜像引擎
 - [tauri-apps/tauri](https://github.com/tauri-apps/tauri) - 应用框架
@@ -343,8 +346,8 @@ C:\Users\你的用户名\AppData\Local\Programs\scrcpy-launcher-rust\config.json
 
 <div align="center">
 
-**如果觉得有用，请给个 ⭐ Star 支持一下！**
+**如果觉得有用，请 Star 支持一下！**
 
-Made with ❤️ by Li-Junlei
+Made by Li-Junlei
 
 </div>
