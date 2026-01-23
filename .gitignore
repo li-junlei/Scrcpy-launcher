@@ -76,3 +76,6 @@ yarn-error.log*
 
 # 应用图标资源（如果有大量的应用图标缓存）
 # dist/app_icons/*.png
+
+# 测试版本
+/test_version

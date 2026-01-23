@@ -58,6 +58,7 @@ fn main() {
             commands::save_tray_settings,
             commands::save_first_run_config,
             commands::set_theme,
+            commands::adb_push_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

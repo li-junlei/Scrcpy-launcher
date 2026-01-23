@@ -4,6 +4,8 @@
 
 use crate::config::{Config, AppConfig, AppSettings, ScrcpyOptions};
 use crate::scrcpy::{self, AdbStatus, CommandResult, LaunchMode};
+use crate::adb_sync::AdbPusher;
+use tauri::Emitter;
 
 
 /// 获取配置
@@ -222,6 +224,55 @@ pub fn save_first_run_config(
     
     config.save();
 }
+
+/// ADB 推送文件
+#[tauri::command]
+pub async fn adb_push_file(window: tauri::Window, local_path: String, remote_path: Option<String>) -> Result<CommandResult, String> {
+    let target = remote_path.unwrap_or_else(|| "/sdcard/Download/".to_string());
+    
+    // 处理目标路径：如果是目录（以 / 结尾），则追加文件名
+    let target_file = if target.ends_with('/') {
+        let filename = std::path::Path::new(&local_path)
+            .file_name()
+            .and_then(|f| f.to_str())
+            .unwrap_or("unknown_file");
+        // ADB SYNC 协议通常需要 "路径,权限" 格式，或者至少完整路径
+        // 我们尝试发送 "路径,0644" 以确保权限正确 (标准 adb push 行为)
+        format!("{}{},0644", target, filename)
+    } else {
+        format!("{},0644", target)
+    };
+
+    // 使用原生 TCP 连接进行传输
+    let pusher = AdbPusher::new(None); 
+    
+    let window_clone = window.clone();
+    
+    pusher.push(&local_path, &target_file, Some(Box::new(move |current, total| {
+        let percent = if total > 0 {
+            (current as f64 / total as f64) * 100.0
+        } else { 
+            0.0 
+        };
+        
+        let _ = window_clone.emit("adb-push-progress", serde_json::json!({
+            "progress": percent as u32,
+            "message": format!("传输中: {:.1}%", percent)
+        }));
+    }))).await.map_err(|e| e.to_string())?;
+    
+    // 发送 100% 进度
+    let _ = window.emit("adb-push-progress", serde_json::json!({
+        "progress": 100,
+        "message": "传输完成"
+    }));
+
+    Ok(CommandResult {
+        success: true,
+        message: format!("发送成功: {}", local_path),
+    })
+}
+
 
 
 

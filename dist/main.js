@@ -4,7 +4,9 @@
  */
 
 const { invoke, convertFileSrc } = window.__TAURI__.core;
+const { listen } = window.__TAURI__.event;
 const { getCurrentWindow } = window.__TAURI__.window;
+const { open } = window.__TAURI__.dialog;
 
 // 全局状态
 let config = null;
@@ -58,6 +60,7 @@ function setupEventListeners() {
     $('tcpip-btn').onclick = enableTcpip;
     $('disconnect-btn').onclick = disconnectAll;
     $('kill-btn').onclick = killScrcpy;
+    $('push-file-btn').onclick = pushFile;
 
     // 标签页
     document.querySelectorAll('.tab').forEach(tab => {
@@ -119,6 +122,32 @@ function setupEventListeners() {
             $('history-dropdown').classList.remove('show');
         }
     });
+
+    // 监听进度事件
+    listen('adb-push-progress', (event) => {
+        const { progress, message } = event.payload;
+        updateProgressBar(progress, message);
+    });
+}
+
+function updateProgressBar(progress, message) {
+    const container = $('push-progress');
+    const fill = $('progress-fill');
+    const text = $('progress-text');
+
+    if (container.classList.contains('hidden')) {
+        container.classList.remove('hidden');
+    }
+
+    fill.style.width = `${progress}%`;
+    text.textContent = message || `${progress}%`;
+
+    if (progress >= 100) {
+        setTimeout(() => {
+            container.classList.add('hidden');
+            fill.style.width = '0%';
+        }, 3000);
+    }
 }
 
 // ==================== ADB 操作 ====================
@@ -198,6 +227,29 @@ async function killScrcpy() {
         showMessage(`失败: ${e}`);
     } finally {
         setLoading('kill-btn', false);
+    }
+}
+
+async function pushFile() {
+    try {
+        const selected = await open({
+            multiple: false,
+            directory: false,
+        });
+
+        if (selected) {
+            setLoading('push-file-btn', true);
+            // 重置并显示进度条
+            updateProgressBar(0, '准备开始...');
+
+            // 默认推送到 /sdcard/Download/，后端已处理默认值
+            const result = await invoke('adb_push_file', { localPath: selected, remotePath: null });
+            showMessage(result.message);
+        }
+    } catch (e) {
+        showMessage(`操作失败: ${e}`);
+    } finally {
+        setLoading('push-file-btn', false);
     }
 }
 

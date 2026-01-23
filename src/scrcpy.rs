@@ -7,7 +7,9 @@
 
 use std::process::{Command, Stdio};
 use std::path::PathBuf;
+use std::io::{BufRead, BufReader};
 use crate::config::{Config, ScrcpyOptions};
+use tauri::Emitter;
 
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
@@ -303,6 +305,95 @@ pub fn kill_adb_server() -> CommandResult {
 pub fn cleanup_before_exit() {
     kill_scrcpy_processes();
     kill_adb_server();
+}
+
+/// 发送文件到设备 (带进度)
+pub fn push_file<R: tauri::Runtime>(window: &tauri::Window<R>, local_path: &str, remote_path: &str) -> CommandResult {
+    let adb_path = get_adb_path();
+
+    // 尝试启动 adb push 进程
+    // -p: 显示进度 (即使重定向输出也能强制显示)
+    let mut child = match create_command(&adb_path)
+        .args(["push", "-p", local_path, remote_path])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn() {
+            Ok(c) => c,
+            Err(e) => return CommandResult {
+                success: false,
+                message: format!("启动失败: {}", e),
+            },
+        };
+
+    // 收集 stderr 用于最终结果
+    let mut collected_stderr = Vec::new();
+
+    // 处理标准错误 (ADB 进度信息通常在 stderr)
+    if let Some(mut stderr) = child.stderr.take() {
+        use std::io::Read;
+        let mut reader = BufReader::new(stderr);
+        let mut buffer = Vec::new();
+        let mut byte = [0u8; 1];
+
+        while let Ok(n) = reader.read(&mut byte) {
+            if n == 0 { break; }
+            
+            collected_stderr.push(byte[0]);
+
+            // 遇到回车或换行符时处理缓冲区
+            if byte[0] == b'\r' || byte[0] == b'\n' {
+                if !buffer.is_empty() {
+                    let line = String::from_utf8_lossy(&buffer);
+                    if line.contains("%]") {
+                        if let Some(start) = line.find('[') {
+                            if let Some(end) = line.find("%]") {
+                                let percent_str = &line[start+1..end].trim();
+                                if let Ok(percent) = percent_str.parse::<u32>() {
+                                    let _ = window.emit("adb-push-progress", serde_json::json!({
+                                        "progress": percent,
+                                        "message": format!("正在传输: {}%", percent)
+                                    }));
+                                }
+                            }
+                        }
+                    }
+                    buffer.clear();
+                }
+            } else {
+                buffer.push(byte[0]);
+            }
+        }
+    }
+
+    // 等待进程结束
+    match child.wait_with_output() {
+        Ok(output) => {
+            // output.stderr 已经被我们 take() 走了，所以使用收集到的 collected_stderr
+            let stderr = String::from_utf8_lossy(&collected_stderr);
+            
+            if output.status.success() {
+                // 发送 100% 进度
+                let _ = window.emit("adb-push-progress", serde_json::json!({
+                    "progress": 100,
+                    "message": "传输完成"
+                }));
+                
+                CommandResult {
+                    success: true,
+                    message: format!("发送成功: {}", local_path),
+                }
+            } else {
+                 CommandResult {
+                    success: false,
+                    message: format!("发送失败: {}", stderr),
+                }
+            }
+        }
+        Err(e) => CommandResult {
+            success: false,
+            message: format!("执行中断: {}", e),
+        },
+    }
 }
 
 /// 从选项构建参数列表
