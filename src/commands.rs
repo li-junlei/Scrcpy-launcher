@@ -32,6 +32,12 @@ pub fn connect_wireless(ip: String) -> CommandResult {
     scrcpy::connect_wireless(&ip)
 }
 
+/// 无线配对
+#[tauri::command]
+pub fn pair_device(addr: String, code: String) -> CommandResult {
+    scrcpy::pair_device(&addr, &code)
+}
+
 /// 启用 TCP/IP 模式
 #[tauri::command]
 pub fn enable_tcpip() -> CommandResult {

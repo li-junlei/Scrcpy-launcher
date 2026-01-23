@@ -152,6 +152,42 @@ pub fn connect_wireless(ip: &str) -> CommandResult {
     }
 }
 
+/// 无线配对设备 (Android 11+)
+pub fn pair_device(addr: &str, code: &str) -> CommandResult {
+    let adb_path = get_adb_path();
+    
+    // adb pair <ip>:<port> <code>
+    let output = create_command(&adb_path)
+        .args(["pair", addr, code])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .output();
+
+    match output {
+        Ok(output) => {
+            let stdout = String::from_utf8_lossy(&output.stdout);
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            
+            // 成功通常输出 "Successfully paired to ..."
+            if stdout.contains("Successfully paired") || output.status.success() {
+                CommandResult {
+                    success: true,
+                    message: format!("配对成功: {}\n{}", stdout, stderr),
+                }
+            } else {
+                CommandResult {
+                    success: false,
+                    message: format!("配对失败: {}\n{}", stdout, stderr),
+                }
+            }
+        }
+        Err(e) => CommandResult {
+            success: false,
+            message: format!("执行失败: {}", e),
+        },
+    }
+}
+
 /// 启用 TCP/IP 模式
 pub fn enable_tcpip_mode() -> CommandResult {
     let adb_path = get_adb_path();

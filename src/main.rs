@@ -59,6 +59,7 @@ fn main() {
             commands::save_first_run_config,
             commands::set_theme,
             commands::adb_push_file,
+            commands::pair_device,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

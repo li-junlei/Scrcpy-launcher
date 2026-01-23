@@ -44,6 +44,7 @@
             </div>
 
             <div class="button-row">
+                <button class="btn outline" id="pair-btn">无线配对</button>
                 <button class="btn teal" id="tcpip-btn">有线转无线</button>
                 <button class="btn danger" id="disconnect-btn">断开连接</button>
             </div>
@@ -117,6 +118,24 @@
                 </svg>
                 <h3>释放文件以发送到手机</h3>
                 <p>支持单个或多个文件</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 配对对话框 -->
+    <div class="modal" id="pair-modal">
+        <div class="modal-content">
+            <h2>无线调试配对</h2>
+            <p class="hint">适用于 Android 11+ 原生无线调试。<br>请在开发者选项中点击 "无线调试" -> "使用配对码配对设备"。</p>
+            <div class="form-row">
+                <input type="text" id="pair-ip" placeholder="IP地址:端口 (例如 192.168.1.5:36000)">
+            </div>
+            <div class="form-row">
+                <input type="text" id="pair-code" placeholder="6位配对码">
+            </div>
+            <div class="modal-actions">
+                <button class="btn outline" id="pair-cancel-btn">取消</button>
+                <button class="btn primary" id="pair-confirm-btn">配对</button>
             </div>
         </div>
     </div>

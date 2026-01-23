@@ -60,7 +60,11 @@ function setupEventListeners() {
     $('tcpip-btn').onclick = enableTcpip;
     $('disconnect-btn').onclick = disconnectAll;
     $('kill-btn').onclick = killScrcpy;
+    $('kill-btn').onclick = killScrcpy;
     $('push-file-btn').onclick = pushFile;
+    $('pair-btn').onclick = openPairModal;
+    $('pair-cancel-btn').onclick = () => hideModal('pair-modal');
+    $('pair-confirm-btn').onclick = pairDevice;
 
     // 标签页
     document.querySelectorAll('.tab').forEach(tab => {
@@ -301,6 +305,56 @@ async function pushFile() {
         showMessage(`操作失败: ${e}`);
     } finally {
         setLoading('push-file-btn', false);
+    }
+}
+
+// ==================== 无线配对 ====================
+
+function openPairModal() {
+    // 尝试预填 IP (从输入框获取 IP 部分)
+    const currentInput = $('ip-input').value.trim();
+    if (currentInput) {
+        const ip = currentInput.split(':')[0];
+        if (ip && ip.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+            $('pair-ip').value = `${ip}:`;
+        }
+    }
+    showModal('pair-modal');
+    $('pair-code').focus();
+}
+
+async function pairDevice() {
+    const addr = $('pair-ip').value.trim();
+    const code = $('pair-code').value.trim();
+
+    if (!addr || !addr.includes(':')) {
+        showMessage('请输入正确的 IP:端口');
+        return;
+    }
+    if (!code) {
+        showMessage('请输入配对码');
+        return;
+    }
+
+    setLoading('pair-confirm-btn', true);
+    try {
+        const result = await invoke('pair_device', { addr, code });
+        if (result.success) {
+            hideModal('pair-modal');
+            showMessage(result.message);
+            // 提示用户连接
+            const connectIp = addr.split(':')[0]; // 这里配对端口通常不是连接端口
+            showMessage(`配对成功！请在主界面输入 "连接端口" 进行连接 (IP: ${connectIp})`);
+
+            // 尝试将 IP 填入主界面 (保留方便用户修改端口)
+            $('ip-input').value = connectIp + ":";
+        } else {
+            showMessage(result.message);
+        }
+    } catch (e) {
+        showMessage(`配对请求失败: ${e}`);
+    } finally {
+        setLoading('pair-confirm-btn', false);
     }
 }
 
