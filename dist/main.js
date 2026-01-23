@@ -128,6 +128,57 @@ function setupEventListeners() {
         const { progress, message } = event.payload;
         updateProgressBar(progress, message);
     });
+
+    // 监听文件拖拽
+    setupFileDropListeners();
+}
+
+async function setupFileDropListeners() {
+    // Tauri v2 拖拽事件 (v1 是 file-drop-hover)
+    await listen('tauri://drag-enter', () => {
+        $('drop-overlay').classList.remove('hidden');
+    });
+
+    // 拖拽离开 (v1 是 file-drop-cancelled)
+    await listen('tauri://drag-leave', () => {
+        $('drop-overlay').classList.add('hidden');
+    });
+
+    // 拖拽放下 (v1 是 file-drop)
+    await listen('tauri://drag-drop', async (event) => {
+        $('drop-overlay').classList.add('hidden');
+
+        // Tauri v2 payload 结构: { paths: string[], position: { x, y } }
+        const payload = event.payload;
+        // 兼容处理：检查 paths 字段，或者如果 payload 本身是数组 (v1/早期v2)
+        const files = payload.paths || (Array.isArray(payload) ? payload : []);
+
+        if (files && files.length > 0) {
+            for (const file of files) {
+                await pushFileFromPath(file);
+            }
+        }
+    });
+}
+
+
+async function pushFileFromPath(path) {
+    if (!path) return;
+
+    setLoading('push-file-btn', true);
+    // 重置并显示进度条 (追加模式或者单文件模式)
+    // 这里简单处理：每次都更新进度条
+    updateProgressBar(0, `准备传输 ${path.split(/[\\/]/).pop()}...`);
+
+    try {
+        // 默认推送到 /sdcard/Download/
+        const result = await invoke('adb_push_file', { localPath: path, remotePath: null });
+        showMessage(result.message);
+    } catch (e) {
+        showMessage(`操作失败: ${e}`);
+    } finally {
+        setLoading('push-file-btn', false);
+    }
 }
 
 function updateProgressBar(progress, message) {
