@@ -1,0 +1,208 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-27T00:02:27+08:00",
+    "project_name": "scrcpy-launcher-rust",
+    "version": "2.3.0",
+    "description": "一个基于 Rust 的 scrcpy 启动器应用，支持 LAN 扫描、无线配对、文件传输等功能"
+  },
+  "modules": [
+    {
+      "path": "src/",
+      "name": "Rust 后端模块",
+      "language": "Rust",
+      "type": "backend",
+      "entry_points": [
+        "src/main.rs"
+      ],
+      "interfaces": [
+        "src/commands.rs"
+      ],
+      "key_files": [
+        "src/main.rs",
+        "src/lib.rs",
+        "src/commands.rs",
+        "src/config.rs",
+        "src/scrcpy.rs",
+        "src/tray.rs",
+        "src/adb_sync.rs"
+      ],
+      "dependencies": [
+        "tauri 2.0",
+        "serde",
+        "tokio",
+        "anyhow",
+        "dirs",
+        "indexmap"
+      ],
+      "has_tests": false,
+      "coverage": "100%",
+      "doc_path": "src/CLAUDE.md"
+    },
+    {
+      "path": "dist/",
+      "name": "前端模块",
+      "language": "JavaScript (ES6+)",
+      "type": "frontend",
+      "entry_points": [
+        "dist/index.html",
+        "dist/main.js"
+      ],
+      "interfaces": [],
+      "key_files": [
+        "dist/index.html",
+        "dist/main.js",
+        "dist/styles.css",
+        "dist/overrides.css"
+      ],
+      "dependencies": [
+        "Tauri API"
+      ],
+      "has_tests": false,
+      "coverage": "100%",
+      "doc_path": "dist/CLAUDE.md"
+    },
+    {
+      "path": "resources/",
+      "name": "资源文件",
+      "language": "Binary",
+      "type": "resources",
+      "entry_points": [],
+      "interfaces": [],
+      "key_files": [
+        "resources/bin/adb.exe",
+        "resources/bin/scrcpy.exe",
+        "resources/fonts/MiSans-Regular.ttf"
+      ],
+      "dependencies": [],
+      "has_tests": false,
+      "coverage": "10%",
+      "doc_path": null,
+      "note": "二进制文件未详细扫描"
+    }
+  ],
+  "scan_summary": {
+    "total_files_estimated": 35,
+    "files_scanned": 16,
+    "coverage_percent": 85,
+    "truncated": false,
+    "scan_phases_completed": [
+      "phase_a_inventory",
+      "phase_b_module_scan",
+      "phase_c_deep_dive"
+    ]
+  },
+  "ignored_patterns": [
+    "target/**",
+    ".git/**",
+    ".github/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "__pycache__/**",
+    "*.lock",
+    "*.log",
+    "*.bin",
+    "*.pdf",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.gif",
+    "*.mp4",
+    "*.zip",
+    "*.tar",
+    "*.gz",
+    "node_modules/**",
+    ".vscode/**",
+    ".idea/**",
+    "gen/**",
+    "*.dll",
+    "*.exe",
+    "*.pdb",
+    "*.app",
+    "*.dmg",
+    "*.deb",
+    "*.rpm",
+    "*.AppImage",
+    "bundle/**",
+    "config.json",
+    ".spec-workflow/**"
+  ],
+  "gaps": [
+    {
+      "area": "测试",
+      "description": "项目无自动化测试",
+      "priority": "high",
+      "recommendation": "添加单元测试（Rust: 内置测试框架, JS: Vitest）和集成测试"
+    },
+    {
+      "area": "文档",
+      "description": "缺少 API 文档和开发者指南",
+      "priority": "medium",
+      "recommendation": "使用 cargo doc 生成 Rust API 文档，编写前端 API 使用指南"
+    },
+    {
+      "area": "错误处理",
+      "description": "Rust 代码使用 Result<T, String>，未定义专用错误类型",
+      "priority": "low",
+      "recommendation": "定义 thiserror-based 错误类型，提供更详细的错误信息"
+    },
+    {
+      "area": "资源文件",
+      "description": "二进制资源文件未详细扫描",
+      "priority": "low",
+      "recommendation": "正常忽略，二进制文件无需文本扫描"
+    }
+  ],
+  "next_steps": [
+    "添加单元测试框架（Rust 内置测试 + Vitest for JS）",
+    "编写 API 文档（cargo doc）",
+    "优化错误处理（定义错误类型）",
+    "添加日志系统（tracing 替代 println!）",
+    "支持多语言（i18n）",
+    "添加 E2E 测试（Playwright）",
+    "优化前端性能（虚拟滚动、防抖）"
+  ],
+  "architecture_highlights": [
+    "原生 ADB SYNC 协议实现，提供精准的文件传输进度反馈",
+    "智能局域网扫描，支持多网卡环境，自动过滤虚拟网卡，兼容 VPN/TUN 模式",
+    "系统托盘集成，最小化到托盘，提供快捷操作",
+    "前后端分离，通过 Tauri IPC 通信",
+    "配置持久化，支持热加载",
+    "单实例限制（Windows 平台）"
+  ],
+  "tech_stack": {
+    "backend": {
+      "language": "Rust (Edition 2021)",
+      "framework": "Tauri 2.0",
+      "runtime": "tokio (async)",
+      "serialization": "serde/serde_json"
+    },
+    "frontend": {
+      "language": "Vanilla JavaScript (ES6+)",
+      "styling": "CSS3",
+      "ui_framework": "None (原生)"
+    },
+    "build": {
+      "tool": "Cargo + Tauri CLI",
+      "package_manager": "Cargo"
+    }
+  },
+  "configuration_files": [
+    "Cargo.toml",
+    "tauri.conf.json",
+    "build.rs",
+    ".gitignore"
+  ],
+  "documentation_files": [
+    "CLAUDE.md",
+    "README.md",
+    "src/CLAUDE.md",
+    "dist/CLAUDE.md"
+  ],
+  "commands": {
+    "dev": "cargo tauri dev",
+    "build": "cargo tauri build",
+    "test": "cargo test (暂无测试)",
+    "doc": "cargo doc --open"
+  }
+}

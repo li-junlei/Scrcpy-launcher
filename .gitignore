@@ -79,3 +79,8 @@ yarn-error.log*
 
 # 测试版本
 /test_version
+CHANGELOG.md
+src/CLAUDE.md
+dist/CLAUDE.md
+CLAUDE.md
+CLAUDE.md
