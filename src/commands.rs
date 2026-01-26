@@ -27,9 +27,10 @@ pub fn check_adb_status() -> AdbStatus {
 }
 
 /// 无线连接
+/// 无线连接
 #[tauri::command]
-pub fn connect_wireless(ip: String) -> CommandResult {
-    scrcpy::connect_wireless(&ip)
+pub async fn connect_wireless(ip: String) -> CommandResult {
+    scrcpy::connect_wireless(&ip).await
 }
 
 /// 无线配对
@@ -56,10 +57,17 @@ pub fn get_installed_apps() -> Result<Vec<String>, String> {
     scrcpy::get_installed_apps()
 }
 
+
 /// 关闭所有 scrcpy
 #[tauri::command]
 pub fn kill_scrcpy() -> CommandResult {
     scrcpy::kill_scrcpy_processes()
+}
+
+/// 扫描局域网设备
+#[tauri::command]
+pub async fn scan_tcp_devices() -> Vec<String> {
+    scrcpy::scan_local_network().await
 }
 
 /// 启动屏幕镜像

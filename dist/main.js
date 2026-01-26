@@ -9,11 +9,98 @@ const { getCurrentWindow } = window.__TAURI__.window;
 const { open } = window.__TAURI__.dialog;
 
 // 全局状态
+// 全局状态
 let config = null;
 let isSortingMode = false;
 let editingAppPackage = null;
 let editingPresetName = null;
 let deviceApps = [];
+
+// 辅助：安全绑定点击事件
+function bindClick(id, handler) {
+    const el = $(id);
+    if (el) {
+        el.onclick = handler;
+    } else {
+        console.warn(`Element #${id} not found, skipping event binding.`);
+    }
+}
+
+// ==================== 局域网扫描 (提前定义) ====================
+async function scanDevices() {
+    console.log('点击扫描按钮');
+    showMessage('正在启动扫描...');
+    try {
+        showModal('scan-results-modal');
+    } catch (e) {
+        console.error('显示弹窗失败:', e);
+        showMessage('显示弹窗失败: ' + e);
+        return;
+    }
+
+    const list = $('scan-results-list');
+    const statusText = $('scan-status-text');
+    const spinner = $('scan-spinner');
+
+    if (list) list.innerHTML = '';
+    if (statusText) statusText.textContent = '正在全速扫描局域网 (无需 Root)...';
+    if (spinner) spinner.style.display = 'block';
+
+    try {
+        console.log('调用后端 invoke scan_tcp_devices');
+        const devices = await invoke('scan_tcp_devices');
+        console.log('扫描完成，结果:', devices);
+        renderScanResults(devices);
+
+        if (devices.length === 0) {
+            if (statusText) statusText.textContent = '未发现开启 5555 端口的设备';
+        } else {
+            if (statusText) statusText.textContent = `发现 ${devices.length} 个设备`;
+        }
+    } catch (e) {
+        console.error('扫描出错:', e);
+        if (statusText) statusText.textContent = `扫描出错: ${e}`;
+        showMessage(`扫描失败: ${e}`);
+    } finally {
+        if (spinner) spinner.style.display = 'none';
+    }
+}
+
+function renderScanResults(devices) {
+    const list = $('scan-results-list');
+    if (!list) return;
+
+    if (devices.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">暂无发现<br><small>请确保手机已连接同一 Wi-Fi 并开启了"无线调试"或已通过 USB 执行过 `adb tcpip 5555`</small></div>';
+        return;
+    }
+
+    list.innerHTML = devices.map(ip => `
+        <div class="device-item" onclick="selectScanDevice('${ip}')">
+            <div>
+                <div class="device-ip">${ip}</div>
+                <div class="device-hint">端口: 5555</div>
+            </div>
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </div>
+    `).join('');
+}
+
+async function selectScanDevice(ip) {
+    hideModal('scan-results-modal');
+    const input = $('ip-input');
+    if (input) input.value = ip + ":5555";
+    showMessage(`已选择设备: ${ip}`);
+
+    // 自动连接
+    await connectWireless();
+}
+
+// 暴露给全局 (HTML onclick)
+window.scanDevices = scanDevices;
+window.selectScanDevice = selectScanDevice;
 
 
 // DOM 元素缓存
@@ -21,9 +108,16 @@ const $ = (id) => document.getElementById(id);
 
 // 初始化
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadConfig();
-    setupEventListeners();
-    initUI();
+    console.log('App DOMContentLoaded');
+    try {
+        await loadConfig();
+        setupEventListeners();
+        initUI();
+        console.log('App Initialized Successfully');
+    } catch (e) {
+        console.error('App Initialization Failed:', e);
+        showMessage('初始化失败: ' + e);
+    }
 });
 
 // 加载配置
@@ -53,18 +147,26 @@ function initUI() {
 
 // 设置事件监听器
 function setupEventListeners() {
+    console.log('Setting up event listeners...');
+
     // ADB 区域
-    $('refresh-btn').onclick = checkAdbStatus;
-    $('connect-btn').onclick = connectWireless;
-    $('history-btn').onclick = toggleHistoryDropdown;
-    $('tcpip-btn').onclick = enableTcpip;
-    $('disconnect-btn').onclick = disconnectAll;
-    $('kill-btn').onclick = killScrcpy;
-    $('kill-btn').onclick = killScrcpy;
-    $('push-file-btn').onclick = pushFile;
-    $('pair-btn').onclick = openPairModal;
-    $('pair-cancel-btn').onclick = () => hideModal('pair-modal');
-    $('pair-confirm-btn').onclick = pairDevice;
+    bindClick('refresh-btn', checkAdbStatus);
+    bindClick('connect-btn', connectWireless);
+    bindClick('history-btn', toggleHistoryDropdown);
+    bindClick('tcpip-btn', enableTcpip);
+    bindClick('disconnect-btn', disconnectAll);
+    bindClick('kill-btn', killScrcpy);
+    bindClick('push-file-btn', pushFile);
+    bindClick('pair-btn', openPairModal);
+    bindClick('pair-cancel-btn', () => hideModal('pair-modal'));
+    bindClick('pair-confirm-btn', pairDevice);
+
+    // 新增：扫描功能
+    bindClick('scan-btn', () => {
+        console.log('Scan button clicked via safe bind');
+        scanDevices();
+    });
+    bindClick('scan-cancel-btn', () => hideModal('scan-results-modal'));
 
     // 标签页
     document.querySelectorAll('.tab').forEach(tab => {
@@ -72,58 +174,73 @@ function setupEventListeners() {
     });
 
     // 直接投屏
-    $('settings-btn').onclick = () => openSettingsModal();
-    $('advanced-btn').onclick = openAdvancedModal;
-    $('theme-toggle-btn').onclick = toggleTheme;
-    $('mirror-btn').onclick = launchMirror;
-    $('audio-btn').onclick = launchAudio;
+    bindClick('settings-btn', () => openSettingsModal());
+    bindClick('advanced-btn', openAdvancedModal);
+    bindClick('theme-toggle-btn', toggleTheme);
+    bindClick('mirror-btn', launchMirror);
+    bindClick('audio-btn', launchAudio);
 
     // 应用流转
-    $('add-app-btn').onclick = () => openAppConfigModal();
-    $('sort-btn').onclick = toggleSortMode;
+    bindClick('add-app-btn', () => openAppConfigModal());
+    bindClick('sort-btn', toggleSortMode);
 
     // 首次运行
-    $('save-first-run-btn').onclick = saveFirstRunConfig;
+    bindClick('save-first-run-btn', saveFirstRunConfig);
 
     // 设置
-    $('settings-cancel-btn').onclick = () => hideModal('settings-modal');
-    $('settings-save-btn').onclick = saveSettings;
+    bindClick('settings-cancel-btn', () => hideModal('settings-modal'));
+    bindClick('settings-save-btn', saveSettings);
 
     // 高级设置
-    $('use-custom-args').onchange = toggleCustomArgsMode;
-    $('use-app-stream-args').onchange = toggleAppStreamArgs;
-    $('use-app-custom-args').onchange = toggleAppCustomArgsMode;
-    $('advanced-defaults-btn').onclick = restoreDefaults;
-    $('advanced-cancel-btn').onclick = () => hideModal('advanced-modal');
-    $('advanced-save-btn').onclick = saveAdvancedSettings;
+    const useCustomArgs = $('use-custom-args');
+    if (useCustomArgs) useCustomArgs.onchange = toggleCustomArgsMode;
+
+    const useAppStreamArgs = $('use-app-stream-args');
+    if (useAppStreamArgs) useAppStreamArgs.onchange = toggleAppStreamArgs;
+
+    const useAppCustomArgs = $('use-app-custom-args');
+    if (useAppCustomArgs) useAppCustomArgs.onchange = toggleAppCustomArgsMode;
+
+    bindClick('advanced-defaults-btn', restoreDefaults);
+    bindClick('advanced-cancel-btn', () => hideModal('advanced-modal'));
+    bindClick('advanced-save-btn', saveAdvancedSettings);
 
     // 应用配置
-    $('browse-apps-btn').onclick = () => showModal('browse-apps-modal');
-    $('manage-presets-btn').onclick = () => openPresetsModal();
-    $('preset-select').onchange = applyPreset;
-    $('use-custom-res').onchange = toggleResolutionFields;
-    $('use-app-scrcpy-args').onchange = toggleAppScrcpyArgs;
-    $('app-cancel-btn').onclick = () => hideModal('app-config-modal');
+    bindClick('browse-apps-btn', () => showModal('browse-apps-modal'));
+    bindClick('manage-presets-btn', () => openPresetsModal());
 
-    $('app-save-btn').onclick = saveApp;
+    const presetSelect = $('preset-select');
+    if (presetSelect) presetSelect.onchange = applyPreset;
+
+    const useCustomRes = $('use-custom-res');
+    if (useCustomRes) useCustomRes.onchange = toggleResolutionFields;
+
+    const useAppScrcpyArgs = $('use-app-scrcpy-args');
+    if (useAppScrcpyArgs) useAppScrcpyArgs.onchange = toggleAppScrcpyArgs;
+
+    bindClick('app-cancel-btn', () => hideModal('app-config-modal'));
+    bindClick('app-save-btn', saveApp);
 
     // 浏览应用
-    $('browse-back-btn').onclick = () => hideModal('browse-apps-modal');
-    $('load-apps-btn').onclick = loadDeviceApps;
-    $('app-search').oninput = filterDeviceApps;
+    bindClick('browse-back-btn', () => hideModal('browse-apps-modal'));
+    bindClick('load-apps-btn', loadDeviceApps);
+
+    const appSearch = $('app-search');
+    if (appSearch) appSearch.oninput = filterDeviceApps;
 
     // 预设管理
-    $('add-preset-btn').onclick = () => openPresetEditModal();
-    $('presets-close-btn').onclick = () => hideModal('presets-modal');
+    bindClick('add-preset-btn', () => openPresetEditModal());
+    bindClick('presets-close-btn', () => hideModal('presets-modal'));
 
     // 编辑预设
-    $('preset-cancel-btn').onclick = () => hideModal('preset-edit-modal');
-    $('preset-save-btn').onclick = savePreset;
+    bindClick('preset-cancel-btn', () => hideModal('preset-edit-modal'));
+    bindClick('preset-save-btn', savePreset);
 
     // 点击外部关闭历史下拉
     document.addEventListener('click', (e) => {
         if (!e.target.closest('#history-btn') && !e.target.closest('#history-dropdown')) {
-            $('history-dropdown').classList.remove('show');
+            const dropdown = $('history-dropdown');
+            if (dropdown) dropdown.classList.remove('show');
         }
     });
 
@@ -1059,3 +1176,76 @@ window.selectDeviceApp = selectDeviceApp;
 window.openPresetEditModal = openPresetEditModal;
 window.deletePreset = deletePreset;
 window.selectHistory = selectHistory;
+
+// ==================== 局域网扫描 ====================
+
+async function scanDevices() {
+    console.log('点击扫描按钮');
+    showMessage('正在启动扫描...');
+    try {
+        showModal('scan-results-modal');
+    } catch (e) {
+        console.error('显示弹窗失败:', e);
+        showMessage('显示弹窗失败: ' + e);
+        return;
+    }
+
+    const list = $('scan-results-list');
+    const statusText = $('scan-status-text');
+    const spinner = $('scan-spinner');
+
+    list.innerHTML = '';
+    statusText.textContent = '正在全速扫描局域网 (无需 Root)...';
+    spinner.style.display = 'block';
+
+    try {
+        console.log('调用后端 invoke scan_tcp_devices');
+        const devices = await invoke('scan_tcp_devices');
+        console.log('扫描完成，结果:', devices);
+        renderScanResults(devices);
+
+        if (devices.length === 0) {
+            statusText.textContent = '未发现开启 5555 端口的设备';
+        } else {
+            statusText.textContent = `发现 ${devices.length} 个设备`;
+        }
+    } catch (e) {
+        console.error('扫描出错:', e);
+        statusText.textContent = `扫描出错: ${e}`;
+        showMessage(`扫描失败: ${e}`);
+    } finally {
+        spinner.style.display = 'none';
+    }
+}
+
+function renderScanResults(devices) {
+    const list = $('scan-results-list');
+    if (devices.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">暂无发现<br><small>请确保手机已连接同一 Wi-Fi 并开启了"无线调试"或已通过 USB 执行过 `adb tcpip 5555`</small></div>';
+        return;
+    }
+
+    list.innerHTML = devices.map(ip => `
+        <div class="device-item" onclick="selectScanDevice('${ip}')">
+            <div>
+                <div class="device-ip">${ip}</div>
+                <div class="device-hint">端口: 5555</div>
+            </div>
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </div>
+    `).join('');
+}
+
+async function selectScanDevice(ip) {
+    hideModal('scan-results-modal');
+    $('ip-input').value = ip + ":5555";
+    showMessage(`已选择设备: ${ip}`);
+
+    // 自动连接
+    await connectWireless();
+}
+
+window.selectScanDevice = selectScanDevice;
+window.scanDevices = scanDevices;

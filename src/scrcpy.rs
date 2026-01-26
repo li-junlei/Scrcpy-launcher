@@ -7,9 +7,11 @@
 
 use std::process::{Command, Stdio};
 use std::path::PathBuf;
-use std::io::{BufRead, BufReader};
+use std::io::BufReader;
 use crate::config::{Config, ScrcpyOptions};
 use tauri::Emitter;
+use std::time::Duration;
+
 
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
@@ -117,13 +119,54 @@ pub struct CommandResult {
 }
 
 /// 无线连接到设备
-pub fn connect_wireless(ip: &str) -> CommandResult {
+/// 无线连接到设备
+pub async fn connect_wireless(ip: &str) -> CommandResult {
     let adb_path = get_adb_path();
     
     // 保存到历史记录
     let mut config = Config::load();
     config.add_adb_history(ip);
 
+    // 1. TCP 预检查：快速检测目标是否可达，避免 adb connect 阻塞太久
+    // 处理端口：如果用户输入没带端口，默认 5555
+    let target_addr_str = if ip.contains(':') {
+        ip.to_string()
+    } else {
+        format!("{}:5555", ip)
+    };
+
+    if let Ok(addr) = target_addr_str.parse::<std::net::SocketAddr>() {
+        // 尝试建立 TCP 连接，超时设置为 2 秒
+        // 使用 tokio::net::TcpStream
+        let check_result = tokio::time::timeout(
+            Duration::from_secs(2),
+            tokio::net::TcpStream::connect(addr)
+        ).await;
+
+        match check_result {
+            Ok(Ok(_)) => {
+                // 连接成功，目标在线，继续执行 ADB 连接
+            },
+            Ok(Err(e)) => {
+                return CommandResult {
+                    success: false,
+                    message: format!("无法连接到设备 (拒绝连接): {}", e),
+                };
+            },
+            Err(_) => {
+                // 超时
+                return CommandResult {
+                    success: false,
+                    message: "连接超时：设备不可达或未开启无线调试".to_string(),
+                };
+            }
+        }
+    } else {
+         // 解析 IP 失败，可能是域名，跳过预检查直接交给 ADB，或者直接报错
+         // 这里选择继续交给 ADB 处理，也许 ADB 能处理某些特殊格式
+    }
+
+    // 2. 执行真正的 adb connect
     let output = create_command(&adb_path)
         .args(["connect", ip])
         .stdout(Stdio::piped())
@@ -232,6 +275,7 @@ pub fn disconnect_all() -> CommandResult {
         .stderr(Stdio::piped())
         .output();
 
+
     match output {
         Ok(output) => {
             let stdout = String::from_utf8_lossy(&output.stdout);
@@ -252,6 +296,167 @@ pub fn disconnect_all() -> CommandResult {
             message: format!("执行失败: {}", e),
         },
     }
+}
+
+/// 通过 ipconfig 获取所有本机 IPv4 地址，并过滤掉虚拟网卡
+fn get_all_local_ips() -> Vec<String> {
+    let output = std::process::Command::new("ipconfig")
+        .output()
+        .ok();
+
+    let mut ips = Vec::new();
+
+    if let Some(output) = output {
+        // Windows 的 ipconfig 输出编码通常是 GBK (中文环境)，但 `String::from_utf8_lossy` 处理 GBK 会乱码。
+        // 不过我们主要匹配 "IPv4" (ASCII) 和 ":", 以及 IP 数字。
+        // 适配器名称如果是中文可能会乱码，导致过滤失效。
+        // 这是一个潜在风险点。但通常 Virtual/VMware 等关键词是英文。
+        // "vEthernet" 也是英文。
+        // 如果能检测到 "Virtual", "Pseudo", "VMware", "Box", "VPN" 等关键词最好。
+        
+        // 稍微优化：尝试 decode GBK 最好，但引入依赖麻烦。
+        // 这里假设关键的虚拟网卡标识通常包含英文部分，或者通过 IP 特征辅助过滤。
+        
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let mut current_adapter = String::new();
+
+        for line in stdout.lines() {
+            let line = line.trim();
+            if line.is_empty() {
+                continue;
+            }
+
+            // 适配器行通常以 ":" 结尾，且不包含 " . . ."
+            // 例如 "Ethernet adapter Ethernet:" 或 "以太网适配器 vEthernet (WSL):"
+            if line.ends_with(':') && !line.contains(". . .") {
+                current_adapter = line.to_lowercase();
+                continue;
+            }
+
+            // 匹配 IPv4
+            if line.contains("IPv4") && line.contains(":") {
+                // 检查当前适配器是否应该被忽略
+                if current_adapter.contains("vmware") 
+                    || current_adapter.contains("virtual") 
+                    || current_adapter.contains("vethernet") // Hyper-V / WSL
+                    || current_adapter.contains("pseudo")
+                    || current_adapter.contains("tap-windows")
+                    || current_adapter.contains("vpn")
+                    || current_adapter.contains("tun")
+                    || current_adapter.contains("singbox")
+                    || current_adapter.contains("wsl")
+                {
+                    continue;
+                }
+
+                let parts: Vec<&str> = line.split(':').collect();
+                if let Some(ip_part) = parts.last() {
+                    let ip = ip_part.trim().to_string();
+                    
+                    // 过滤 IP 特征
+                    if ip == "127.0.0.1" { continue; }
+                    
+                    // 过滤常见的 TUN/Fake IP 网段
+                    // 198.18.0.0/15 是保留用于性能测试的，常被 TUN 模式用来做 Fake IP
+                    if ip.starts_with("198.18.") { continue; }
+                    
+                    // 169.254.x.x (APIPA)
+                    if ip.starts_with("169.254.") { continue; }
+
+                    if ip.split('.').count() == 4 {
+                        ips.push(ip);
+                    }
+                }
+            }
+        }
+    }
+    
+    // 兜底：如果过滤太严格导致没 IP 了，尝试 UDP 方式（至少能拿到一个出网 IP）
+    if ips.is_empty() {
+         if let Some(ip) = get_local_ip_udp() {
+             // 再次检查 UDP 拿到的 IP 是否也是 TUN IP
+             if !ip.starts_with("198.18.") {
+                 ips.push(ip);
+             }
+         }
+    }
+
+    ips
+}
+
+/// UDP 方式获取 IP (原 get_local_ip)
+fn get_local_ip_udp() -> Option<String> {
+    // 这是一个同步调用，我们在 async 上下文中不能直接用?转换 async 结果
+    // 这里简单起见，既然 scan_local_network 是 async 的，我们可以稍微从简
+    // 但为了不引入 complex async block for now, use std::net if possible or just assume this is rare fallback
+    // Use std::net::UdpSocket for synchronous check
+    let socket = std::net::UdpSocket::bind("0.0.0.0:0").ok()?;
+    socket.connect("8.8.8.8:80").ok()?;
+    socket.local_addr().ok().map(|addr| addr.ip().to_string())
+}
+
+/// 扫描局域网内开放 5555 端口的设备
+pub async fn scan_local_network() -> Vec<String> {
+    let local_ips = get_all_local_ips();
+    let mut tasks = Vec::new();
+
+    // 针对每个找到的本地 IP 所在的网段进行扫描
+    for local_ip in local_ips {
+        let parts: Vec<&str> = local_ip.split('.').collect();
+        if parts.len() != 4 {
+            continue;
+        }
+
+        // 假设是 /24 子网
+        let prefix = format!("{}.{}.{}.", parts[0], parts[1], parts[2]);
+        
+        for i in 1..255 {
+            let ip = format!("{}{}", prefix, i);
+            if ip == local_ip {
+                continue;
+            }
+
+            let bind_ip = local_ip.clone();
+
+            tasks.push(tokio::spawn(async move {
+                let target_addr: std::net::SocketAddr = format!("{}:5555", ip).parse().ok()?;
+                let bind_addr: std::net::SocketAddr = format!("{}:0", bind_ip).parse().ok()?;
+                
+                // 使用 TcpSocket 绑定本地 IP，这可以强制流量走正确的物理网卡，
+                // 从而绕过 V2Ray/Tun 模式的全局流量劫持 (因为 Tun 通常无法劫持绑定了特定物理 IP 的流量)
+                let socket = tokio::net::TcpSocket::new_v4().ok()?;
+                socket.bind(bind_addr).ok()?;
+
+                // 缩短超时时间以加快多网段扫描速度
+                match tokio::time::timeout(Duration::from_millis(150), socket.connect(target_addr)).await {
+                    Ok(Ok(_)) => Some(ip),
+                    _ => None,
+                }
+            }));
+        }
+    }
+
+    let mut devices = Vec::new();
+    for task in tasks {
+        if let Ok(Some(ip)) = task.await {
+            // 去重
+            if !devices.contains(&ip) {
+                devices.push(ip);
+            }
+        }
+    }
+    
+    // 排序
+    devices.sort_by(|a, b| {
+        let a_parts: Vec<&str> = a.split('.').collect();
+        let b_parts: Vec<&str> = b.split('.').collect();
+        // 简单按最后一段排序，不够严谨但够用
+        let a_last: u8 = a_parts.last().unwrap_or(&"0").parse().unwrap_or(0);
+        let b_last: u8 = b_parts.last().unwrap_or(&"0").parse().unwrap_or(0);
+        a_last.cmp(&b_last)
+    });
+
+    devices
 }
 
 /// 获取已安装的第三方应用列表
@@ -365,7 +570,7 @@ pub fn push_file<R: tauri::Runtime>(window: &tauri::Window<R>, local_path: &str,
     let mut collected_stderr = Vec::new();
 
     // 处理标准错误 (ADB 进度信息通常在 stderr)
-    if let Some(mut stderr) = child.stderr.take() {
+    if let Some(stderr) = child.stderr.take() {
         use std::io::Read;
         let mut reader = BufReader::new(stderr);
         let mut buffer = Vec::new();
