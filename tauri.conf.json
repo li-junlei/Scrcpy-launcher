@@ -4,7 +4,7 @@
   "version": "2.5.0",
   "identifier": "com.github.lijunlei.scrcpylauncher",
   "build": {
-    "frontendDist": "../dist",
+    "frontendDist": "./dist",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "",
     "beforeBuildCommand": ""
@@ -14,18 +14,14 @@
     "windows": [
       {
         "title": "Scrcpy Launcher",
-        "width": 560,
-        "height": 900,
+        "width": 460,
+        "height": 800,
         "resizable": true,
         "fullscreen": false,
         "center": true,
         "label": "main"
       }
     ],
-    "trayIcon": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": false
-    },
     "security": {
       "csp": null
     }
@@ -34,11 +30,13 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/icon.png"
+      "icons/icon.png",
+      "icons/icon.ico"
     ],
-    "resources": {
-      "resources/*": "./"
-    },
+    "resources": [
+      "resources/bin/*",
+      "resources/fonts/*"
+    ],
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
