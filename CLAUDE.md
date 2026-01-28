@@ -331,7 +331,7 @@ dist/
 ```
 ./
 ├── Cargo.toml           # Rust 项目配置
-├── tauri.conf.json      # Tauri 应用配置
+├── src-tauri/tauri.conf.json # Tauri 应用配置
 ├── build.rs             # 构建脚本
 └── .gitignore           # Git 忽略规则
 ```
