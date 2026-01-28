@@ -684,6 +684,15 @@ pub enum LaunchMode {
 
 /// 构建并运行 scrcpy 命令
 pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
+    // 1. 预检查：确保有设备连接
+    let adb_status = check_adb_status();
+    if !adb_status.connected {
+        return CommandResult {
+            success: false,
+            message: format!("启动失败: {}", adb_status.message),
+        };
+    }
+
     let config = Config::load();
     let scrcpy_path = get_scrcpy_path();
     
@@ -744,15 +753,47 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
         }
     }
     
-    // 启动 scrcpy
-    let result = create_command(&scrcpy_path)
+    // 启动 scrcpy (捕获 stderr 以便获取错误)
+    let mut child = match create_command(&scrcpy_path)
         .args(&args)
         .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .spawn();
+        .stderr(Stdio::piped())
+        .spawn() {
+            Ok(c) => c,
+            Err(e) => return CommandResult {
+                success: false,
+                message: format!("启动失败: {}", e),
+            },
+        };
     
-    match result {
-        Ok(_) => {
+    // 2. 监控进程启动: 等待一小段时间，看进程是否立即退出
+    std::thread::sleep(std::time::Duration::from_millis(500));
+
+    match child.try_wait() {
+        Ok(Some(status)) => {
+            // 进程已退出，说明启动失败
+            let mut message = format!("启动失败 (退出代码: {})", status);
+            
+            // 尝试读取 stderr
+            if let Some(mut stderr) = child.stderr.take() {
+                use std::io::Read;
+                let mut err_str = String::new();
+                if stderr.read_to_string(&mut err_str).is_ok() && !err_str.is_empty() {
+                    message = format!("启动失败: {}", err_str.trim());
+                }
+            }
+            
+            CommandResult {
+                success: false,
+                message,
+            }
+        }
+        Ok(None) => {
+            // 进程仍在运行，视为启动成功
+            // 释放子进程句柄，使其在脱离后继续运行 (Windows需要 drop child)
+            // 在 Rust 中，Process 默认如果不 wait，drop 时不会 kill，但为了保险起见，或者如果这里的 child 是 Child 类型，drop 是安全的。
+            // 不过如果是 `Command::spawn` 返回的 Child，drop 不会 kill。
+            
             let mode_str = match &mode {
                 LaunchMode::Mirror => "屏幕镜像",
                 LaunchMode::Audio => "纯音频",
@@ -763,9 +804,11 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
                 message: format!("已启动 ({})", mode_str),
             }
         }
-        Err(e) => CommandResult {
-            success: false,
-            message: format!("启动失败: {}", e),
-        },
+        Err(e) => {
+            CommandResult {
+                success: false,
+                message: format!("进程状态检查失败: {}", e),
+            }
+        }
     }
 }
