@@ -1,0 +1,2378 @@
+[
+  {
+    "name": "UC浏览器",
+    "package_name": "com.UCMobile",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/3/110_835dfc8eafa7983cdd91d0c264399985_con_130x130.png"
+  },
+  {
+    "name": "淘宝",
+    "package_name": "com.taobao.taobao",
+    "category": "网上购物",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/106_579a5bf8f14c8656de67adc6de654bd5_con_130x130.png"
+  },
+  {
+    "name": "QQ",
+    "package_name": "com.tencent.mobileqq",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/2/110_6a052c0d48f7e9214a7d351ade5676ed_con_130x130.png"
+  },
+  {
+    "name": "抖音",
+    "package_name": "com.ss.android.ugc.aweme",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/6/106_0f133570d086ead7fa6a84d3fe46f307_con_130x130.png"
+  },
+  {
+    "name": "微信",
+    "package_name": "com.tencent.mm",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/24/8/125_9bd76eaae98f8c9cb57215814c9df8fb_con_130x130.png"
+  },
+  {
+    "name": "快手",
+    "package_name": "com.smile.gifmaker",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/106_e6581c5d12614fb48f8c1be38838043f_con_130x130.png"
+  },
+  {
+    "name": "抖音极速版",
+    "package_name": "com.ss.android.ugc.aweme.lite",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/0/110_01f43e69ba59ab848193a2ce49c8e959_con_130x130.png"
+  },
+  {
+    "name": "快手极速版",
+    "package_name": "com.kuaishou.nebula",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/1/106_9710ed70d19297c9d865032c08116cb3_con_130x130.png"
+  },
+  {
+    "name": "酷狗音乐",
+    "package_name": "com.kugou.android",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/9/110_7d1fe7a10877d7d7288f115408435dd1_con_130x130.png"
+  },
+  {
+    "name": "百度",
+    "package_name": "com.baidu.searchbox",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/25/6/106_edc967658dd8d9ff13d9ae9e1a57eb42_con_130x130.png"
+  },
+  {
+    "name": "作业帮",
+    "package_name": "com.baidu.homework",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/7/2_eb8c12434711f3086395ca0f9adbda73_con_130x130.png"
+  },
+  {
+    "name": "哈啰",
+    "package_name": "com.jingyao.easybike",
+    "category": "健康运动",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/7/110_0f6373e4b81fdc650e62d8a4b52b928a_con_130x130.png"
+  },
+  {
+    "name": "小红书",
+    "package_name": "com.xingin.xhs",
+    "category": "网上购物",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/5/106_2babdc7233430318d4d89039e51a1fb8_con_130x130.png"
+  },
+  {
+    "name": "哔哩哔哩",
+    "package_name": "tv.danmaku.bili",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/10/110_a571efda5272d16a1cac0b647c3dac9c_con_130x130.png"
+  },
+  {
+    "name": "QQ音乐",
+    "package_name": "com.tencent.qqmusic",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/9/106_405be203eaaf13591d19d8e535ee6318_con_130x130.png"
+  },
+  {
+    "name": "夸克",
+    "package_name": "com.quark.browser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/7/110_e2639f55d79ff55d7c4e5a29208197da_con_130x130.png"
+  },
+  {
+    "name": "番茄免费小说",
+    "package_name": "com.dragon.read",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/24/2/106_91285f2cb5fe76ca66f335cfdaa3fc3d_con_130x130.png"
+  },
+  {
+    "name": "快对AI",
+    "package_name": "com.kuaiduizuoye.scan",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/9/110_99a267521aa0d5396ecd07d5b922e93a_con_130x130.png"
+  },
+  {
+    "name": "腾讯视频",
+    "package_name": "com.tencent.qqlive",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/2/110_a3bb0cdba0af838c28140292840fa46a_con_130x130.png"
+  },
+  {
+    "name": "网易云音乐",
+    "package_name": "com.netease.cloudmusic",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/16/10/110_bf237548180a921e094640fcec3875e6_con_130x130.png"
+  },
+  {
+    "name": "百度极速版",
+    "package_name": "com.baidu.searchbox.lite",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/6/2_6cf6a1d93afcb088ff8a155850bb18c9_con_130x130.png"
+  },
+  {
+    "name": "抖音火山版",
+    "package_name": "com.ss.android.ugc.live",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/7/125_fa0257245588b67c011a3fa78cf2a431_con_130x130.png"
+  },
+  {
+    "name": "支付宝",
+    "package_name": "com.eg.android.AlipayGphone",
+    "category": "金融理财",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/9/110_55fb79fd5311634249bb0f9bc8e28fc8_con_130x130.png"
+  },
+  {
+    "name": "西瓜视频",
+    "package_name": "com.ss.android.article.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/4/106_7f6da1ca0543f13b8e3924ee1f6deecb_con_130x130.png"
+  },
+  {
+    "name": "QQ浏览器",
+    "package_name": "com.tencent.mtt",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/8/110_426f42db5ff0756701b004fe0dd0fb09_con_130x130.png"
+  },
+  {
+    "name": "优酷视频",
+    "package_name": "com.youku.phone",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/11/106_408ba64e21045678a15190125443ded8_con_130x130.png"
+  },
+  {
+    "name": "今日头条",
+    "package_name": "com.ss.android.article.news",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/7/125_c3c05401f378188a6c0cbf74fe499ffd_con_130x130.png"
+  },
+  {
+    "name": "番茄畅听",
+    "package_name": "com.xs.fm",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/16/8/125_ce289c9cb78f16b2decb6afca3ba2e78_con_130x130.png"
+  },
+  {
+    "name": "交管12123",
+    "package_name": "com.tmri.app.main",
+    "category": "政府服务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/5/110_962e23b6bd55a3963b5e9dbc464ae78b_con_130x130.png"
+  },
+  {
+    "name": "讯飞输入法",
+    "package_name": "com.iflytek.inputmethod",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/08/2/110_c037f08601d2b85282f20e335ea5eed1_con_130x130.png"
+  },
+  {
+    "name": "爱奇艺极速版",
+    "package_name": "com.qiyi.video.lite",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/8/110_171f54f9e90e3c5752896b175ccb0192_con_130x130.png"
+  },
+  {
+    "name": "高德地图",
+    "package_name": "com.autonavi.minimap",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/11/110_7c2114994c0952a89d910f941d97f9bc_con_130x130.png"
+  },
+  {
+    "name": "软件商店",
+    "package_name": "com.yyddappdemandnew.appdemandnew",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/01/11/106_24e594342f7ae25b3b4e880daa831217_con_130x130.png"
+  },
+  {
+    "name": "钉钉",
+    "package_name": "com.alibaba.android.rimet",
+    "category": "办公商务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/10/106_ff6add0c6aff6b51fbbbd38bf536e25f_con_130x130.png"
+  },
+  {
+    "name": "头条搜索极速版",
+    "package_name": "com.ss.android.article.lite",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/3/125_220a8d1b236ccf352b0ab397c589e86f_con_130x130.png"
+  },
+  {
+    "name": "百度地图",
+    "package_name": "com.baidu.BaiduMap",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/5/110_7a4e0a13816a066034eef1d9e44b1285_con_130x130.png"
+  },
+  {
+    "name": "中国移动",
+    "package_name": "com.greenpoint.android.mc10086.activity",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/16/11/110_0b11655ae328a94456e3644bb901406a_con_130x130.png"
+  },
+  {
+    "name": "影视大全快看",
+    "package_name": "cn.quicktv.android",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/18/11/110_1e8d7f433b4179c5577c220e11fdd8fc_con_130x130.png"
+  },
+  {
+    "name": "企业微信",
+    "package_name": "com.tencent.wework",
+    "category": "办公商务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/29/2/110_d1159d6f95f5837e70756dc93f6e3fe7_con_130x130.png"
+  },
+  {
+    "name": "酷我音乐",
+    "package_name": "cn.kuwo.player",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/6/110_68511d88470d27ea2fc3487e656c1db3_con_130x130.png"
+  },
+  {
+    "name": "手机克隆一键换机助手",
+    "package_name": "com.softin.copydata",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/10/5/106_4dabe94e436fa0159e07ab3c49c18824_con_130x130.png"
+  },
+  {
+    "name": "京东",
+    "package_name": "com.jingdong.app.mall",
+    "category": "网上购物",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/2/110_ad9b2f06af1ef3435e5c1782d686fcc9_con_130x130.png"
+  },
+  {
+    "name": "喜马拉雅",
+    "package_name": "com.ximalaya.ting.android",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/0/106_42bdb73f147063536f272e3422a9e670_con_130x130.png"
+  },
+  {
+    "name": "UC浏览器极速版",
+    "package_name": "com.ucmobile.lite",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/6/110_9bbbd2396233ea5128727a24cd2f2935_con_130x130.png"
+  },
+  {
+    "name": "手机管家",
+    "package_name": "com.feisu.shoujiguanjia",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/06/0/110_ebc99731bccc7ff75f0966b126c0e21a_con_130x130.png"
+  },
+  {
+    "name": "影视大全看看",
+    "package_name": "com.rumtel.mobiletv",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/13/10/106_88d841c81bd1317cc93bdf0a791e368c_con_130x130.png"
+  },
+  {
+    "name": "1905电影网",
+    "package_name": "com.m1905.mobilefree",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/3/106_c89dd47ba94e7695d47c1ca3be3cc94b_con_130x130.png"
+  },
+  {
+    "name": "微分身多开",
+    "package_name": "com.xyn.wskai",
+    "category": "办公商务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/08/2/110_a1efeb0da882c93c99c60cdc4ba54538_con_130x130.png"
+  },
+  {
+    "name": "迅雷",
+    "package_name": "com.xunlei.downloadprovider",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/0/110_457e3759b8cdc6e7dd3194954391846c_con_130x130.png"
+  },
+  {
+    "name": "悟空浏览器",
+    "package_name": "com.cat.readall",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/8/125_9dc15eb181461141259309f941220130_con_130x130.png"
+  },
+  {
+    "name": "搜狗输入法",
+    "package_name": "com.sohu.inputmethod.sogou",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/0/110_164e71885b2a9f513e2e5d244257bf5d_con_130x130.png"
+  },
+  {
+    "name": "百度网盘",
+    "package_name": "com.baidu.netdisk",
+    "category": "办公商务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/4/106_3651ff169a342b80de91fccd131cf1c8_con_130x130.png"
+  },
+  {
+    "name": "滴滴出行",
+    "package_name": "com.sdu.didi.psnger",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/25/9/106_76457b1b0d5dc03f4f5c1931cf4ed732_con_130x130.png"
+  },
+  {
+    "name": "酷狗概念版",
+    "package_name": "com.kugou.android.lite",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/0/110_5a91da7f64861f4fabcf370efae74d16_con_130x130.png"
+  },
+  {
+    "name": "MOMO陌陌",
+    "package_name": "com.immomo.momo",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/3/110_c2ce4b078b5b1b0af611f4b8dc9c0b5d_con_130x130.png"
+  },
+  {
+    "name": "铁路12306",
+    "package_name": "com.MobileTicket",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/01/4/106_78609b422725a4b953f4e602bdf8ed9c_con_130x130.png"
+  },
+  {
+    "name": "美团外卖",
+    "package_name": "com.sankuai.meituan.takeoutnew",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/10/106_e77189994fc405e00143467752e81a3b_con_130x130.png"
+  },
+  {
+    "name": "拼多多商家版",
+    "package_name": "com.xunmeng.merchant",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/7/125_880a79ba84ccc43c75895fcc86731af7_con_130x130.png"
+  },
+  {
+    "name": "咪咕视频",
+    "package_name": "com.cmcc.cmvideo",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/110_4ff073f2b274a217c71c58c3a502f7c2_con_130x130.png"
+  },
+  {
+    "name": "中国电信",
+    "package_name": "com.ct.client",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/08/2/110_48a9ba5916787eb4716bdb5a888512a1_con_130x130.png"
+  },
+  {
+    "name": "波点音乐",
+    "package_name": "cn.wenyu.bodian",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/1/110_f3aa6d791962f06572cf2a5c45af816b_con_130x130.png"
+  },
+  {
+    "name": "北斗侠导航",
+    "package_name": "com.xiguakeji.bddh",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/02/6/110_675f1105f19f249d9db3776309630d04_con_130x130.png"
+  },
+  {
+    "name": "e浏览器",
+    "package_name": "com.ledu.ebrowser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/28/2/125_ff1a122c00464a9c8511f277bc8d34c1_con_130x130.png"
+  },
+  {
+    "name": "安逸花",
+    "package_name": "com.msxf.ayh",
+    "category": "金融理财",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/4/106_55bf3d21d0d83b55e2eda3770a6242ce_con_130x130.png"
+  },
+  {
+    "name": "球探足球",
+    "package_name": "com.bet007.mobile.new007",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/12/6/110_c85f6d8d5f195a3522476093aa64640e_con_130x130.png"
+  },
+  {
+    "name": "DJ多多",
+    "package_name": "com.shoujiduoduo.dj",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/16/7/110_92688a4395142dd5912d1ddfd613115d_con_130x130.png"
+  },
+  {
+    "name": "互传",
+    "package_name": "simple.hema.apkextractor",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/10/29/2/106_0d1548c09fd5b83b15284a74b1c104b5_con_130x130.png"
+  },
+  {
+    "name": "OurPlay",
+    "package_name": "com.excean.gspace",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/12/10/110_e8143d45635e40d06942c4e31ff9889f_con_130x130.png"
+  },
+  {
+    "name": "闲鱼",
+    "package_name": "com.taobao.idlefish",
+    "category": "网上购物",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/11/125_06d2c8fd37f6c8fe65c2f498cfc3bcfe_con_130x130.png"
+  },
+  {
+    "name": "微博",
+    "package_name": "com.sina.weibo",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/3/110_b448822135329474d648e5ebbe62d497_con_130x130.png"
+  },
+  {
+    "name": "快影",
+    "package_name": "com.kwai.videoeditor",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/7/110_835d0aa4ce940a9b4dadd5df003fba3e_con_130x130.png"
+  },
+  {
+    "name": "全民K歌",
+    "package_name": "com.tencent.karaoke",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/1/125_56b7b733588f4ccc32c0f05445a627b7_con_130x130.png"
+  },
+  {
+    "name": "搜狐视频",
+    "package_name": "com.sohu.sohuvideo",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/1/2_ea0f46a07c6b05347ec4680984d859a1_con_130x130.png"
+  },
+  {
+    "name": "中国建设银行",
+    "package_name": "com.chinamworld.main",
+    "category": "金融理财",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2019/06/10/1/1_5d0b8694f25e3b6f0264d20d84bfcf0e_con_130x130.png"
+  },
+  {
+    "name": "饿了么",
+    "package_name": "me.ele",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/5/106_2ec24a6eed2c7ff1fd8341760d74dd4a_con_130x130.png"
+  },
+  {
+    "name": "浏览器",
+    "package_name": "com.ume.browser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/9/106_b2119f6541a9fdeeefed1db2929b3476_con_130x130.png"
+  },
+  {
+    "name": "画世界Pro",
+    "package_name": "net.huanci.hsjpro",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/9/125_ecf2cfeb26fd694fdd1d0342a74ae88e_con_130x130.png"
+  },
+  {
+    "name": "网易LOFTER",
+    "package_name": "com.lofter.android",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/6/106_edf13fbe94c56db33e70a305a6e3e433_con_130x130.png"
+  },
+  {
+    "name": "中国联通",
+    "package_name": "com.sinovatech.unicom.ui",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/04/2/106_ecd1801f2e482a72c86d5c8637fb587a_con_130x130.png"
+  },
+  {
+    "name": "芒果TV",
+    "package_name": "com.hunantv.imgo.activity",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/9/110_6fda243c325f6f544e376a3367ccc812_con_130x130.png"
+  },
+  {
+    "name": "快看漫画",
+    "package_name": "com.kuaikan.comic",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/6/106_05950b57964a26035a412c7844ac82fd_con_130x130.png"
+  },
+  {
+    "name": "快牙",
+    "package_name": "com.dewmobile.kuaiya",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/09/11/106_4871ce69236db2f70917b92464fa2c0d_con_130x130.png"
+  },
+  {
+    "name": "腾讯地图",
+    "package_name": "com.tencent.map",
+    "category": "旅游出行",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/9/110_5151aca43193ea5c2ed8959c66eeaa97_con_130x130.png"
+  },
+  {
+    "name": "网上国网",
+    "package_name": "com.sgcc.wsgw.cn",
+    "category": "生活休闲",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/30/10/110_9dd5c275c2966d179b1cc07eb9b10669_con_130x130.png"
+  },
+  {
+    "name": "小猿搜题",
+    "package_name": "com.fenbi.android.solar",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/11/125_44d2a5acab579dfbecab58984088dacc_con_130x130.png"
+  },
+  {
+    "name": "ROOT大师",
+    "package_name": "com.mgyun.rootmaster",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/09/30/7/110_d3741ccc90487dcf25be87c262b54d26_con_130x130.png"
+  },
+  {
+    "name": "洪恩识字",
+    "package_name": "com.hongen.app.word",
+    "category": "育儿亲子",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/31/1/110_b32feb0ac5910f685a2a87bf1142edd6_con_130x130.png"
+  },
+  {
+    "name": "360手机卫士极速版",
+    "package_name": "com.mobilesecurity.lite",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/1/110_8d1316173ba970741363def15f88a15b_con_130x130.png"
+  },
+  {
+    "name": "一起作业",
+    "package_name": "com.A17zuoye.mobile.homework",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/11/8/106_cb59ce02588c42907428f05153f80e67_con_130x130.png"
+  },
+  {
+    "name": "咪咕音乐",
+    "package_name": "cmccwm.mobilemusic",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/10/110_150a1fdc1a98f49d83518a72b9f060e0_con_130x130.png"
+  },
+  {
+    "name": "一课",
+    "package_name": "com.zuoyebang.airclass",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/11/110_a03d84b70ee31e76ca8fd89e0fdaea3b_con_130x130.png"
+  },
+  {
+    "name": "海马汇",
+    "package_name": "com.hand_china.hrms",
+    "category": "办公商务",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/05/5/106_f54ba561b5e44e127f4715b4a9d3a7e2_con_130x130.png"
+  },
+  {
+    "name": "爱奇艺",
+    "package_name": "com.qiyi.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/4/110_c92f1bfd6661e9da7aedfd0c46172382_con_130x130.png"
+  },
+  {
+    "name": "手机电视高清直播",
+    "package_name": "com.zbx.ct.tvzhibo",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/9/110_d855e0b7e63ca6d021c4385e8f06cfdd_con_130x130.png"
+  },
+  {
+    "name": "热播影视大全",
+    "package_name": "com.rebo.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/05/16/0/110_e8de163ca329f80f3b9388f44c1a41fc_con_130x130.png"
+  },
+  {
+    "name": "红果免费短剧",
+    "package_name": "com.phoenix.read",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/125_739227a692f98bba8acb4d7e3b67a893_con_130x130.png"
+  },
+  {
+    "name": "花儿影视",
+    "package_name": "com.zhui.hantv",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/22/9/110_c9cd267e85da96fe07b65c9f97f5a255_con_130x130.png"
+  },
+  {
+    "name": "天天影视大全",
+    "package_name": "com.tt.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/01/4/110_bb9481a4b9760662b78da3f7266541a2_con_130x130.png"
+  },
+  {
+    "name": "央视频",
+    "package_name": "com.cctv.yangshipin.app.androidp",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/08/10/110_55d8cc3489c73ec2d427e0b991aac10c_con_130x130.png"
+  },
+  {
+    "name": "免费听音乐",
+    "package_name": "kaixin.manhua46",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/26/2/110_93d9dbf17e653b25e92542bc5daeb0f6_con_130x130.png"
+  },
+  {
+    "name": "酷狗音乐HD",
+    "package_name": "com.kugou.playerHD",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/21/3/110_494538a416def5cda2dd7019c7fae63c_con_130x130.png"
+  },
+  {
+    "name": "电视直播专家",
+    "package_name": "com.dszb.app",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/12/13/3/110_925fa23ce4942c047728b8a0afdb815f_con_130x130.png"
+  },
+  {
+    "name": "西瓜视频横屏版",
+    "package_name": "com.ss.android.article.video.landscape",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/09/0/106_bebf12b4ccf93161c11cb64f76861490_con_130x130.png"
+  },
+  {
+    "name": "西瓜影音播放器",
+    "package_name": "com.xgyybfq.uc.va",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/10/12/0/110_66e2e08c19a6d36e7f8f2a91bf47c97a_con_130x130.png"
+  },
+  {
+    "name": "播放器OPlayer",
+    "package_name": "com.olimsoft.android.oplayer",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/19/5/125_4c705835a9f5a2cc42bc326f9a12306b_con_130x130.png"
+  },
+  {
+    "name": "私密视频看片播放器",
+    "package_name": "com.mrobt.ugkc",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/04/7/110_607a728fdfe611601966f4972d1b6bd8_con_130x130.png"
+  },
+  {
+    "name": "手机收音机",
+    "package_name": "syj.youngfhsher",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/07/2/106_8691ad1ad68a96faab4a48c9bb09bf96_con_130x130.png"
+  },
+  {
+    "name": "听听广播",
+    "package_name": "net.joydao.radio",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/23/1/110_e9612bc764239331939c42c4001690ef_con_130x130.png"
+  },
+  {
+    "name": "快听免费音乐大全",
+    "package_name": "kaixin.ktyyue",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/05/09/6/110_42994f37ee78758b9f3e674548a33eed_con_130x130.png"
+  },
+  {
+    "name": "央视影音",
+    "package_name": "cn.cntv",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/26/10/110_7439156d2e79261b13d4446ddb16dcab_con_130x130.png"
+  },
+  {
+    "name": "今日看影视大全",
+    "package_name": "com.yongxi.jinri",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/05/09/6/110_b3daac7c147faaaba363e6c7ad412e9a_con_130x130.png"
+  },
+  {
+    "name": "爱奇艺PAD",
+    "package_name": "com.qiyi.video.pad",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/9/110_7507337fdd9d8a64c482416fcddabfef_con_130x130.png"
+  },
+  {
+    "name": "全民电视直播",
+    "package_name": "org.fungo.fungoliveallstar",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/04/01/4/110_f89d5d554831d0da419c8e6aae171b5e_con_130x130.png"
+  },
+  {
+    "name": "好看视频",
+    "package_name": "com.baidu.haokan",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/04/8/110_f4e6be9f7ea2a52aa26b5b60331b9e3d_con_130x130.png"
+  },
+  {
+    "name": "电视直播助手",
+    "package_name": "com.zbx.ct.tvhelper",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/25/8/110_92d7e4df8ff3299723c3788f70d1f9cf_con_130x130.png"
+  },
+  {
+    "name": "本地视频播放解码",
+    "package_name": "com.tfq.localvideo",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/17/3/106_12440f878547ee2fb38f06b0040e6ebc_con_130x130.png"
+  },
+  {
+    "name": "聚看影视大全",
+    "package_name": "com.jkysdq.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/17/8/125_3ceafe4da534ab907d53cedc729718cb_con_130x130.png"
+  },
+  {
+    "name": "AcFun",
+    "package_name": "tv.acfundanmaku.video",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/16/7/106_5bc107e971d4c1324c66b85ffd30968e_con_130x130.png"
+  },
+  {
+    "name": "CCTV手机电视",
+    "package_name": "com.cctv4g.cctvmobiletv",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/02/9/110_9dca1314d202557e2399a35ac6ecef69_con_130x130.png"
+  },
+  {
+    "name": "酷狗大字版",
+    "package_name": "com.kugou.android.elder",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/25/11/110_f734f9b06fb659787240b03bffd9d55a_con_130x130.png"
+  },
+  {
+    "name": "小小影视",
+    "package_name": "com.myfxvid.er",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/14/9/110_3c156cc0af070a49b35faeb65346570a_con_130x130.png"
+  },
+  {
+    "name": "电视直播大全",
+    "package_name": "com.rumtel.pandatv",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/06/18/6/110_2f6f30eb7851fc3ad98f0022aa371f4e_con_130x130.png"
+  },
+  {
+    "name": "酷我音乐HD",
+    "package_name": "cn.kuwo.kwmusichd",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/04/04/7/125_4d4551c8996e2807585d40008204e819_con_130x130.png"
+  },
+  {
+    "name": "片多多",
+    "package_name": "com.pianduoduo.sheng",
+    "category": "影音播放",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/01/16/5/110_c8a49a612b5cdf61bc065c9edce0c8bc_con_130x130.png"
+  },
+  {
+    "name": "腾讯手机管家",
+    "package_name": "com.tencent.qqpimsecure",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/05/3/106_6cf3909ac7343a3035c1b91686b7c873_con_130x130.png"
+  },
+  {
+    "name": "Via",
+    "package_name": "mark.via",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/26/11/110_38ccbe77c22a3ab8db759cf368cb634e_con_130x130.png"
+  },
+  {
+    "name": "Edge",
+    "package_name": "com.microsoft.emmx",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/4/110_f4a658f710addb483be8e06b7b9738e5_con_130x130.png"
+  },
+  {
+    "name": "WiFi万能钥匙",
+    "package_name": "com.snda.wifilocating",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/10/110_4ab25dd0980989f582486f9e838eb67d_con_130x130.png"
+  },
+  {
+    "name": "360清理大师",
+    "package_name": "com.qihoo.cleandroid_cn",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/11/13/3/110_be628238cda0d28b81789dadd5f3e811_con_130x130.png"
+  },
+  {
+    "name": "百度输入法",
+    "package_name": "com.baidu.input",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/7/106_686d0040142702a8b67b940de6b43865_con_130x130.png"
+  },
+  {
+    "name": "手心输入法",
+    "package_name": "com.xinshuru.inputmethod",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/10/9/110_e5d68b379d76a5a0647348897923e1ea_con_130x130.png"
+  },
+  {
+    "name": "360极速浏览器",
+    "package_name": "com.qihoo.contents",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/20/0/106_3cf47ccfc77184d12a1444596400e012_con_130x130.png"
+  },
+  {
+    "name": "PP助手",
+    "package_name": "com.pp.assistant",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/09/1/110_7ca85bc58f8645fa6ed1e281a2e5099c_con_130x130.png"
+  },
+  {
+    "name": "百度手机卫士",
+    "package_name": "cn.opda.a.phonoalbumshoushou",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/12/10/110_94600bcf8179a19bf54528ed28adcc90_con_130x130.png"
+  },
+  {
+    "name": "ES文件浏览器",
+    "package_name": "com.estrongs.android.pop",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/24/3/125_c2e29bf2697bc3d3019e4e0ed6150885_con_130x130.png"
+  },
+  {
+    "name": "设备信息by流舟",
+    "package_name": "com.liuzh.deviceinfo",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/17/8/110_d5960658aa396b97285db0216459e5cf_con_130x130.png"
+  },
+  {
+    "name": "鲁大师",
+    "package_name": "com.ludashi.benchmark",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/18/6/110_8daed3f11d26532f34584b824fd3aeee_con_130x130.png"
+  },
+  {
+    "name": "存储空间清理",
+    "package_name": "com.ktls.fileinfo",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/11/106_ff3c4273f69b220ae0d947d02cfe32af_con_130x130.png"
+  },
+  {
+    "name": "微信输入法",
+    "package_name": "com.tencent.wetype",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/17/5/110_5e9a809ad977e47b407ca2d8fc4cf341_con_130x130.png"
+  },
+  {
+    "name": "WiFi万能钥匙极速版",
+    "package_name": "com.snda.lantern.wifilocating",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/7/110_ff40eed42e591e54360bb320cb5acaff_con_130x130.png"
+  },
+  {
+    "name": "360浏览器",
+    "package_name": "com.qihoo.browser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/10/11/106_15ad9263d650920c967e5a863be2fdf1_con_130x130.png"
+  },
+  {
+    "name": "欧朋浏览器",
+    "package_name": "com.oupeng.mini.android",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/30/8/106_c833bfb72380d92fd1dffb970c6e283b_con_130x130.png"
+  },
+  {
+    "name": "搜狗浏览器极速版",
+    "package_name": "sogou.mobile.explorer",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/9/106_53f22a0369e289f39cdddd869437fef3_con_130x130.png"
+  },
+  {
+    "name": "CPU监控大师",
+    "package_name": "com.feisu.cpujkds",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/20/6/110_f0a5ea70e7b93fac86751f3497951095_con_130x130.png"
+  },
+  {
+    "name": "电池医生",
+    "package_name": "com.zjzy.batterydoctor",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/2/125_62ff616c53d438e6c26e6d1a04d01acc_con_130x130.png"
+  },
+  {
+    "name": "安兔兔评测",
+    "package_name": "com.antutu.ABenchMark",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/04/3/110_93180147b9f4250d3b37b226c31b1c4d_con_130x130.png"
+  },
+  {
+    "name": "电池管家",
+    "package_name": "com.yj.liulqi.ftllq",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/08/04/0/110_b9731d0102a6f2d7ea317452f7ed7f78_con_130x130.png"
+  },
+  {
+    "name": "WiFi万能管家",
+    "package_name": "com.twx.wifi",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/14/0/110_5366bc919c8d7851b1042ffeb4342c20_con_130x130.png"
+  },
+  {
+    "name": "高速浏览器",
+    "package_name": "com.jx.fastbrowser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/30/8/106_f4980ec67d36a5e382cc5535dd94a70d_con_130x130.png"
+  },
+  {
+    "name": "hao网址大全",
+    "package_name": "com.pcpop.popapk",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/3/125_ff09646813570a01f586f01dd6033953_con_130x130.png"
+  },
+  {
+    "name": "2345浏览器",
+    "package_name": "com.browser2345",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/22/5/106_ca56b4b89acd87c02297df4a373ab699_con_130x130.png"
+  },
+  {
+    "name": "手机安全管家",
+    "package_name": "kaiqi.mobileguard",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/09/1/110_f5ad76da77afdf57081bbbc79bf5678a_con_130x130.png"
+  },
+  {
+    "name": "AI输入法",
+    "package_name": "aisrf.com",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/22/4/110_f365bb1ce6440f4ff3beeecafd70323a_con_130x130.png"
+  },
+  {
+    "name": "蚂蚁浏览器",
+    "package_name": "org.mozilla.fennec_mylinux",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/08/14/8/125_a4d6307f90d1be774e0bf4fdeb2caede_con_130x130.png"
+  },
+  {
+    "name": "WiFi密码查看",
+    "package_name": "com.winking.pwdcheck",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/12/24/7/110_493a75f85138f4311ab4945f892fafbe_con_130x130.png"
+  },
+  {
+    "name": "私密浏览器",
+    "package_name": "com.jx.privatebrowser",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/20/1/106_bd90dc1154898ba628892dd542d441e8_con_130x130.png"
+  },
+  {
+    "name": "电池虚电修复",
+    "package_name": "cn.com.wiisoft.batterysaver",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/26/2/110_0f4fccd8fd7fbd79f4e16341fda56876_con_130x130.png"
+  },
+  {
+    "name": "一键清理",
+    "package_name": "com.musimiao.powersave",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/22/11/106_43193cb5467f930b3e8d1437b22e477f_con_130x130.png"
+  },
+  {
+    "name": "系统优化大师",
+    "package_name": "com.ntyy.systems.optimization.master",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/12/27/6/110_d3902c9b11a9769fcfdfc8146d9e4f94_con_130x130.png"
+  },
+  {
+    "name": "万能WiFi密码破解器",
+    "package_name": "com.huyu.flow",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/06/03/10/110_6b587b043eaa8fa19b664518d615e948_con_130x130.png"
+  },
+  {
+    "name": "手机电池医生",
+    "package_name": "com.wlkj.batterydoctor",
+    "category": "系统工具",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/11/01/6/125_8cde4158fffc44b78d3c0412149a38e4_con_130x130.png"
+  },
+  {
+    "name": "他趣",
+    "package_name": "com.xingjiabi.shengsheng",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/5/106_c1fa446ee37a55d9953af21a1c0cf00d_con_130x130.png"
+  },
+  {
+    "name": "舌聊",
+    "package_name": "com.yanying.she",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/01/8/106_ccea823e5a957a32194ecc37548e0424_con_130x130.png"
+  },
+  {
+    "name": "叔叔不约",
+    "package_name": "www.shushubuyue.net",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/01/13/10/110_d462403fd58431928d8328f5105707de_con_130x130.png"
+  },
+  {
+    "name": "枫叶漂流瓶",
+    "package_name": "com.yzhiqiu.driftbottle",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/24/1/110_4a121968c3c2423a27d76317757374a5_con_130x130.png"
+  },
+  {
+    "name": "69短视频",
+    "package_name": "com.ljdumanshnip.iok",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/01/16/11/110_18e0490cf806c2403750ccd31fcb845c_con_130x130.png"
+  },
+  {
+    "name": "如果遇见",
+    "package_name": "com.ifmeet.im",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/09/02/10/110_86e4b5dfe712bca9e26c55468b0aae3f_con_130x130.png"
+  },
+  {
+    "name": "一对一视频",
+    "package_name": "driftbottle.chat.app",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/29/3/110_23a35ce59ddc44f0eb7fd71626ca12af_con_130x130.png"
+  },
+  {
+    "name": "被窝视频聊天",
+    "package_name": "com.net.yuesejiaoyou",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/07/12/9/110_032e87c4fdff7135c302ddb858e5c5c8_con_130x130.png"
+  },
+  {
+    "name": "悦色视频交友",
+    "package_name": "com.net.yuesejiaoyou.redirect.ResolverD.interface4",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/10/10/110_3d308eb65a2f7fc6264d988bd1b70640_con_130x130.png"
+  },
+  {
+    "name": "Soul",
+    "package_name": "cn.soulapp.android",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/10/110_4eb973d36930bce2a3356c91da756c9e_con_130x130.png"
+  },
+  {
+    "name": "WorldChat",
+    "package_name": "com.zerophil.worldchat",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/08/9/110_82916f5732784cecfa3eaefa85a2f71e_con_130x130.png"
+  },
+  {
+    "name": "美丽约",
+    "package_name": "com.meiliyue",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/23/6/110_76668c0854a4606127f9820f8bc64923_con_130x130.png"
+  },
+  {
+    "name": "Sub",
+    "package_name": "com.simu.sub",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/11/14/5/2_4c2a3544f632664d2897baf7da84e802_con_130x130.png"
+  },
+  {
+    "name": "梦莲交友",
+    "package_name": "com.menglian.dingdang",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/12/7/110_0c03b4306145a24b923727cce315dfa5_con_130x130.png"
+  },
+  {
+    "name": "妞妞",
+    "package_name": "com.remit.niuniu",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/10/24/8/110_6505d7e68ef1812cb940f6552434f441_con_130x130.png"
+  },
+  {
+    "name": "春雨",
+    "package_name": "com.chunyu.xiongou",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/01/08/1/110_7e36467645b589cd2c17be5e0b998887_con_130x130.png"
+  },
+  {
+    "name": "ShowMe",
+    "package_name": "com.dlsnet.showme",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/0/110_8cd29f60f6e6fd9be251926e99073925_con_130x130.png"
+  },
+  {
+    "name": "微分身王",
+    "package_name": "com.excean.maid",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/29/8/110_5731062f4b0c55c335067b146c1698ba_con_130x130.png"
+  },
+  {
+    "name": "精聊",
+    "package_name": "cn.deep.inter",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/21/5/106_1c09fb1c2f1f901403314a89b234e46b_con_130x130.png"
+  },
+  {
+    "name": "捡对象",
+    "package_name": "com.yuetun.jianduixiang",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/3/110_10499c5a6df4075e9a1b14a8fed3a6e9_con_130x130.png"
+  },
+  {
+    "name": "云爱holyiot",
+    "package_name": "com.one.tais",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/02/28/7/106_a7ccfca22a7a5bed81d9fd3d022d812b_con_130x130.png"
+  },
+  {
+    "name": "showyou",
+    "package_name": "com.duoleshi.showyou",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/28/7/110_63a5d2c3785c35161a4318d0e486308b_con_130x130.png"
+  },
+  {
+    "name": "性用社极速版",
+    "package_name": "com.xingysjsb.xy",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/06/10/0/110_f4a6dba8d78ddc6304f34e2a5bb7b974_con_130x130.png"
+  },
+  {
+    "name": "麻豆约拍",
+    "package_name": "com.madouyuepai.meiying",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/21/6/110_89f32504faa722c5937002b59e177245_con_130x130.png"
+  },
+  {
+    "name": "WorldTalks",
+    "package_name": "com.zerophil.worldtalks",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/07/2/110_d2bbba6b91174583ca37cfe21878a3ec_con_130x130.png"
+  },
+  {
+    "name": "TikChat",
+    "package_name": "chat.zhifeiji",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/10/31/5/110_860ef93f415d7a535a5a5da5c2980f9a_con_130x130.png"
+  },
+  {
+    "name": "桃夭视频聊天交友",
+    "package_name": "com.tingsong.taoyao",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/08/1/110_8eec55a400aecbb5773a19bd3e24c3c2_con_130x130.png"
+  },
+  {
+    "name": "附近红灯聊",
+    "package_name": "cn.light.rc",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/21/2/106_dd644c91f5fd2ec2bd6be7f0fe37f15f_con_130x130.png"
+  },
+  {
+    "name": "约茶",
+    "package_name": "com.luanpobing.tea",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/07/19/4/110_e7386bb4415057cf62a065d71211397b_con_130x130.png"
+  },
+  {
+    "name": "洽玩",
+    "package_name": "com.wuhui.wanshi",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/05/04/1/110_577393548c972ce46611514b18f2ec3e_con_130x130.png"
+  },
+  {
+    "name": "汝聊交友",
+    "package_name": "cn.stealspr.sv",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/11/08/5/125_4d7e6589c1a821b046de05210134348d_con_130x130.png"
+  },
+  {
+    "name": "对聊",
+    "package_name": "com.hnhuyu.chatlive",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/02/7/110_1cae2abbb2ed43213f5170cde517eb3f_con_130x130.png"
+  },
+  {
+    "name": "网易花田",
+    "package_name": "com.netease.huatian",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/07/04/7/110_64da7807bb6ce9d5812aea327c648b2a_con_130x130.png"
+  },
+  {
+    "name": "樱桃视频",
+    "package_name": "com.ytx.dfas",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/25/7/110_0583ba3baeff8d355b1bad3ec2916c3b_con_130x130.png"
+  },
+  {
+    "name": "思语",
+    "package_name": "com.app.siyu",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/9/106_482375e4662cb9512992ad9488f33130_con_130x130.png"
+  },
+  {
+    "name": "秘密公园",
+    "package_name": "com.mimigongyuan.app",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/01/10/106_0b202005ebfb1a9e75534a4539c347eb_con_130x130.png"
+  },
+  {
+    "name": "唇聊",
+    "package_name": "com.yiyan.chunliao",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/05/6/106_9868e1106c00181993ff37a9d937b9fc_con_130x130.png"
+  },
+  {
+    "name": "粉聊交友",
+    "package_name": "cn.whfp.pink",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/11/08/10/110_c67dbc155578d3e3c5c167f9279a83f6_con_130x130.png"
+  },
+  {
+    "name": "电遇",
+    "package_name": "com.dc.voiceapp",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/11/02/8/106_80d30fed797d569c235719180e09468c_con_130x130.png"
+  },
+  {
+    "name": "抱抱直播",
+    "package_name": "cn.myhug.baobao",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/3/110_0a51b04c6f74d692f6e8fc7f4b557a71_con_130x130.png"
+  },
+  {
+    "name": "爱私聊",
+    "package_name": "com.kaiying.fengliao",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/05/11/3/110_9401bb25194405d519ccd9ebad42501b_con_130x130.png"
+  },
+  {
+    "name": "potato",
+    "package_name": "com.tm.potato",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/11/29/9/110_0e84eed71dc01482d099a7a81df92d60_con_130x130.png"
+  },
+  {
+    "name": "Togoo",
+    "package_name": "com.zerophil.togoo",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/07/9/110_1bcb53ebebc01c4176c5f8b847aeb0a2_con_130x130.png"
+  },
+  {
+    "name": "月下交友",
+    "package_name": "com.lingxi.moondating",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/05/27/11/106_19d0c663842d4de94129bc7642512210_con_130x130.png"
+  },
+  {
+    "name": "点点",
+    "package_name": "com.qutalkdiandian.bowcity",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/01/10/106_7e8c8cffb2f19849d66efd9ce97564a6_con_130x130.png"
+  },
+  {
+    "name": "探探",
+    "package_name": "com.p1.mobile.putong",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/10/110_126caf920015bbd2ce6a0c1182d5aa73_con_130x130.png"
+  },
+  {
+    "name": "积目",
+    "package_name": "com.fenzotech.jimu",
+    "category": "通讯社交",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/05/3/106_daff41e82c9e199d1c6478fd08ce02cb_con_130x130.png"
+  },
+  {
+    "name": "安卓壁纸",
+    "package_name": "com.androidesk",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/27/6/110_f6ca8e58c9ca5b08e3e6494ffa83206c_con_130x130.png"
+  },
+  {
+    "name": "心动主题壁纸",
+    "package_name": "com.minitools.miniwidget",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/2/110_4c4ae39320e3c586b32ff97f00ce988e_con_130x130.png"
+  },
+  {
+    "name": "壁纸多多",
+    "package_name": "com.shoujiduoduo.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/3/106_74c4224537ce51418891e000eef9ee2f_con_130x130.png"
+  },
+  {
+    "name": "微软桌面",
+    "package_name": "com.microsoft.launcher",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/24/1/125_0fa1d5d17740811246f1d1ce032ff081_con_130x130.png"
+  },
+  {
+    "name": "免费主题壁纸",
+    "package_name": "weicom.yi.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/05/20/2/110_4805a18f532440211a794a386e0b0638_con_130x130.png"
+  },
+  {
+    "name": "安卓动态壁纸",
+    "package_name": "com.androidesk.livewallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/07/19/9/110_d434f8aa55b27e20e05db719582c289a_con_130x130.png"
+  },
+  {
+    "name": "万能小组件 Top Widgets",
+    "package_name": "com.growing.topwidgets",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/4/106_5ed224790eaf181f0b1d4d0f48f75383_con_130x130.png"
+  },
+  {
+    "name": "壁纸主题大全-动态超清壁纸下载",
+    "package_name": "com.qisi.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/03/10/106_d78d9aa5b7b35757961fc78737727680_con_130x130.png"
+  },
+  {
+    "name": "免费字体",
+    "package_name": "com.qisi.fontdownload",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/16/3/106_9a2db175cba3fb50fced99a415a421e3_con_130x130.png"
+  },
+  {
+    "name": "爱壁纸",
+    "package_name": "com.lovebizhi.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/10/21/7/110_f7579fa1765e9904f7991a1af207f6ef_con_130x130.png"
+  },
+  {
+    "name": "万能小组件盒子",
+    "package_name": "com.chenwei.wnzj",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/29/9/106_eeb8132fa747ac8448112b8e2052b6f4_con_130x130.png"
+  },
+  {
+    "name": "灵动主题皮肤",
+    "package_name": "cn.com.wiisoft.skin",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/20/8/110_53435e30846b4d997361df77eb007cb3_con_130x130.png"
+  },
+  {
+    "name": "互动桌面宠物",
+    "package_name": "com.yuanlue.chongwu",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/09/25/2/125_502d4fe8ab708cff457d9955754d6d1b_con_130x130.png"
+  },
+  {
+    "name": "光氪息屏显示",
+    "package_name": "com.grunkr.aod",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/08/9/106_dfce2ad2165241d94e3aba6b9562ac53_con_130x130.png"
+  },
+  {
+    "name": "高清壁纸主题",
+    "package_name": "com.hua.end.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/02/01/6/110_18bb15fc33438f0505d8b20842411f04_con_130x130.png"
+  },
+  {
+    "name": "字体美化大师",
+    "package_name": "com.mylikefonts.activity",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/4/110_f90edcc78fa1a92dd4236075475979aa_con_130x130.png"
+  },
+  {
+    "name": "元气壁纸",
+    "package_name": "com.wander.android.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/02/0/106_74a993461786840fcdc9e69a93605b91_con_130x130.png"
+  },
+  {
+    "name": "灵动锁屏",
+    "package_name": "cn.com.wiisoft.lockscreen",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/23/7/110_21abb77d041455b2fd393a57dc7e6f55_con_130x130.png"
+  },
+  {
+    "name": "酷炫字体",
+    "package_name": "com.example.jituo.xkzt",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/08/24/9/106_2435b1e9435503536a20d5b196f96678_con_130x130.png"
+  },
+  {
+    "name": "人脸应用锁",
+    "package_name": "com.grunkr.facelock",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/06/18/10/110_6a5dd6d82dd950d5d6d23fb734de9bc2_con_130x130.png"
+  },
+  {
+    "name": "灵动胶囊",
+    "package_name": "cn.com.wiisoft.island",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/26/8/110_8a5188ac44fbd7b4c91156dc5b780e85_con_130x130.png"
+  },
+  {
+    "name": "壁纸引擎",
+    "package_name": "io.wallpaperengine.weclient",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/08/2/110_6c8d23b55e2cde8df2ed8097622e033b_con_130x130.png"
+  },
+  {
+    "name": "动态壁纸",
+    "package_name": "com.ddmh.livewallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/02/03/6/110_50f2acda2a9d614034699e35cbf584f9_con_130x130.png"
+  },
+  {
+    "name": "一键锁屏",
+    "package_name": "com.iodkols.onekeylockscreen",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/05/26/11/110_baac32d60e166094641367bdf045de45_con_130x130.png"
+  },
+  {
+    "name": "主题屋",
+    "package_name": "com.jjzmzt.walls",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/08/07/0/110_1499b95eaa18aa1beec776bc1209b153_con_130x130.png"
+  },
+  {
+    "name": "万象小组件",
+    "package_name": "com.example.raccoon.dialogwidget",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/23/4/110_384e4032681d34907e52e2b594187123_con_130x130.png"
+  },
+  {
+    "name": "陪你",
+    "package_name": "com.zhao.withu",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/01/12/10/110_ca0b3ef7752123223f18257964a7775d_con_130x130.png"
+  },
+  {
+    "name": "主题盒",
+    "package_name": "cszy.aibz.sahdcs",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/16/4/110_e15f6e3830133bae9d9774b23da19dad_con_130x130.png"
+  },
+  {
+    "name": "动态壁纸",
+    "package_name": "com.njmizhilan.wallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/23/10/106_0255f66cb589e6b936f576693799b836_con_130x130.png"
+  },
+  {
+    "name": "搜图神器",
+    "package_name": "com.example.administrator.searchpicturetool",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/31/11/125_4fc8d9bf36fcb90d3484ff7be5f529cb_con_130x130.png"
+  },
+  {
+    "name": "乐酷铃声",
+    "package_name": "com.mvring.mvring",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/12/26/8/106_bc51945604e8d442e5ceeff55a066dbe_con_130x130.png"
+  },
+  {
+    "name": "桌面萌宠",
+    "package_name": "com.aswind.libdesktoppet",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/06/1/106_e226e5a19ec9a92770eaec8680f67fc0_con_130x130.png"
+  },
+  {
+    "name": "动态壁纸视频桌面",
+    "package_name": "com.pnn.dongtai.livewallpaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/02/24/0/110_18f1ff9bec3b20cf5b946f76e749ae46_con_130x130.png"
+  },
+  {
+    "name": "小白点虚拟按键",
+    "package_name": "com.oeiskd.easysoftkey",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/18/6/110_f018315d6a36445bd7cba6d03b732b09_con_130x130.png"
+  },
+  {
+    "name": "多多桌面小助手",
+    "package_name": "com.shoujiduoduo.wpplugin",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/05/9/110_a019b93b8a4206dd0a5307e57f3de1f1_con_130x130.png"
+  },
+  {
+    "name": "爱动漫壁纸",
+    "package_name": "com.lqh.love.comic",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/12/02/7/123_40e5dfe0350b0d9ea61d597bba17177f_con_130x130.png"
+  },
+  {
+    "name": "漫猫",
+    "package_name": "gzru.yimm.uhdsd",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/08/2/110_bfaed222957ed68f51782e2d4be420aa_con_130x130.png"
+  },
+  {
+    "name": "柠莓",
+    "package_name": "com.jnsdyt.limeberry",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/7/2_2b307abe222c4fd72a443984fc21ef08_con_130x130.png"
+  },
+  {
+    "name": "彩虹猫",
+    "package_name": "gzqf.chmao.ihusb",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/11/5/106_8b8b014e2353efce0c9324f9f959b9b6_con_130x130.png"
+  },
+  {
+    "name": "蓝猫图库",
+    "package_name": "fgj.com.con",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/14/2/106_92854531155999040fbb99d486f5ae6c_con_130x130.png"
+  },
+  {
+    "name": "美女图集大全",
+    "package_name": "com.gator.mm",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/15/11/125_856fc6db68ca654296a0467c1ddaef72_con_130x130.png"
+  },
+  {
+    "name": "二次元贴贴",
+    "package_name": "com.xingluo.ecytt",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/02/11/6/110_0738d076d2ea9fdf4ec0c7a0410f1254_con_130x130.png"
+  },
+  {
+    "name": "4D动态壁纸",
+    "package_name": "helectronsoft.com.live.wallpaper.pixel4d",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/13/9/125_af2e11c34c8a80f03d5c9b4d5ebb91f0_con_130x130.png"
+  },
+  {
+    "name": "情侣头像匹配",
+    "package_name": "kobe.loves.avatar",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/02/27/1/110_a2a85bb07bd5c464f1a38ca4ca9c7131_con_130x130.png"
+  },
+  {
+    "name": "包子漫画",
+    "package_name": "lhypg.bnq.zbnh",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/30/9/106_4fc02cd63ee1b9440ae52e47f458d10b_con_130x130.png"
+  },
+  {
+    "name": "喵上漫画",
+    "package_name": "can.magic.domatic",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/19/4/110_f98ace7bae1c44c6f8eec2d6ced7d8c9_con_130x130.png"
+  },
+  {
+    "name": "桌面时钟锁屏",
+    "package_name": "com.fanghe.makepaper",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/22/10/110_b528b3e4bc754a89cbae992bf8c9e30e_con_130x130.png"
+  },
+  {
+    "name": "超萌鸭",
+    "package_name": "com.mywallpaper.customizechanger",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/08/22/1/125_ecc9ce73973f5ffc5cd8161d6788fd6a_con_130x130.png"
+  },
+  {
+    "name": "哈哩哈哩",
+    "package_name": "hncs.bzdd.mfzt",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/16/10/106_234f7a42d36d779c176478e43b9c640e_con_130x130.png"
+  },
+  {
+    "name": "奇漫屋",
+    "package_name": "com.qmwer.amhji",
+    "category": "手机美化",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/06/2/106_e4dd5406ba5ceab9add0234d9bfc9179_con_130x130.png"
+  },
+  {
+    "name": "七猫免费小说",
+    "package_name": "com.kmxs.reader",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/9/110_4c3db72ba3d416991668ae0a8b70af62_con_130x130.png"
+  },
+  {
+    "name": "免费看漫画大全",
+    "package_name": "kaixin1.zuowen14",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/23/9/110_b6736336e2a43f8e0cf010cbc3f9edc2_con_130x130.png"
+  },
+  {
+    "name": "TXT全本免费小说全集",
+    "package_name": "cn.ttkmfxs.novel",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/04/26/3/110_7f5d5413647e039523df51f186a233b2_con_130x130.png"
+  },
+  {
+    "name": "书旗小说",
+    "package_name": "com.shuqi.controller",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/3/125_3c5de87fd2c26e200f0aed12ec6afe95_con_130x130.png"
+  },
+  {
+    "name": "画涯",
+    "package_name": "cn.fzhuayantcoltd.huayaapp",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/25/4/110_053547b487fa3d61d51e4cd958067d73_con_130x130.png"
+  },
+  {
+    "name": "掌阅",
+    "package_name": "com.chaozh.iReaderFree",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/08/5/110_6b75fbc04ef8f2fc3639509c6ce6077a_con_130x130.png"
+  },
+  {
+    "name": "画耽漫画",
+    "package_name": "com.huadan",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/06/13/4/110_c0b7c3984ce46146b2d60da07ef8eec2_con_130x130.png"
+  },
+  {
+    "name": "熊猫看书",
+    "package_name": "com.nd.android.pandareader",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/12/26/6/106_a66ea7e1090e966263d1ff1ab674e2d8_con_130x130.png"
+  },
+  {
+    "name": "懒人听书",
+    "package_name": "bubei.tingshu",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/12/10/110_fb1198a602c4cee1ec284bd8bc9074c3_con_130x130.png"
+  },
+  {
+    "name": "百度新闻",
+    "package_name": "com.baidu.news",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/22/9/125_92a951ebd41f6c166e164714c3c848a4_con_130x130.png"
+  },
+  {
+    "name": "全免漫画",
+    "package_name": "com.kanman.allfree",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/03/08/7/110_b5dd1d7d862c39a3aedd5afda276f68c_con_130x130.png"
+  },
+  {
+    "name": "得间免费小说",
+    "package_name": "com.chaozh.iReader.dj",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/05/19/2/110_8398f503458ebd6b9f9d6e3853b7f90c_con_130x130.png"
+  },
+  {
+    "name": "快读免费小说",
+    "package_name": "com.klww.novel",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/02/28/4/106_657cfe82e30e859b088e37aa0ef2f0cf_con_130x130.png"
+  },
+  {
+    "name": "漫画台",
+    "package_name": "com.comic.manhuatai",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/14/7/110_0995b09ec34de9491bd3b89defc1356e_con_130x130.png"
+  },
+  {
+    "name": "凤凰新闻",
+    "package_name": "com.ifeng.news2",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/11/125_77adc282e21a7e155844dd33ce717425_con_130x130.png"
+  },
+  {
+    "name": "追书神器",
+    "package_name": "com.ushaqi.zhuishushenqi",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/20/9/106_33156fd1c348be1a4da890794808bb90_con_130x130.png"
+  },
+  {
+    "name": "参考消息",
+    "package_name": "com.cankaoxiaoxi.app1",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/17/6/106_b169d8c78e8b5f1dbd9f420fe6669925_con_130x130.png"
+  },
+  {
+    "name": "免费听书小说大全",
+    "package_name": "guangchangwu.jianxue",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/06/04/3/110_9ef1de19d4e177956020eb057028820f_con_130x130.png"
+  },
+  {
+    "name": "飒漫画",
+    "package_name": "com.comic.isaman",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/01/2/110_0f70ee22b012db23005230d09854b6cd_con_130x130.png"
+  },
+  {
+    "name": "蜻蜓FM",
+    "package_name": "fm.qingting.qtradio",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/10/106_35189c594c00aa130d1e8c9927ae656e_con_130x130.png"
+  },
+  {
+    "name": "菠萝包漫画",
+    "package_name": "com.sfacg.comic",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2021/11/15/1/110_81eb7c1e5507e56ecd2f6a40f040f52e_con_130x130.png"
+  },
+  {
+    "name": "喜马拉雅极速版",
+    "package_name": "com.ximalaya.ting.lite",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/25/11/110_a1cb3cd51b8a2bc7e46acda545b0d440_con_130x130.png"
+  },
+  {
+    "name": "哔哩哔哩漫画",
+    "package_name": "com.bilibili.comic",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/0/110_d9b517a68bc2ab31c3ad7c5291bc0b42_con_130x130.png"
+  },
+  {
+    "name": "无界阅读",
+    "package_name": "com.zerohi.flyfish",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/18/10/110_65d28564de7a77ab60469f2ce3f142e4_con_130x130.png"
+  },
+  {
+    "name": "红板报",
+    "package_name": "flipboard.cn",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/26/6/106_bcb3507399d46a4ea229035be4c521cf_con_130x130.png"
+  },
+  {
+    "name": "澎湃新闻",
+    "package_name": "com.wondertek.paper",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/0/110_6299cf4fb6bef8505ce0c40ad8b5643a_con_130x130.png"
+  },
+  {
+    "name": "全本小说TXT免费阅读器",
+    "package_name": "com.qbreader.www",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/0/106_a6378473dc732ca1c2757e6700fd9533_con_130x130.png"
+  },
+  {
+    "name": "趣阁小说",
+    "package_name": "com.bqg.ddnoverl",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/24/6/110_4a4a9043f29bb765c0c3e3c82e8c4a0a_con_130x130.png"
+  },
+  {
+    "name": "起点读书",
+    "package_name": "com.qidian.QDReader",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/106_9efa6c6c79d1c8fb524689918e49c7db_con_130x130.png"
+  },
+  {
+    "name": "微信读书",
+    "package_name": "com.tencent.weread",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/23/10/110_64113c2a510c73487961eca7e1533814_con_130x130.png"
+  },
+  {
+    "name": "风车动漫",
+    "package_name": "com.xmyaoyao.mh",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/11/10/125_59b78c7e6635ee8d1128b9696c15fd81_con_130x130.png"
+  },
+  {
+    "name": "QQ阅读",
+    "package_name": "com.qq.reader",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/31/6/125_770844d57b896fe25b9461c3f016728e_con_130x130.png"
+  },
+  {
+    "name": "免费小说大全",
+    "package_name": "com.aikan",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/04/10/106_151af37983d7a63329b1559493f4b664_con_130x130.png"
+  },
+  {
+    "name": "搜狗免费小说",
+    "package_name": "com.sogou.reader.free",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/04/28/0/110_9a199fc03488618578e5c18acaa5d23b_con_130x130.png"
+  },
+  {
+    "name": "中国新闻网",
+    "package_name": "com.cns.mc.activity",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/07/2/106_a448ee93d6a7210cc636337614ea88c8_con_130x130.png"
+  },
+  {
+    "name": "腾讯动漫",
+    "package_name": "com.qq.ac.android",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/5/110_5ae7c8a940ea970d18a6612cd5c98e86_con_130x130.png"
+  },
+  {
+    "name": "知乎日报",
+    "package_name": "com.zhihu.daily.android",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/05/2/110_eb817ba2e15dc86fb9bb7fc5c727e809_con_130x130.png"
+  },
+  {
+    "name": "腾讯新闻",
+    "package_name": "com.tencent.news",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/17/10/106_e29aba9df1c1b70eed27d638fceef54a_con_130x130.png"
+  },
+  {
+    "name": "百度阅读",
+    "package_name": "com.baidu.yuedu",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/02/22/8/110_072762c18caad56446bdd23c48abcecd_con_130x130.png"
+  },
+  {
+    "name": "TXT文本听书",
+    "package_name": "com.wyfc.itingtxt2",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/12/10/110_50a13d0eff93d85c7629c86c7d599145_con_130x130.png"
+  },
+  {
+    "name": "知音漫客",
+    "package_name": "cn.zymk.comic",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/09/5/106_0280f5aca9905bf01ed8383fb28a4931_con_130x130.png"
+  },
+  {
+    "name": "漫画人极速版",
+    "package_name": "com.manga.manhuaren",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/24/4/110_5d71ec52e9a3b2dae168c831d145ea53_con_130x130.png"
+  },
+  {
+    "name": "薯条漫画",
+    "package_name": "com.shutiao",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/12/24/0/110_01dd4ccdef5e0b8ed132b2ba3aa9e8f9_con_130x130.png"
+  },
+  {
+    "name": "TXT阅读器",
+    "package_name": "com.only.ib",
+    "category": "新闻阅读",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/04/11/110_f6706145a33a731e23fb2715a3acc12c_con_130x130.png"
+  },
+  {
+    "name": "一甜相机",
+    "package_name": "com.kwai.m2u",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/17/10/110_3a43345d592b1e38a2fac6f4095e447f_con_130x130.png"
+  },
+  {
+    "name": "天天P图",
+    "package_name": "com.tencent.ttpic",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/09/2/110_be41e4f0dbe2f7758f5b20f2565e615d_con_130x130.png"
+  },
+  {
+    "name": "无他相机",
+    "package_name": "com.benqu.wuta",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/11/2_17b7ad1b88ade34469fab9061cfb09bd_con_130x130.png"
+  },
+  {
+    "name": "相册管家",
+    "package_name": "com.tencent.gallerymanager",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/31/8/110_6119d299031f3ba7c6b5e6039b6e2943_con_130x130.png"
+  },
+  {
+    "name": "黄油相机",
+    "package_name": "com.by.butter.camera",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/30/10/106_aa69c909780d6121cefb8c170b3fa422_con_130x130.png"
+  },
+  {
+    "name": "B612咔叽",
+    "package_name": "com.campmobile.snowcamera",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/5/110_2c1549ccb8ffdca91c8aa47527f8c714_con_130x130.png"
+  },
+  {
+    "name": "装酷神器",
+    "package_name": "com.androidvista",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/09/8/110_f2c2adf2b15d647044251612be927248_con_130x130.png"
+  },
+  {
+    "name": "camera connect",
+    "package_name": "com.news.camera.canoneo",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/29/11/110_98d1eb5a72ecc173d5ea7115bf1d14b1_con_130x130.png"
+  },
+  {
+    "name": "红外热像仪",
+    "package_name": "com.heat.imaging",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/12/6/106_2353c734bf3787d06d0031450e68ddff_con_130x130.png"
+  },
+  {
+    "name": "剪印",
+    "package_name": "com.wonderful.anime",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/07/8/106_13c025fba18843bf4e19d17a821d6d5f_con_130x130.png"
+  },
+  {
+    "name": "必剪",
+    "package_name": "com.bilibili.studio",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/7/110_d2f67b6fb8b3b2466f36321426b2eef1_con_130x130.png"
+  },
+  {
+    "name": "Ins",
+    "package_name": "com.yj.jzi.insxji",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/03/0/106_2c5c8e2a350aefe97f50a02f7406d0bc_con_130x130.png"
+  },
+  {
+    "name": "快剪辑-视频大片一键制作",
+    "package_name": "com.qihoo.qeditor",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/9/106_a9aa4534c520234321dcd6951ccf3dc7_con_130x130.png"
+  },
+  {
+    "name": "快图浏览",
+    "package_name": "hfgl.ktll.xyres",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/24/0/106_b11dc183c683260ff6433e617f0f101c_con_130x130.png"
+  },
+  {
+    "name": "超级录屏",
+    "package_name": "com.sulp",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/4/2_e3a1929df7dddfb531f39377d26e6693_con_130x130.png"
+  },
+  {
+    "name": "屏幕录制大师",
+    "package_name": "com.littlea.screencorder.finger",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/04/1/106_18c1c16e6084a55b71b0baff06256636_con_130x130.png"
+  },
+  {
+    "name": "捷映视频制作",
+    "package_name": "com.jieying365.www",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/07/20/8/110_7d07c101bc6d24afce3381fc224e8637_con_130x130.png"
+  },
+  {
+    "name": "证件照",
+    "package_name": "com.mengdaishuang.diyphoto",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/05/7/106_48008fae81fae7ce94cdcc8d516af684_con_130x130.png"
+  },
+  {
+    "name": "证件照",
+    "package_name": "com.photocamera.identification",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/25/11/106_67178ace9e5b034ad0d50f22b2449d99_con_130x130.png"
+  },
+  {
+    "name": "手绘视频制作",
+    "package_name": "com.lejian.shouhui",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/25/4/106_b2930f0623ea24c44dcb879def54ebeb_con_130x130.png"
+  },
+  {
+    "name": "毕业证件照",
+    "package_name": "com.qiutinghe.graduatecamera",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/26/1/106_652405882374bea5c3c8f71be363e534_con_130x130.png"
+  },
+  {
+    "name": "蜂鸟摄影",
+    "package_name": "com.fn.android",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/27/1/106_5563c8751329f0d9b027765322942229_con_130x130.png"
+  },
+  {
+    "name": "传影记视频制作",
+    "package_name": "com.cykj.chuangyingdiy",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/08/17/1/125_c81fdc3b0eced5d2bd973803eb6f0dcb_con_130x130.png"
+  },
+  {
+    "name": "私家云",
+    "package_name": "com.cm.weixiangji",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/04/07/0/125_e51fdbf6ae9b466f535bc4aafc7cfbd8_con_130x130.png"
+  },
+  {
+    "name": "AI今曰水印相机",
+    "package_name": "com.yjwl.todayswatermarkcamera",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/18/8/110_32adfba3e911f2d8cb426f90153ef2b2_con_130x130.png"
+  },
+  {
+    "name": "Mikuture",
+    "package_name": "dfg.tuu.con",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/03/19/2/110_06b45e84f70763d4a5c2c178153bb6ac_con_130x130.png"
+  },
+  {
+    "name": "秘密空间",
+    "package_name": "com.privacy.album",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/05/22/6/125_f6e58e5070966f1a6ce43c56d3bc8ced_con_130x130.png"
+  },
+  {
+    "name": "漫蛙",
+    "package_name": "shuffle.manwa.wallpaper",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/11/4/110_6c4e2908e662e0db4c2ea7930b180085_con_130x130.png"
+  },
+  {
+    "name": "图片大全",
+    "package_name": "com.app.jdxsxp",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/29/7/106_130b92d51a14e6191fa4d148ea5f15e6_con_130x130.png"
+  },
+  {
+    "name": "免费证件照制作",
+    "package_name": "com.yiheng.idphoto",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/01/3/106_cf270fae33ecf8c1b73210702591f246_con_130x130.png"
+  },
+  {
+    "name": "皮皮视频照片去水印",
+    "package_name": "com.ming.xvideo",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/08/14/11/125_904041e81c08c81d293550a4d1ca977c_con_130x130.png"
+  },
+  {
+    "name": "装Biu神器",
+    "package_name": "queek.huazhi.magic",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/30/8/110_e8a4760ce05be469dbe4c40ab62df464_con_130x130.png"
+  },
+  {
+    "name": "私密相册加密",
+    "package_name": "com.e.album",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/06/06/5/110_8f47b0f549629eaae38272299ab5ae0f_con_130x130.png"
+  },
+  {
+    "name": "证件照相机",
+    "package_name": "com.leqi.photograph",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/03/29/7/110_a5c56134d5634a64123df2704b4fa918_con_130x130.png"
+  },
+  {
+    "name": "相片书",
+    "package_name": "com.yuanli.picturealbumbook",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/14/11/110_a3410707749cfe9f44f1dcb69fcccbc2_con_130x130.png"
+  },
+  {
+    "name": "iBaby Care",
+    "package_name": "com.ibaby",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/02/28/6/106_72b8bd48236ab32d4da2051c762a7ba0_con_130x130.png"
+  },
+  {
+    "name": "画中人-拼图",
+    "package_name": "com.jyx.ps.jpg.www",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/18/2/106_f86200f73528692caa78538c8616c012_con_130x130.png"
+  },
+  {
+    "name": "橘子相机",
+    "package_name": "mydxx.hqxj.bvxk",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/29/2/125_ce85b4748dfcdcf8ad173fe704b2a945_con_130x130.png"
+  },
+  {
+    "name": "大观云图",
+    "package_name": "com.mobile.daguanyun",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/06/6/110_340027583681c327f1b0cad499c9d946_con_130x130.png"
+  },
+  {
+    "name": "证件照研究院",
+    "package_name": "com.leqi.IDPhotoVerify",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/18/1/110_978dc5d254d02714b92894e9b5839b17_con_130x130.png"
+  },
+  {
+    "name": "马克水印相机",
+    "package_name": "com.ai.marki",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/1/110_a90d609249fb326503feca60dee255f6_con_130x130.png"
+  },
+  {
+    "name": "四维看看",
+    "package_name": "com.fdage.turn.dual",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/0/110_849e069a9fc357c492e57001efcd1f52_con_130x130.png"
+  },
+  {
+    "name": "酷雀AI智能抠图",
+    "package_name": "com.dachuang.koutu",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/29/0/2_c19dcd52b6dbc7e309831e3b6f4bf61e_con_130x130.png"
+  },
+  {
+    "name": "老相册修复",
+    "package_name": "com.ziyi18.lxcxf",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/18/11/106_2b073025194c98fe16eb920ade993ec5_con_130x130.png"
+  },
+  {
+    "name": "Face换颜相机",
+    "package_name": "com.realcome.picture",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/16/4/106_fa735734226853ffcbec700562c691d4_con_130x130.png"
+  },
+  {
+    "name": "加密照片",
+    "package_name": "com.yuanhuie.photovault",
+    "category": "摄影图像",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2023/12/27/5/110_e17903615f9d8f98ac71feedf6d3900a_con_130x130.png"
+  },
+  {
+    "name": "洋葱学园",
+    "package_name": "com.yangcong345.android.phone",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/26/8/110_a44b6035c850991f0059820408b10181_con_130x130.png"
+  },
+  {
+    "name": "不背单词",
+    "package_name": "cn.com.langeasy.LangEasyLexis",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/14/7/110_a0650da86e814e12e054bf3abcfe2e9f_con_130x130.png"
+  },
+  {
+    "name": "猿题库",
+    "package_name": "com.fenbi.android.gaozhong",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/22/0/106_f5ce60193eea19e52dc2ff9404f79b8f_con_130x130.png"
+  },
+  {
+    "name": "百词斩",
+    "package_name": "com.jiongji.andriod.card",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/21/4/110_0700976c87ee28f27c66660d03157744_con_130x130.png"
+  },
+  {
+    "name": "每日英语听力",
+    "package_name": "com.eusoft.ting.en",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/0/110_d2f8e200d4df501129c483f2ac75824b_con_130x130.png"
+  },
+  {
+    "name": "多邻国-英语日语法语",
+    "package_name": "com.duolingo",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/1/125_159b5fc9588f0dc3db310329e5354c67_con_130x130.png"
+  },
+  {
+    "name": "同步小学课堂",
+    "package_name": "com.wyt.iexuetang.hd.xxtb",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/1/110_03f56e7b126835a04de25091f722c637_con_130x130.png"
+  },
+  {
+    "name": "painter绘画",
+    "package_name": "com.xszvwd.trzzsn",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/04/19/0/110_a4a517229cc72e4c70df0c7dbcd93091_con_130x130.png"
+  },
+  {
+    "name": "网易公开课",
+    "package_name": "com.netease.vopen",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/30/6/106_d00951404abaa6de4e113ddb08ceef5c_con_130x130.png"
+  },
+  {
+    "name": "驾考宝典3D练车",
+    "package_name": "jiakaokeyi.app.good",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/13/7/110_684a79b162c64a4a8a600671255a70ed_con_130x130.png"
+  },
+  {
+    "name": "学习强国",
+    "package_name": "cn.xuexi.android",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/0/110_3d72a1df26ad491bc93e161bee63f367_con_130x130.png"
+  },
+  {
+    "name": "宝宝学汉字",
+    "package_name": "com.wordtiger.babyhanzi",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/24/7/110_e4aac4e638308ae9657e0146c22378a7_con_130x130.png"
+  },
+  {
+    "name": "流利说-英语",
+    "package_name": "com.liulishuo.engzo",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/25/0/125_af05f02c4997119de75f1aa748eb8b9c_con_130x130.png"
+  },
+  {
+    "name": "纸条作文",
+    "package_name": "zwzt.fangqiu.edu.com.zwzt",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/15/11/106_9463d046983a12e8943a9dcc06a23564_con_130x130.png"
+  },
+  {
+    "name": "驾考宝典",
+    "package_name": "com.handsgo.jiakao.android",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/0/110_8f7195144ad40c569f180edadc150835_con_130x130.png"
+  },
+  {
+    "name": "出国翻译君",
+    "package_name": "com.junruy.cgfyj",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/03/31/3/110_f697040e317c32963eeb613573db7945_con_130x130.png"
+  },
+  {
+    "name": "记忆力与注意力训练",
+    "package_name": "com.nongyao.memory",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/29/3/106_7ec7e3c6cca5b8b2d492c8eb7ebba385_con_130x130.png"
+  },
+  {
+    "name": "网易有道词典",
+    "package_name": "com.youdao.dict",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/22/2/2_04f6ea410ac58f33b35625b6a84479f9_con_130x130.png"
+  },
+  {
+    "name": "宝宝玩加减法",
+    "package_name": "com.sinyee.babybus.happycounting",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/10/6/110_fb31f908f40f8a15e22af54ae719bde2_con_130x130.png"
+  },
+  {
+    "name": "中小学辅导班",
+    "package_name": "com.wyt.iexuetang.hd.zxxtb",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/20/0/110_d1bccefd305f23143c641f5abe59614f_con_130x130.png"
+  },
+  {
+    "name": "全国驾考3D考场模拟练车",
+    "package_name": "com.spirit3d.kaochang3d",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/04/11/2/110_1dc241adc0a4853d268456b890b8430e_con_130x130.png"
+  },
+  {
+    "name": "欧拉AI学",
+    "package_name": "com.ola100.app",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/11/110_89fc2f74de9ee8d463ee429ba10c376b_con_130x130.png"
+  },
+  {
+    "name": "练字秀",
+    "package_name": "cn.nps.app.lzshow",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/03/07/11/110_10e0d02dab9cc5a5162e9a7f385a5335_con_130x130.png"
+  },
+  {
+    "name": "驾考家园",
+    "package_name": "jiayuan.com.aikao",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/07/21/0/110_39fc413621b540c3166c43027976e50f_con_130x130.png"
+  },
+  {
+    "name": "我要自学网",
+    "package_name": "com.fzisen.app51zxw",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/24/0/110_8c4c7d94cd89d76319cb549a13a9e68c_con_130x130.png"
+  },
+  {
+    "name": "高考真题",
+    "package_name": "com.jumen.gaokao",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/12/11/106_55491d44fa9e688a6b93cc5f22ed241a_con_130x130.png"
+  },
+  {
+    "name": "妙懂历史",
+    "package_name": "com.cnhsqk.history.student",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/24/8/110_3052e7783e1d09f36aff7cab7c9eb567_con_130x130.png"
+  },
+  {
+    "name": "小猿口算",
+    "package_name": "com.fenbi.android.leo",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/2/106_35bbb6af1f91fc1fbfe825d2f91010dc_con_130x130.png"
+  },
+  {
+    "name": "翻译狗",
+    "package_name": "com.qingxun.translationdog",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/19/10/110_adfa8f7a96d18723806bfdf381f83169_con_130x130.png"
+  },
+  {
+    "name": "上学吧初级会计题库",
+    "package_name": "com.ujigu.tcchujikuaiji",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/12/16/3/110_bd960615aa3f6b8291889da139299ea0_con_130x130.png"
+  },
+  {
+    "name": "小学语文识字",
+    "package_name": "com.zhihui.chinese",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/20/8/110_c17f70ad61627c6be5d72d492dff0811_con_130x130.png"
+  },
+  {
+    "name": "我爱英语",
+    "package_name": "com.realsys.learnenglish",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/11/04/2/110_5de8d9edd010e619cdcda77eb767e0f5_con_130x130.png"
+  },
+  {
+    "name": "哆啦绘本",
+    "package_name": "cn.dlbook.app",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/27/11/106_4251c111eeb0914b4fa8ee4110fcc0e9_con_130x130.png"
+  },
+  {
+    "name": "移动图书馆",
+    "package_name": "com.superlib",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/14/4/125_a7b61f813301782217768636698f950f_con_130x130.png"
+  },
+  {
+    "name": "单词帮",
+    "package_name": "com.kzf.ideamost.wordhelp",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2022/06/02/5/110_7b9c68c24fbadcb46bbd7525fb27565a_con_130x130.png"
+  },
+  {
+    "name": "二级建造师",
+    "package_name": "com.ggeye.kaoshi.jianzaotwo",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/3/110_cb1624d57206056e90b5ffa0ae4f482b_con_130x130.png"
+  },
+  {
+    "name": "执业药师准题库",
+    "package_name": "cn.wangxiao.yaoshizhuntiku",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2024/10/29/6/125_39dfeef9b43ecce338d6a0945d33a70d_con_130x130.png"
+  },
+  {
+    "name": "大力家长",
+    "package_name": "com.kongming.android.h.parent",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/10/13/5/106_cf8ac0bc6a5d06bca9ef8a3e335181b5_con_130x130.png"
+  },
+  {
+    "name": "入党考试题库",
+    "package_name": "com.ujigu.three.rdks",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/08/0/110_0305ce414589d336b621703667688a3c_con_130x130.png"
+  },
+  {
+    "name": "口算出题家长助手",
+    "package_name": "com.idoli.cacl",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/13/11/110_f56572740cff2c94883f3b559e45d58e_con_130x130.png"
+  },
+  {
+    "name": "育婴师题库",
+    "package_name": "com.ujigu.tcyuying",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/20/8/110_b9f3090324406346a5c0b1f702366760_con_130x130.png"
+  },
+  {
+    "name": "驾校报表",
+    "package_name": "cn.mucang.android.xinjiapei",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/08/13/5/110_ad357d617b6b35cd3b6c1ac57d1d52bd_con_130x130.png"
+  },
+  {
+    "name": "消防工程师考试宝典",
+    "package_name": "com.yingsoft.gongcheng.Activity",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/05/19/0/110_ddf1dd9740bc66d6eb47ce2c684f29b2_con_130x130.png"
+  },
+  {
+    "name": "社会工作者疯狂题库",
+    "package_name": "com.ycx.socialworker",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/09/4/110_74a4739a9caab590608d33a0e57cd525_con_130x130.png"
+  },
+  {
+    "name": "电工考试聚题库",
+    "package_name": "com.s20cxq.electricianexamination",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/09/09/10/110_c0c0da96c405a3b9333429176f9a06f0_con_130x130.png"
+  },
+  {
+    "name": "竹马",
+    "package_name": "com.zhumaonline.exercise",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2026/01/23/1/106_0edcb2a5f23dccdca7d4f105e344b260_con_130x130.png"
+  },
+  {
+    "name": "驾照宝典",
+    "package_name": "jiaxiao.app.good",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/12/19/3/110_dcf3d91497bcaf19c13ef38661e938ff_con_130x130.png"
+  },
+  {
+    "name": "上学吧保险高管题库",
+    "package_name": "com.ujigu.tcbx",
+    "category": "考试学习",
+    "icon_url": "https://android-artworks.25pp.com/fs08/2025/01/14/7/110_aac02279d1c48611eaad5f12ae5980d1_con_130x130.png"
+  }
+]

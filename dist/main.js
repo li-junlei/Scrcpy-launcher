@@ -16,6 +16,17 @@ let editingAppPackage = null;
 let editingPresetName = null;
 let deletingAppPackage = null;
 let deviceApps = [];
+let appDatabase = [];
+
+async function loadAppDatabase() {
+    try {
+        const response = await fetch('app_database.json');
+        appDatabase = await response.json();
+        console.log('App database loaded:', appDatabase.length, 'entries');
+    } catch (e) {
+        console.error('Failed to load app database:', e);
+    }
+}
 
 // 辅助：安全绑定点击事件
 function bindClick(id, handler) {
@@ -112,6 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('App DOMContentLoaded');
     try {
         await loadConfig();
+        loadAppDatabase(); // Load silently in background
         setupEventListeners();
         initUI();
         console.log('App Initialized Successfully');
@@ -221,6 +233,35 @@ function setupEventListeners() {
 
     bindClick('app-cancel-btn', () => hideModal('app-config-modal'));
     bindClick('app-save-btn', saveApp);
+
+    // App Name Autocomplete
+    const appNameInput = $('app-name');
+    if (appNameInput) {
+        appNameInput.addEventListener('input', function () {
+            const name = this.value.trim();
+            const hintEl = $('app-name-hint');
+            const pkgInput = $('app-package');
+
+            if (!name) {
+                if (hintEl) hintEl.textContent = '';
+                return;
+            }
+
+            const match = appDatabase.find(app => app.name === name);
+            if (match) {
+                if (pkgInput && !pkgInput.value) {
+                    pkgInput.value = match.package_name;
+                    if (hintEl) hintEl.textContent = '已自动填充包名: ' + match.package_name;
+                } else if (pkgInput && pkgInput.value === match.package_name) {
+                    if (hintEl) hintEl.textContent = '已匹配包名: ' + match.package_name;
+                } else {
+                    if (hintEl) hintEl.textContent = '数据库中找到: ' + match.package_name + ' (未覆盖现有值)';
+                }
+            } else {
+                if (hintEl) hintEl.textContent = '未找到匹配的包名，请手动输入';
+            }
+        });
+    }
 
     // 浏览应用
     bindClick('browse-back-btn', () => hideModal('browse-apps-modal'));
