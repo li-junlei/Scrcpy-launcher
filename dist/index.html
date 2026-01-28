@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrcpy Launcher</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="overrides.css">
+    <link rel="stylesheet" href="styles.css?v=2.6.1">
+    <link rel="stylesheet" href="suggestions.css">
 </head>
 
 <body>
@@ -263,6 +263,18 @@
                     <label>完整分辨率</label>
                     <input type="text" id="global-res" value="1200x2670" placeholder="如 1200x2670">
                 </div>
+                <div class="form-row">
+                    <label class="switch-label">
+                        <input type="checkbox" id="global-show-icons" checked>
+                        <span>显示应用图标</span>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label class="switch-label">
+                        <input type="checkbox" id="global-filter-installed" checked>
+                        <span>输入联想仅显示已安装应用</span>
+                    </label>
+                </div>
             </div>
 
             <div class="form-section">
@@ -386,8 +398,27 @@
             <h2 id="app-config-title">添加应用</h2>
 
             <div class="app-header">
-                <div class="app-info-inputs">
-                    <input type="text" id="app-name" placeholder="备注名">
+                <div class="app-icon-section" style="cursor: pointer; position: relative;" id="select-icon-btn"
+                    title="点击更改图标">
+                    <img id="app-icon-preview" src=""
+                        style="width: 64px; height: 64px; object-fit: contain; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-color-secondary);"
+                        onerror="this.onerror=null; this.style.visibility='hidden'">
+                    <div class="icon-edit-overlay"
+                        style="position: absolute; bottom: -8px; right: -8px; background: var(--primary-color); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                        ✏️</div>
+                    <div id="reset-icon-btn"
+                        style="position: absolute; top: -8px; right: -8px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 10;"
+                        title="恢复默认图标" onclick="deleteCustomIcon(event)">↺</div>
+                </div>
+                <div class="app-info-inputs" style="flex: 1; margin-left: 16px; position: relative;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label style="font-size: 0.85em; display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="search-name-only" style="margin-right: 4px;"> 仅搜名称
+                        </label>
+                    </div>
+                    <input type="text" id="app-name" placeholder="应用名" autocomplete="off">
+                    <div id="app-name-suggestions" class="suggestions-list hidden"></div>
                     <div id="app-name-hint"
                         style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; min-height: 18px;"></div>
                     <div class="form-row">

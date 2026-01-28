@@ -148,11 +148,71 @@ pub fn set_first_run_complete() {
 
 /// 保存全局设置
 #[tauri::command]
-pub fn save_global_settings(dpi: u32, full_res: String) {
+pub fn save_global_settings(
+    dpi: u32, 
+    full_res: String, 
+    show_app_icons: bool,
+    filter_installed_apps: bool
+) {
     let mut config = Config::load();
     config.global_settings.dpi = dpi;
     config.global_settings.full_res = full_res;
+    config.global_settings.show_app_icons = show_app_icons;
+    config.global_settings.filter_installed_apps = filter_installed_apps;
     config.save();
+}
+
+/// 保存应用图标
+#[tauri::command]
+pub fn save_app_icon(package: String, source_path: String) -> Result<String, String> {
+    // 验证源文件存在
+    let src = std::path::Path::new(&source_path);
+    if !src.exists() {
+        return Err("源文件不存在".to_string());
+    }
+
+    // 目标目录: dist/custom_icons/
+    let mut dest = std::env::current_dir().map_err(|e| e.to_string())?;
+    dest.push("dist");
+    dest.push("custom_icons");
+
+    // 确保目录存在
+    if !dest.exists() {
+        std::fs::create_dir_all(&dest).map_err(|e| e.to_string())?;
+    }
+
+    // 目标文件名: {package}.png (简单起见统一转为 png 后缀，实际可能是 ico/jpg)
+    // 为了更好的兼容性，我们保留原扩展名或者统一转存？
+    // 为了前端方便加载，我们尽量保持原扩展名，或者前端尝试加载多种。
+    // 这里简单处理：直接拷贝，文件名设为 package.png (假设用户选的是图片)
+    // 如果用户选的是 ico，强行命名 png 也可以显示，但最好是保留扩展名。
+    // 既然前端逻辑可以固定 `<img src="...png">`，那我们也可以强制用户选 png，
+    // 或者不管扩展名，统一存为 png 文件 (内容其实是 jpg/ico 也不影响浏览器显示，大部分现代浏览器靠内容嗅探)
+    // 让我们稍微严谨一点：获取源扩展名，如果是支持的图片格式，就拷贝。
+    // 但为了前端简单 `src="${pkg}.png"`，我们直接把目标文件命名为 `.png` 结尾。
+    
+    dest.push(format!("{}.png", package));
+
+    std::fs::copy(src, &dest).map_err(|e| format!("复制文件失败: {}", e))?;
+
+    Ok(format!("图标已保存: {}", package))
+}
+
+/// 删除自定义图标
+#[tauri::command]
+pub fn delete_custom_icon(package: String) -> Result<String, String> {
+    // 目标目录: dist/custom_icons/
+    let mut dest = std::env::current_dir().map_err(|e| e.to_string())?;
+    dest.push("dist");
+    dest.push("custom_icons");
+    dest.push(format!("{}.png", package));
+
+    if dest.exists() {
+        std::fs::remove_file(dest).map_err(|e| format!("删除图标失败: {}", e))?;
+        Ok("恢复默认图标成功".to_string())
+    } else {
+        Ok("未找到自定义图标，无需恢复".to_string())
+    }
 }
 
 /// 设置主题

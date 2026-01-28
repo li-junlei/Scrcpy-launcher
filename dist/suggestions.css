@@ -1,0 +1,46 @@
+/* 自动补全建议列表 */
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+    background: var(--bg);
+}
+
+.suggestion-item img {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.suggestion-item .name {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+}
+
+.suggestion-item .pkg {
+    font-size: 11px;
+    color: var(--text-secondary);
+}

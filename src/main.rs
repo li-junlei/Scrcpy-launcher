@@ -61,6 +61,8 @@ fn main() {
             commands::adb_push_file,
             commands::pair_device,
             commands::scan_tcp_devices,
+            commands::save_app_icon,
+            commands::delete_custom_icon,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

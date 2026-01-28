@@ -17,14 +17,18 @@ let editingPresetName = null;
 let deletingAppPackage = null;
 let deviceApps = [];
 let appDatabase = [];
+let installedPackages = new Set();
+let isInstalledAppsSynced = false;
 
 async function loadAppDatabase() {
     try {
-        const response = await fetch('app_database.json');
+        const response = await fetch('app_database.json?t=' + Date.now());
         appDatabase = await response.json();
         console.log('App database loaded:', appDatabase.length, 'entries');
+        // showMessage('数据库已更新: ' + appDatabase.length + ' 个应用');
     } catch (e) {
         console.error('Failed to load app database:', e);
+        showMessage('数据库加载失败');
     }
 }
 
@@ -138,6 +142,12 @@ async function loadConfig() {
     try {
         config = await invoke('get_config');
         applyTheme(config.global_settings.theme);
+
+        // 应用全局图标显示设置
+        const showIcons = config.global_settings.show_app_icons !== false; // 默认为 true
+        const globalShowIcons = $('global-show-icons');
+        if (globalShowIcons) globalShowIcons.checked = showIcons;
+
     } catch (e) {
         console.error('加载配置失败:', e);
         showMessage('加载配置失败');
@@ -151,6 +161,7 @@ function initUI() {
     } else {
         checkAdbStatus();
         renderApps();
+        loadAppDatabase(); // 加载数据库
         loadHistoryDropdown();
         if (config.adb_history.length > 0) {
             $('ip-input').value = config.adb_history[0];
@@ -197,6 +208,23 @@ function setupEventListeners() {
     bindClick('add-app-btn', () => openAppConfigModal());
     bindClick('sort-btn', toggleSortMode);
 
+    // 绑定应用名输入建议
+    const appNameInput = $('app-name');
+    if (appNameInput) {
+        appNameInput.addEventListener('input', handleAppNameInput);
+        document.addEventListener('click', (e) => {
+            if (e.target !== appNameInput && e.target.id !== 'search-name-only') {
+                $('app-name-suggestions').classList.add('hidden');
+            }
+        });
+
+        // Toggle Search Name Only
+        const searchNameOnly = $('search-name-only');
+        if (searchNameOnly) {
+            searchNameOnly.onchange = handleAppNameInput;
+        }
+    }
+
     // 首次运行
     bindClick('save-first-run-btn', saveFirstRunConfig);
 
@@ -204,7 +232,17 @@ function setupEventListeners() {
     bindClick('settings-cancel-btn', () => hideModal('settings-modal'));
     bindClick('settings-save-btn', saveSettings);
 
-    // 高级设置
+    // Filter Installed Toggle (Global)
+    const globalFilterInstalled = $('global-filter-installed');
+    if (globalFilterInstalled) {
+        globalFilterInstalled.onchange = () => {
+            // Optional: Immediately sync if enabled and connected
+            if (globalFilterInstalled.checked && config.adb_status && config.adb_status.connected && !isInstalledAppsSynced) {
+                syncInstalledApps();
+            }
+        };
+    }
+
     const useCustomArgs = $('use-custom-args');
     if (useCustomArgs) useCustomArgs.onchange = toggleCustomArgsMode;
 
@@ -233,33 +271,15 @@ function setupEventListeners() {
 
     bindClick('app-cancel-btn', () => hideModal('app-config-modal'));
     bindClick('app-save-btn', saveApp);
+    bindClick('select-icon-btn', selectAppIcon); // 选择图标事件
+    bindClick('reset-icon-btn', deleteCustomIcon); // 绑定恢复默认按钮
 
-    // App Name Autocomplete
-    const appNameInput = $('app-name');
-    if (appNameInput) {
-        appNameInput.addEventListener('input', function () {
-            const name = this.value.trim();
-            const hintEl = $('app-name-hint');
-            const pkgInput = $('app-package');
 
-            if (!name) {
-                if (hintEl) hintEl.textContent = '';
-                return;
-            }
-
-            const match = appDatabase.find(app => app.name === name);
-            if (match) {
-                if (pkgInput && !pkgInput.value) {
-                    pkgInput.value = match.package_name;
-                    if (hintEl) hintEl.textContent = '已自动填充包名: ' + match.package_name;
-                } else if (pkgInput && pkgInput.value === match.package_name) {
-                    if (hintEl) hintEl.textContent = '已匹配包名: ' + match.package_name;
-                } else {
-                    if (hintEl) hintEl.textContent = '数据库中找到: ' + match.package_name + ' (未覆盖现有值)';
-                }
-            } else {
-                if (hintEl) hintEl.textContent = '未找到匹配的包名，请手动输入';
-            }
+    // App Package Input Listener for Icon Preview
+    const appPackageInput = $('app-package');
+    if (appPackageInput) {
+        appPackageInput.addEventListener('input', function () {
+            updateIconPreview(this.value.trim());
         });
     }
 
@@ -375,9 +395,54 @@ async function checkAdbStatus() {
         const status = await invoke('check_adb_status');
         $('status-dot').classList.toggle('connected', status.connected);
         $('status-text').textContent = status.message;
+
+        // 智能补全状态同步
+        if (status.connected) {
+            if (!isInstalledAppsSynced && (config.filter_installed_apps !== false)) {
+                syncInstalledApps();
+            }
+        } else {
+            // 断开连接，清空缓存，确保降级为显示所有
+            installedPackages.clear();
+            isInstalledAppsSynced = false;
+        }
+
     } catch (e) {
         $('status-dot').classList.remove('connected');
         $('status-text').textContent = '检查失败';
+        installedPackages.clear(); // 检查失败视为断开，清空缓存
+    }
+}
+
+async function syncInstalledApps() {
+    if (isInstalledAppsSynced) return; // 避免重复同步
+
+    console.log('开始同步已安装应用...');
+    try {
+        const apps = await invoke('get_installed_apps');
+        installedPackages = new Set(apps);
+        isInstalledAppsSynced = true;
+        console.log(`已同步 ${installedPackages.size} 个已安装应用。`);
+    } catch (e) {
+        console.error('同步已安装应用失败:', e);
+        installedPackages.clear();
+        isInstalledAppsSynced = false;
+    }
+}
+
+async function syncInstalledApps() {
+    if (isInstalledAppsSynced) return; // 避免重复同步
+
+    console.log('开始同步已安装应用...');
+    try {
+        const apps = await invoke('get_installed_apps');
+        installedPackages = new Set(apps);
+        isInstalledAppsSynced = true;
+        console.log(`已同步 ${installedPackages.size} 个已安装应用。`);
+    } catch (e) {
+        console.error('同步已安装应用失败:', e);
+        installedPackages.clear();
+        isInstalledAppsSynced = false;
     }
 }
 
@@ -579,6 +644,9 @@ function renderApps() {
     const grid = $('apps-grid');
     grid.innerHTML = '';
 
+    const showIcons = config.global_settings.show_app_icons !== false;
+    grid.classList.toggle('show-icons', showIcons);
+
     const appEntries = Object.entries(config.apps || {});
 
     if (appEntries.length === 0) {
@@ -604,6 +672,11 @@ function renderApps() {
                         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
                 </div>
+                <!-- 图标 (双层加载: custom -> database -> hidden) -->
+                ${showIcons ? `
+                <div class="app-icon-wrapper">
+                    <img src="custom_icons/${pkg}.png?t=${Date.now()}" onerror="this.onerror=null; this.src='app_icons/${pkg}.png'; this.onerror=function(){this.style.display='none'};" style="display: block;">
+                </div>` : ''}
                 <span class="app-name">${app.name || '未命名'}</span>
             `;
 
@@ -619,8 +692,13 @@ function renderApps() {
                 rightBtn.onclick = () => moveApp(pkg, index, index + 1);
             }
         } else {
-            // 创建内容 - 仅文字
+            // 创建内容
             card.innerHTML = `
+                <!-- 图标 (双层加载: custom -> database -> hidden) -->
+                ${showIcons ? `
+                <div class="app-icon-wrapper">
+                    <img src="custom_icons/${pkg}.png?t=${Date.now()}" onerror="this.onerror=null; this.src='app_icons/${pkg}.png'; this.onerror=function(){this.style.display='none'};" style="display: block;">
+                </div>` : ''}
                 <span class="app-name">${app.name || '未命名'}</span>
                 <button class="menu-btn">⋮</button>
                 <div class="app-menu" id="menu-${pkg}">
@@ -791,12 +869,92 @@ function openAppConfigModal(pkg = null) {
         $('app-landscape').checked = false;
     }
 
-    // 自定义参数
     $('use-app-scrcpy-args').checked = app.scrcpy_args !== null && app.scrcpy_args !== undefined;
     $('app-scrcpy-args').value = app.scrcpy_args || config.custom_args || '';
     toggleAppScrcpyArgs();
 
+    // 更新图标预览
+    updateIconPreview(pkg || '');
+
     showModal('app-config-modal');
+}
+
+// 选择应用图标
+async function selectAppIcon() {
+    try {
+        const selected = await open({
+            multiple: false,
+            filters: [{
+                name: 'Image',
+                extensions: ['png', 'jpg', 'jpeg', 'ico', 'webp']
+            }]
+        });
+
+        if (selected) {
+            // 获取当前包名 (如果尚未输入包名，提示用户先输入)
+            const pkg = $('app-package').value.trim();
+            if (!pkg) {
+                showMessage('请先输入应用包名');
+                return;
+            }
+
+            // 调用后端保存图标
+            const result = await invoke('save_app_icon', {
+                package: pkg,
+                sourcePath: selected
+            });
+            showMessage(result);
+
+            // 刷新预览
+            updateIconPreview(pkg);
+        }
+    } catch (e) {
+        showMessage('选择图标失败: ' + e);
+        console.error(e);
+    }
+}
+
+// 更新图标预览 (逻辑: 先尝试 custom，失败(onerror) 加载 database，再失败隐藏)
+function updateIconPreview(pkg) {
+    const img = $('app-icon-preview');
+    if (!img) return;
+
+    img.style.visibility = 'visible';
+    img.onerror = null;
+
+    if (pkg) {
+        const timestamp = Date.now();
+        img.src = `custom_icons/${pkg}.png?t=${timestamp}`;
+
+        img.onerror = function () {
+            this.onerror = null;
+            this.src = `app_icons/${pkg}.png?t=${timestamp}`;
+            this.onerror = function () {
+                this.style.visibility = 'hidden';
+            };
+        };
+    } else {
+        img.src = '';
+        img.style.visibility = 'hidden';
+    }
+}
+
+// 删除自定义图标
+async function deleteCustomIcon(e) {
+    if (e) e.stopPropagation();
+
+    const pkg = $('app-package').value.trim();
+    if (!pkg) return;
+
+    if (!confirm('确定要恢复默认图标吗？(自定义图标将被删除)')) return;
+
+    try {
+        const result = await invoke('delete_custom_icon', { package: pkg });
+        showMessage(result);
+        updateIconPreview(pkg);
+    } catch (e) {
+        showMessage(e);
+    }
 }
 
 function toggleResolutionFields() {
@@ -860,6 +1018,40 @@ async function saveApp() {
     }
 }
 
+// 应用名输入建议
+function handleAppNameInput() {
+    const input = $('app-name');
+    const suggestionsDiv = $('app-name-suggestions');
+    const searchTerm = input.value.toLowerCase();
+
+    if (searchTerm.length < 1) {
+        suggestionsDiv.classList.add('hidden');
+        return;
+    }
+
+    const filteredSuggestions = appDatabase.filter(app =>
+        app.name.toLowerCase().includes(searchTerm) || app.package.toLowerCase().includes(searchTerm)
+    ).slice(0, 10); // Limit to 10 suggestions
+
+    suggestionsDiv.innerHTML = '';
+    if (filteredSuggestions.length > 0) {
+        filteredSuggestions.forEach(app => {
+            const item = document.createElement('div');
+            item.classList.add('suggestion-item');
+            item.textContent = `${app.name} (${app.package})`;
+            item.onclick = () => {
+                input.value = app.name;
+                $('app-package').value = app.package;
+                updateIconPreview(app.package);
+                suggestionsDiv.classList.add('hidden');
+            };
+            suggestionsDiv.appendChild(item);
+        });
+        suggestionsDiv.classList.remove('hidden');
+    } else {
+        suggestionsDiv.classList.add('hidden');
+    }
+}
 
 
 // ==================== 浏览设备应用 ====================
@@ -997,6 +1189,9 @@ async function deletePreset(name) {
 function openSettingsModal() {
     $('global-dpi').value = config.global_settings.dpi;
     $('global-res').value = config.global_settings.full_res;
+    $('global-show-icons').checked = config.global_settings.show_app_icons !== false;
+    $('global-filter-installed').checked = config.global_settings.filter_installed_apps !== false;
+
     $('tray-count').value = config.tray_app_count;
     $('tray-mirror').checked = config.tray_show_mirror;
     $('tray-audio').checked = config.tray_show_audio;
@@ -1006,18 +1201,25 @@ function openSettingsModal() {
 async function saveSettings() {
     const dpi = parseInt($('global-dpi').value) || 400;
     const fullRes = $('global-res').value || '1200x2670';
+    const showIcons = $('global-show-icons').checked;
+    const filterInstalled = $('global-filter-installed').checked;
+
     const trayCount = parseInt($('tray-count').value) || 4;
     const showMirror = $('tray-mirror').checked;
     const showAudio = $('tray-audio').checked;
 
+    setLoading('settings-save-btn', true);
     try {
-        await invoke('save_global_settings', { dpi, fullRes });
-        await invoke('save_tray_settings', { appCount: trayCount, showMirror, showAudio });
+        await invoke('save_global_settings', { dpi, fullRes, showAppIcons: showIcons, filterInstalledApps: filterInstalled });
+        await invoke('save_tray_settings', { appCount: trayCount, showMirror: showMirror, showAudio: showAudio });
         await loadConfig();
+        renderApps(); // 重新渲染以应用图标设置
         hideModal('settings-modal');
-        showMessage('设置已保存（托盘菜单将在重启后生效）');
+        showMessage('设置已保存');
     } catch (e) {
         showMessage(`保存失败: ${e}`);
+    } finally {
+        setLoading('settings-save-btn', false);
     }
 }
 
@@ -1040,6 +1242,21 @@ function openAdvancedModal() {
     $('opt-ime').checked = opts.local_ime;
     $('opt-max-size').value = opts.max_size || '';
     $('opt-max-fps').value = opts.max_fps || '';
+
+    // 根据配置开启/关闭选项
+    if (config.use_custom_args) {
+        $('use-custom-args').checked = true;
+        toggleCustomArgsMode();
+    } else {
+        $('use-custom-args').checked = false;
+        toggleCustomArgsMode();
+    }
+
+    // Filter Installed (default true if undefined)
+    const filterInstalled = $('opt-filter-installed');
+    if (filterInstalled) {
+        filterInstalled.checked = config.filter_installed_apps !== false;
+    }
 
     // 应用流转选项
     $('use-app-stream-args').checked = config.use_app_stream_args;
@@ -1094,6 +1311,7 @@ function restoreDefaults() {
     $('opt-ime').checked = false;
     $('opt-max-size').value = '';
     $('opt-max-fps').value = '';
+    $('opt-filter-installed').checked = true; // Default to true
 
     $('use-app-stream-args').checked = true;
     $('use-app-custom-args').checked = false;
@@ -1325,3 +1543,98 @@ async function selectScanDevice(ip) {
 
 window.selectScanDevice = selectScanDevice;
 window.scanDevices = scanDevices;
+
+// ==================== 应用名自动补全 ====================
+// 应用名输入建议
+function handleAppNameInput() {
+    const input = $('app-name');
+    const suggestionsDiv = $('app-name-suggestions');
+    const searchTerm = input.value.trim().toLowerCase();
+    const searchNameOnly = $('search-name-only') ? $('search-name-only').checked : false;
+
+    // console.log(`Autocomplete search: "${searchTerm}"`);
+
+    if (searchTerm.length < 1) {
+        suggestionsDiv.classList.add('hidden');
+        return;
+    }
+
+    // 智能过滤条件
+    const filterEnabled = (config.global_settings && config.global_settings.filter_installed_apps !== false);
+    const shouldFilter = filterEnabled && isInstalledAppsSynced;
+
+    let matches = [];
+
+    // 移除最大数量限制，确保能搜索到所有匹配项
+    for (const app of appDatabase) {
+
+        const name = app.name.toLowerCase();
+        const pkg = (app.package_name || '').toLowerCase();
+
+        const matchName = name.includes(searchTerm);
+        let matchPkg = false;
+
+        if (!searchNameOnly) {
+            matchPkg = pkg.includes(searchTerm);
+        }
+
+        if (matchName || matchPkg) {
+            // Filter logic
+            if (shouldFilter) {
+                if (pkg && !installedPackages.has(app.package_name)) {
+                    continue;
+                }
+            }
+
+            // Calculate Score for Sorting
+            let score = 0;
+            // 1. Exact Name Match (Highest)
+            if (name === searchTerm) score += 100;
+            // 2. Exact Package Match
+            else if (!searchNameOnly && pkg === searchTerm) score += 90;
+            // 3. Name Starts With
+            else if (name.startsWith(searchTerm)) score += 80;
+            // 4. Package Starts With
+            else if (!searchNameOnly && pkg.startsWith(searchTerm)) score += 70;
+            // 5. Shortest Name Bonus (closer length to query is better)
+            else score += (20 - Math.min(name.length - searchTerm.length, 20));
+
+            matches.push({ app, score });
+        }
+    }
+
+    // Sort by score descending
+    matches.sort((a, b) => b.score - a.score);
+
+    // Keep top 10
+    const topMatches = matches.slice(0, 10).map(m => m.app);
+
+    // console.log(`Found ${matches.length} matches, showing top ${topMatches.length}.`);
+
+    suggestionsDiv.innerHTML = '';
+    if (topMatches.length === 0) {
+        suggestionsDiv.classList.add('hidden');
+        return;
+    }
+
+    suggestionsDiv.classList.remove('hidden');
+
+    topMatches.forEach(app => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.innerHTML = `
+            <img src="${app.icon_url || 'assets/icon_placeholder.png'}" onerror="this.src='assets/icon_placeholder.png'" alt="icon">
+            <span class="name">${app.name}</span>
+            <span class="pkg">${app.package_name || ''}</span>
+        `;
+        item.onclick = () => {
+            $('app-name').value = app.name;
+            if (app.package_name) {
+                $('app-package').value = app.package_name;
+            }
+            updateIconPreview(app.package_name);
+            suggestionsDiv.classList.add('hidden');
+        };
+        suggestionsDiv.appendChild(item);
+    });
+}

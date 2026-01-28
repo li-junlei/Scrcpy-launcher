@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Scrcpy Launcher",
-  "version": "2.4.0",
-  "identifier": "com.scrcpy.launcher",
+  "version": "2.5.0",
+  "identifier": "com.github.lijunlei.scrcpylauncher",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",

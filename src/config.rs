@@ -24,10 +24,18 @@ pub struct GlobalSettings {
     pub is_landscape: bool,
     #[serde(default = "default_theme")]
     pub theme: String,
+    #[serde(default = "default_true")]
+    pub show_app_icons: bool,
+    #[serde(default = "default_true")]
+    pub filter_installed_apps: bool,
 }
 
 fn default_theme() -> String {
     "light".to_string()
+}
+
+fn default_true() -> bool {
+    true
 }
 
 impl Default for GlobalSettings {
@@ -38,6 +46,8 @@ impl Default for GlobalSettings {
             dpi: 400,
             is_landscape: false,
             theme: default_theme(),
+            show_app_icons: true,
+            filter_installed_apps: true,
         }
     }
 }
