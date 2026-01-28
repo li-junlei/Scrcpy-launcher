@@ -14,6 +14,7 @@ let config = null;
 let isSortingMode = false;
 let editingAppPackage = null;
 let editingPresetName = null;
+let deletingAppPackage = null;
 let deviceApps = [];
 
 // 辅助：安全绑定点击事件
@@ -235,6 +236,10 @@ function setupEventListeners() {
     // 编辑预设
     bindClick('preset-cancel-btn', () => hideModal('preset-edit-modal'));
     bindClick('preset-save-btn', savePreset);
+
+    // 删除确认
+    bindClick('delete-cancel-btn', () => hideModal('delete-confirm-modal'));
+    bindClick('delete-confirm-btn', performDeleteApp);
 
     // 点击外部关闭历史下拉
     document.addEventListener('click', (e) => {
@@ -609,7 +614,7 @@ function renderApps() {
                 };
                 buttons[1].onclick = function (e) {
                     e.stopPropagation();
-                    deleteApp(pkg);
+                    deleteAppConfirm(pkg);
                 };
             }
         }
@@ -634,9 +639,25 @@ async function moveApp(pkg, fromIndex, toIndex) {
 }
 
 function toggleAppMenu(pkg) {
+    const targetMenu = $(`menu-${pkg}`);
+    const isCurrentlyOpen = targetMenu.classList.contains('show');
+
+    // Close all menus first
     document.querySelectorAll('.app-menu').forEach(m => m.classList.remove('show'));
-    $(`menu-${pkg}`).classList.toggle('show');
+
+    // If it wasn't open, open it. If it was open, we just closed it above.
+    if (!isCurrentlyOpen) {
+        targetMenu.classList.add('show');
+    }
 }
+
+// Global click listener for closing app menus
+document.addEventListener('click', (e) => {
+    // If click is not on a menu button and not inside a menu, close all menus
+    if (!e.target.closest('.menu-btn') && !e.target.closest('.app-menu')) {
+        document.querySelectorAll('.app-menu').forEach(m => m.classList.remove('show'));
+    }
+});
 
 function toggleSortMode() {
     isSortingMode = !isSortingMode;
@@ -663,16 +684,30 @@ async function reorderApps(fromPkg, toPkg) {
     }
 }
 
-async function deleteApp(pkg) {
-    if (!confirm(`确定要删除 "${config.apps[pkg]?.name || pkg}" 吗？`)) return;
+async function deleteAppConfirm(pkg) {
+    deletingAppPackage = pkg;
+    const appName = config.apps[pkg]?.name || pkg;
+    const textEl = $('delete-confirm-text');
+    if (textEl) textEl.textContent = `确定要删除 "${appName}" 吗？`;
+
+    showModal('delete-confirm-modal');
+}
+
+async function performDeleteApp() {
+    if (!deletingAppPackage) return;
+
+    // 立即关闭弹窗
+    hideModal('delete-confirm-modal');
 
     try {
-        await invoke('delete_app', { package: pkg });
+        await invoke('delete_app', { package: deletingAppPackage });
         await loadConfig();
         renderApps();
         showMessage('已删除');
     } catch (e) {
         showMessage(`删除失败: ${e}`);
+    } finally {
+        deletingAppPackage = null;
     }
 }
 
@@ -1171,7 +1206,7 @@ async function toggleTheme() {
 // 暴露到全局供 HTML onclick 使用
 window.toggleAppMenu = toggleAppMenu;
 window.openAppConfigModal = openAppConfigModal;
-window.deleteApp = deleteApp;
+window.deleteAppConfirm = deleteAppConfirm;
 window.selectDeviceApp = selectDeviceApp;
 window.openPresetEditModal = openPresetEditModal;
 window.deletePreset = deletePreset;
