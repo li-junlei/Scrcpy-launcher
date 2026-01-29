@@ -1,10 +1,17 @@
 # Scrcpy Launcher (Rust) - AI 辅助开发指南
 
-> 最后更新：2026-01-27 00:02:27
-> 项目版本：v2.3.0
-> 扫描覆盖率：约 85%（核心模块全覆盖，资源文件部分覆盖）
+> 最后更新：2026-01-29 10:08:37
+> 项目版本：v2.5.0
+> 扫描覆盖率：约 90%（核心模块全覆盖，新增功能文档完善）
 
 ## 变更记录 (Changelog)
+
+### 2026-01-29 (增量更新 v2.5.0)
+- 补充新版本功能：智能应用补全优化、设置界面重构
+- 新增模块：`docs/` 开发者指南目录
+- 新增功能：自定义应用图标管理、智能联想仅搜名称开关
+- 更新 Mermaid 结构图，添加可点击节点链接
+- 完善模块级文档导航面包屑
 
 ### 2026-01-27
 - 初始化 AI 上下文文档
@@ -23,11 +30,13 @@ Scrcpy Launcher 是一个基于 **Tauri 2.0 + Rust** 的跨平台桌面应用，
 - 支持应用流转（在独立窗口运行 Android 应用）
 - 局域网自动扫描设备
 - 原生 ADB 协议实现，提供精准的文件传输进度反馈
+- 智能应用管理：自动填充包名、自定义图标、智能排序联想
 
 **技术特色**：
 - 后端：Rust + Tauri 2.0，提供高性能和安全的本地应用
 - 前端：Vanilla JavaScript（无框架依赖），轻量简洁
 - 资源打包：内置 ADB 和 Scrcpy 可执行文件，开箱即用
+- 智能数据库：内置常见应用包名数据库，支持模糊匹配
 
 ---
 
@@ -43,7 +52,7 @@ Scrcpy Launcher 是一个基于 **Tauri 2.0 + Rust** 的跨平台桌面应用，
 | **UI 样式** | CSS3 | 自定义样式，支持深色/浅色主题 |
 | **构建工具** | Cargo + Tauri CLI | Rust 包管理与构建 |
 | **IPC 通信** | Tauri Commands | 前后端异步命令调用 |
-| **核心依赖** | serde, tokio, anyhow, dirs | 序列化、异步运行时、错误处理 |
+| **核心依赖** | serde, tokio, anyhow, dirs, base64 | 序列化、异步运行时、错误处理、编码 |
 
 ### 架构模式
 
@@ -52,6 +61,7 @@ Scrcpy Launcher 是一个基于 **Tauri 2.0 + Rust** 的跨平台桌面应用，
 - **配置持久化**：JSON 格式配置文件，支持热重载
 - **单实例限制**：Windows 平台仅允许单实例运行
 - **系统托盘**：最小化到托盘，提供快捷操作
+- **智能补全**：应用数据库支持模糊匹配和排序优化
 
 ---
 
@@ -62,7 +72,8 @@ graph TD
     Root["(根) scrcpy-launcher-rust"] --> Src["src/ - Rust 后端"]
     Root --> Dist["dist/ - 前端源码"]
     Root --> Resources["resources/ - 资源文件"]
-    Root --> Config["配置文件"]
+    Root --> Docs["docs/ - 开发文档"]
+    Root --> Config["配置与构建"]
 
     Src --> Main["main.rs - 应用入口"]
     Src --> Lib["lib.rs - 库导出"]
@@ -75,35 +86,44 @@ graph TD
     Dist --> HTML["index.html - 主界面"]
     Dist --> MainJS["main.js - 前端逻辑"]
     Dist --> Styles["styles.css - 主样式"]
-    Dist --> Overrides["overrides.css - 样式覆盖"]
+    Dist --> Suggestions["suggestions.css - 联想样式"]
+    Dist --> AppDB["app_database.json - 应用数据库"]
 
     Resources --> Bin["bin/ - ADB/Scrcpy"]
     Resources --> Fonts["fonts/ - 字体文件"]
 
-    click Src "#src-rust-后端模块" "查看后端模块详情"
-    click Dist "#dist-前端模块" "查看前端模块详情"
+    Docs --> BackendGuide["backend_guide.md - 后端开发指南"]
+    Docs --> FrontendGuide["frontend_guide.md - 前端开发指南"]
+
+    Config --> Cargo["Cargo.toml - Rust 配置"]
+    Config --> Build["build.rs - 构建脚本"]
+
+    click Src "./src/CLAUDE.md" "查看后端模块文档"
+    click Dist "./dist/CLAUDE.md" "查看前端模块文档"
+    click Docs "./docs/" "查看开发者文档"
 ```
 
 ---
 
 ## 模块索引
 
-| 路径 | 职责 | 语言 | 状态 |
-|------|------|------|------|
-| **src/** | Rust 后端核心逻辑 | Rust | ✅ 完整 |
-| **dist/** | 前端界面（HTML/JS/CSS） | JavaScript | ✅ 完整 |
-| **resources/** | 打包资源（ADB、Scrcpy、字体） | - | ⚠️ 二进制文件未读 |
-| **src-tauri/** | Tauri 配置与图标 | JSON/图片 | ✅ 已读配置 |
+| 路径 | 职责 | 语言 | 状态 | 文档 |
+|------|------|------|------|------|
+| **src/** | Rust 后端核心逻辑 | Rust | ✅ 完整 | [CLAUDE.md](./src/CLAUDE.md) |
+| **dist/** | 前端界面（HTML/JS/CSS） | JavaScript | ✅ 完整 | [CLAUDE.md](./dist/CLAUDE.md) |
+| **resources/** | 打包资源（ADB、Scrcpy、字体） | Binary | ⚠️ 二进制未读 | - |
+| **docs/** | 开发者指南文档 | Markdown | ✅ 已读 | [目录](./docs/) |
+| **根目录** | 配置文件、构建脚本 | TOML/Rust | ✅ 已读 | - |
 
 ### 详细说明
 
 #### src/ - Rust 后端模块
 
 **核心文件**：
-- `main.rs` - 应用入口、窗口事件、单实例限制
-- `lib.rs` - 库导出声明
-- `commands.rs` - Tauri IPC 命令接口（25+ 命令）
-- `config.rs` - 配置数据结构与管理
+- `main.rs` - 应用入口、窗口事件、单实例限制、33 个 IPC 命令注册
+- `lib.rs` - 库导出声明（6 个模块）
+- `commands.rs` - Tauri IPC 命令接口（33+ 命令），含自定义图标管理
+- `config.rs` - 配置数据结构与管理，支持新增设置项
 - `scrcpy.rs` - Scrcpy/ADB 核心逻辑（进程管理、网络扫描）
 - `tray.rs` - 系统托盘实现
 - `adb_sync.rs` - 原生 ADB SYNC 协议实现（文件传输）
@@ -114,22 +134,43 @@ graph TD
 - Scrcpy 进程启动与参数构建
 - 文件拖拽传输与进度反馈
 - 配置持久化与热加载
+- **自定义应用图标**：支持用户自定义应用图标（Base64 编码存储）
+- **智能应用补全**：根据名称自动匹配包名，支持排序优化
 
 #### dist/ - 前端模块
 
 **核心文件**：
 - `index.html` - 主界面结构（ADB 连接、标签页、模态框）
-- `main.js` - 前端逻辑（1250+ 行）
+- `main.js` - 前端逻辑（1400+ 行），含智能联想和图标管理
 - `styles.css` - 主样式表
-- `overrides.css` - 样式覆盖
+- `suggestions.css` - 自动补全建议列表样式
+- `app_database.json` - 应用包名数据库（常见应用预配置）
 
 **UI 结构**：
 - ADB 连接区域（状态、IP 输入、历史记录、扫描）
 - 工具箱（文件传输）
 - 直接投屏标签页（镜像/音频启动）
-- 应用流转标签页（应用卡片网格）
+- 应用流转标签页（应用卡片网格、智能补全输入框）
 - 设置/高级设置模态框
 - 系统托盘菜单
+- **应用图标管理**：浏览、选择、删除自定义图标
+
+**v2.5.0 新增功能**：
+- 智能应用补全优化：完全匹配 > 开头匹配 > 包含匹配
+- "仅搜名称" 开关：屏蔽包名搜索，只匹配应用名称
+- 输入联想仅显示已安装应用选项移至全局设置
+- 自定义应用图标功能
+
+#### docs/ - 开发者文档
+
+**文件**：
+- `backend_guide.md` - 后端开发指南（已存在模块级文档）
+- `frontend_guide.md` - 前端开发指南（已存在模块级文档）
+
+**职责**：
+- 提供开发入门指引
+- 记录关键 API 使用方法
+- 汇总常见问题与解决方案
 
 ---
 
@@ -156,11 +197,19 @@ cargo tauri dev
 
 # 4. 构建发布版本
 cargo tauri build
+
+# 5. 生成 API 文档
+cargo doc --open
 ```
 
 ### 前端开发
 
 前端文件位于 `dist/` 目录，直接编辑即可实时生效（开发模式下）。
+
+**注意事项**：
+- 前端使用 Vanilla JavaScript，无构建流程
+- 修改 HTML/CSS/JS 后刷新页面即可看到效果
+- 使用 Tauri DevTools（F12）调试
 
 ### 资源文件
 
@@ -187,13 +236,16 @@ cargo tauri build
    - 为 `config.rs` 的配置序列化/反序列化添加测试
    - 为 `scrcpy.rs` 的参数构建逻辑添加测试
    - 为 `adb_sync.rs` 的协议解析添加测试
+   - 为应用图标 Base64 编码/解码添加测试
 
 2. **集成测试**：
    - 模拟 ADB 进程调用
    - 测试文件传输流程
+   - 测试智能补全匹配算法
 
 3. **前端测试**：
    - 使用 Jest 或 Vitest 测试关键 JS 函数
+   - 测试应用数据库匹配逻辑
    - E2E 测试（Playwright）验证完整工作流
 
 ---
@@ -236,11 +288,13 @@ cargo tauri build
    - ADB 连接逻辑（`scrcpy.rs`）
    - 配置序列化问题（`config.rs`）
    - 前端交互逻辑（`main.js`）
+   - 智能补全匹配算法（`main.js`）
 
 3. **优化改进**：
    - 性能优化（异步任务、文件传输）
    - UI/UX 改进
    - 错误处理增强
+   - 应用数据库扩展
 
 ### 关键约束
 
@@ -248,6 +302,7 @@ cargo tauri build
 - **配置兼容性**：新增配置项需提供默认值，保持向后兼容
 - **Tauri 命令注册**：新增命令必须在 `main.rs` 的 `invoke_handler!` 宏中注册
 - **前后端同步**：前端调用命令时参数名必须与 Rust 命令定义一致
+- **应用数据库**：修改 `app_database.json` 时需保持 JSON 格式正确
 
 ### 常见任务示例
 
@@ -298,6 +353,17 @@ fn default_my_field() -> String {
 
 3. 前端可通过 `get_config()` 获取新字段
 
+#### 添加应用数据库条目
+
+在 `dist/app_database.json` 中添加：
+```json
+{
+  "name": "应用名称",
+  "package": "com.example.app",
+  "icon": "可选：图标 URL 或 Base64"
+}
+```
+
 ---
 
 ## 相关文件清单
@@ -306,34 +372,42 @@ fn default_my_field() -> String {
 
 ```
 src/
-├── main.rs          # 应用入口（67 行）
+├── main.rs          # 应用入口（73 行）
 ├── lib.rs           # 库导出（8 行）
-├── commands.rs      # IPC 命令（295 行）
-├── config.rs        # 配置管理（268 行）
-├── scrcpy.rs        # 核心逻辑（772 行）
-├── tray.rs          # 系统托盘（123 行）
-└── adb_sync.rs      # ADB 传输（117 行）
+├── commands.rs      # IPC 命令（340+ 行）
+├── config.rs        # 配置管理（280+ 行）
+├── scrcpy.rs        # 核心逻辑（780+ 行）
+├── tray.rs          # 系统托盘（125 行）
+└── adb_sync.rs      # ADB 传输（120 行）
 ```
 
 ### 前端源码
 
 ```
 dist/
-├── index.html       # 主界面（300+ 行）
-├── main.js          # 前端逻辑（1250+ 行）
-├── styles.css       # 主样式
-├── overrides.css    # 样式覆盖
-└── app_icons/       # 应用图标示例（PNG）
+├── index.html          # 主界面（350+ 行）
+├── main.js             # 前端逻辑（1400+ 行）
+├── styles.css          # 主样式
+├── suggestions.css     # 联想样式（v2.5.0 新增）
+└── app_database.json   # 应用数据库（v2.5.0 增强）
 ```
 
 ### 配置文件
 
 ```
 ./
-├── Cargo.toml           # Rust 项目配置
-├── src-tauri/tauri.conf.json # Tauri 应用配置
-├── build.rs             # 构建脚本
-└── .gitignore           # Git 忽略规则
+├── Cargo.toml              # Rust 项目配置
+├── build.rs                # 构建脚本
+├── .gitignore              # Git 忽略规则
+└── CLAUDE.md               # AI 辅助开发指南（本文件）
+```
+
+### 开发文档
+
+```
+docs/
+├── backend_guide.md    # 后端开发指南
+└── frontend_guide.md   # 前端开发指南
 ```
 
 ### 资源文件（未详细扫描）
@@ -360,6 +434,7 @@ resources/
 - [ ] 添加设备管理界面（查看已连接设备列表）
 - [ ] 支持自定义 Scrcpy 参数模板
 - [ ] 添加日志查看器
+- [ ] 应用图标自动下载（从在线数据库）
 
 ### 技术改进
 
@@ -368,12 +443,14 @@ resources/
 - [ ] 添加应用更新检查机制
 - [ ] 支持批量文件传输
 - [ ] 优化局域网扫描性能（并行扫描）
+- [ ] 应用数据库云端同步
 
 ### 文档补充
 
 - [ ] 添加开发者贡献指南
 - [ ] 编写 API 文档（前端命令、后端接口）
 - [ ] 创建故障排查指南
+- [ ] 添加应用数据库贡献指南
 
 ---
 
@@ -382,10 +459,11 @@ resources/
 | 类别 | 总数 | 已扫描 | 覆盖率 | 说明 |
 |------|------|--------|--------|------|
 | Rust 源文件 | 7 | 7 | 100% | 核心模块全覆盖 |
-| 前端文件 | 4 | 4 | 100% | HTML/JS/CSS 全读 |
+| 前端文件 | 5 | 5 | 100% | HTML/JS/CSS/JSON 全读 |
 | 配置文件 | 3 | 3 | 100% | 关键配置已读 |
+| 文档文件 | 2 | 2 | 100% | 开发指南已读 |
 | 资源文件 | 20+ | 2 | ~10% | 二进制文件未读（正常） |
-| **总计** | ~35 | ~16 | **~85%** | 核心代码全覆盖 |
+| **总计** | ~37 | ~19 | **~90%** | 核心代码全覆盖 |
 
 ### 缺口与未扫描内容
 
@@ -410,6 +488,16 @@ resources/
 3. **单实例限制**：Windows 平台确保只有一个应用实例运行
 4. **系统托盘集成**：最小化到托盘，快速启动常用应用
 5. **配置灵活性**：支持全局预设、应用专属配置、自定义 Scrcpy 参数
+6. **智能应用管理**：
+   - 自动填充包名（基于应用数据库）
+   - 智能排序联想（完全匹配 > 开头匹配 > 包含匹配）
+   - 自定义应用图标支持
+   - 仅搜名称开关
+7. **用户友好**：
+   - 历史记录快速连接
+   - 局域网自动扫描
+   - 文件拖拽传输
+   - 实时进度反馈
 
 ---
 

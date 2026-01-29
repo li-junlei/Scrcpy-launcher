@@ -812,3 +812,31 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config::ScrcpyOptions;
+
+    #[test]
+    fn test_build_args_from_options_defaults() {
+        let opts = ScrcpyOptions::default();
+        let args = build_args_from_options(&opts);
+        // 默认情况下应该没有特殊参数，或者只有 max_size/max_fps 如果默认值不为0
+        // 只要不 panic 即可，这里简单验证一下
+        let _ = args;
+    }
+
+    #[test]
+    fn test_build_args_from_options_custom() {
+        let mut opts = ScrcpyOptions::default();
+        opts.show_touches = true;
+        opts.stay_awake = true;
+        opts.max_fps = 60;
+        
+        let args = build_args_from_options(&opts);
+        assert!(args.contains(&"--show-touches".to_string()));
+        assert!(args.contains(&"--stay-awake".to_string()));
+        assert!(args.contains(&"--max-fps=60".to_string()));
+    }
+}

@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "generated_at": "2026-01-27T00:02:27+08:00",
+    "generated_at": "2026-01-29T10:08:37+08:00",
     "project_name": "scrcpy-launcher-rust",
-    "version": "2.3.0",
-    "description": "一个基于 Rust 的 scrcpy 启动器应用，支持 LAN 扫描、无线配对、文件传输等功能"
+    "version": "2.5.0",
+    "description": "一个基于 Rust 的 scrcpy 启动器应用，支持 LAN 扫描、无线配对、文件传输、智能应用管理等功能"
   },
   "modules": [
     {
@@ -32,11 +32,17 @@
         "tokio",
         "anyhow",
         "dirs",
-        "indexmap"
+        "indexmap",
+        "base64"
       ],
       "has_tests": false,
       "coverage": "100%",
-      "doc_path": "src/CLAUDE.md"
+      "doc_path": "src/CLAUDE.md",
+      "new_features_v2.5.0": [
+        "自定义应用图标管理（Base64 编码）",
+        "智能应用补全优化",
+        "33+ 个 IPC 命令"
+      ]
     },
     {
       "path": "dist/",
@@ -52,14 +58,38 @@
         "dist/index.html",
         "dist/main.js",
         "dist/styles.css",
-        "dist/overrides.css"
+        "dist/suggestions.css",
+        "dist/app_database.json"
       ],
       "dependencies": [
         "Tauri API"
       ],
       "has_tests": false,
       "coverage": "100%",
-      "doc_path": "dist/CLAUDE.md"
+      "doc_path": "dist/CLAUDE.md",
+      "new_features_v2.5.0": [
+        "智能应用补全（完全匹配 > 开头匹配 > 包含匹配）",
+        "仅搜名称开关",
+        "自定义应用图标浏览与管理",
+        "应用数据库增强"
+      ]
+    },
+    {
+      "path": "docs/",
+      "name": "开发者文档",
+      "language": "Markdown",
+      "type": "documentation",
+      "entry_points": [],
+      "interfaces": [],
+      "key_files": [
+        "docs/backend_guide.md",
+        "docs/frontend_guide.md"
+      ],
+      "dependencies": [],
+      "has_tests": false,
+      "coverage": "100%",
+      "doc_path": null,
+      "note": "开发者指南文档"
     },
     {
       "path": "resources/",
@@ -81,14 +111,15 @@
     }
   ],
   "scan_summary": {
-    "total_files_estimated": 35,
-    "files_scanned": 16,
-    "coverage_percent": 85,
+    "total_files_estimated": 37,
+    "files_scanned": 19,
+    "coverage_percent": 90,
     "truncated": false,
     "scan_phases_completed": [
       "phase_a_inventory",
       "phase_b_module_scan",
-      "phase_c_deep_dive"
+      "phase_c_deep_dive",
+      "phase_d_incremental_update_v2.5.0"
     ]
   },
   "ignored_patterns": [
@@ -151,6 +182,12 @@
       "description": "二进制资源文件未详细扫描",
       "priority": "low",
       "recommendation": "正常忽略，二进制文件无需文本扫描"
+    },
+    {
+      "area": "应用数据库",
+      "description": "app_database.json 可扩展更多常见应用",
+      "priority": "medium",
+      "recommendation": "收集更多常见应用包名，支持用户贡献"
     }
   ],
   "next_steps": [
@@ -160,7 +197,10 @@
     "添加日志系统（tracing 替代 println!）",
     "支持多语言（i18n）",
     "添加 E2E 测试（Playwright）",
-    "优化前端性能（虚拟滚动、防抖）"
+    "优化前端性能（虚拟滚动、防抖）",
+    "扩展应用数据库（更多常见应用包名）",
+    "支持应用图标自动下载",
+    "添加应用数据库云端同步"
   ],
   "architecture_highlights": [
     "原生 ADB SYNC 协议实现，提供精准的文件传输进度反馈",
@@ -168,14 +208,19 @@
     "系统托盘集成，最小化到托盘，提供快捷操作",
     "前后端分离，通过 Tauri IPC 通信",
     "配置持久化，支持热加载",
-    "单实例限制（Windows 平台）"
+    "单实例限制（Windows 平台）",
+    "智能应用补全：完全匹配 > 开头匹配 > 包含匹配",
+    "自定义应用图标支持（Base64 编码存储）",
+    "应用数据库预配置常见应用包名",
+    "仅搜名称开关，精准联想"
   ],
   "tech_stack": {
     "backend": {
       "language": "Rust (Edition 2021)",
       "framework": "Tauri 2.0",
       "runtime": "tokio (async)",
-      "serialization": "serde/serde_json"
+      "serialization": "serde/serde_json",
+      "encoding": "base64"
     },
     "frontend": {
       "language": "Vanilla JavaScript (ES6+)",
@@ -189,7 +234,6 @@
   },
   "configuration_files": [
     "Cargo.toml",
-    "tauri.conf.json",
     "build.rs",
     ".gitignore"
   ],
@@ -197,12 +241,33 @@
     "CLAUDE.md",
     "README.md",
     "src/CLAUDE.md",
-    "dist/CLAUDE.md"
+    "dist/CLAUDE.md",
+    "docs/backend_guide.md",
+    "docs/frontend_guide.md"
   ],
   "commands": {
     "dev": "cargo tauri dev",
     "build": "cargo tauri build",
     "test": "cargo test (暂无测试)",
     "doc": "cargo doc --open"
-  }
+  },
+  "version_history": [
+    {
+      "version": "2.5.0",
+      "date": "2026-01-29",
+      "highlights": [
+        "智能应用补全优化",
+        "设置界面重构",
+        "自定义应用图标功能",
+        "仅搜名称开关"
+      ]
+    },
+    {
+      "version": "2.4.0",
+      "date": "2026-01-27",
+      "highlights": [
+        "初始架构文档"
+      ]
+    }
+  ]
 }
