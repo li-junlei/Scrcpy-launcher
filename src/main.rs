@@ -61,6 +61,9 @@ fn main() {
             commands::adb_push_file,
             commands::pair_device,
             commands::scan_tcp_devices,
+            commands::get_custom_icons_dir,
+            commands::open_custom_icons_dir,
+            commands::get_app_icon_data,
             commands::save_app_icon,
             commands::delete_custom_icon,
         ])

@@ -15,7 +15,9 @@ let isSortingMode = false;
 let editingAppPackage = null;
 let editingPresetName = null;
 let deletingAppPackage = null;
+let customIconsDir = null;
 let deviceApps = [];
+
 let appDatabase = [];
 let installedPackages = new Set();
 let isInstalledAppsSynced = false;
@@ -148,7 +150,16 @@ async function loadConfig() {
         const globalShowIcons = $('global-show-icons');
         if (globalShowIcons) globalShowIcons.checked = showIcons;
 
+        // 获取自定义图标目录
+        try {
+            customIconsDir = await invoke('get_custom_icons_dir');
+            console.log('Custom icons dir:', customIconsDir);
+        } catch (e) {
+            console.warn('Failed to get custom icons dir:', e);
+        }
+
     } catch (e) {
+
         console.error('加载配置失败:', e);
         showMessage('加载配置失败');
     }
@@ -273,6 +284,7 @@ function setupEventListeners() {
     bindClick('app-save-btn', saveApp);
     bindClick('select-icon-btn', selectAppIcon); // 选择图标事件
     bindClick('reset-icon-btn', deleteCustomIcon); // 绑定恢复默认按钮
+    bindClick('open-icons-folder-btn', openCustomIconsDir); // 绑定打开文件夹按钮
 
 
     // App Package Input Listener for Icon Preview
@@ -675,10 +687,12 @@ function renderApps() {
                 <!-- 图标 (双层加载: custom -> database -> hidden) -->
                 ${showIcons ? `
                 <div class="app-icon-wrapper">
-                    <img src="custom_icons/${pkg}.png?t=${Date.now()}" onerror="this.onerror=null; this.src='app_icons/${pkg}.png'; this.onerror=function(){this.style.display='none'};" style="display: block;">
+                    <img id="app-icon-${pkg}" src="app_icons/${pkg}.png" 
+                         onerror="this.onerror=null; this.style.visibility='hidden';" style="display: block;">
                 </div>` : ''}
                 <span class="app-name">${app.name || '未命名'}</span>
             `;
+
 
             // 左移按钮 (前移)
             const leftBtn = card.querySelector('.sort-btn.left');
@@ -697,7 +711,8 @@ function renderApps() {
                 <!-- 图标 (双层加载: custom -> database -> hidden) -->
                 ${showIcons ? `
                 <div class="app-icon-wrapper">
-                    <img src="custom_icons/${pkg}.png?t=${Date.now()}" onerror="this.onerror=null; this.src='app_icons/${pkg}.png'; this.onerror=function(){this.style.display='none'};" style="display: block;">
+                    <img id="app-icon-${pkg}" src="app_icons/${pkg}.png" 
+                         onerror="this.onerror=null; this.style.visibility='hidden';" style="display: block;">
                 </div>` : ''}
                 <span class="app-name">${app.name || '未命名'}</span>
                 <button class="menu-btn">⋮</button>
@@ -740,7 +755,30 @@ function renderApps() {
 
         grid.appendChild(card);
     });
+
+    // 异步加载自定义图标 (Base64) - 解决 Release 版本权限导致的显示问题
+    if (showIcons) {
+        loadCustomIconsForList(appEntries.map(([pkg]) => pkg));
+    }
 }
+
+async function loadCustomIconsForList(packages) {
+    for (const pkg of packages) {
+        try {
+            const base64Data = await invoke('get_app_icon_data', { package: pkg });
+            if (base64Data) {
+                const img = $(`app-icon-${pkg}`);
+                if (img) {
+                    img.src = base64Data;
+                    img.style.visibility = 'visible';
+                }
+            }
+        } catch (e) {
+            console.warn(`Failed to load icon for ${pkg}:`, e);
+        }
+    }
+}
+
 
 // 移动应用位置
 async function moveApp(pkg, fromIndex, toIndex) {
@@ -915,7 +953,8 @@ async function selectAppIcon() {
 }
 
 // 更新图标预览 (逻辑: 先尝试 custom，失败(onerror) 加载 database，再失败隐藏)
-function updateIconPreview(pkg) {
+// 更新图标预览
+async function updateIconPreview(pkg) {
     const img = $('app-icon-preview');
     if (!img) return;
 
@@ -924,20 +963,38 @@ function updateIconPreview(pkg) {
 
     if (pkg) {
         const timestamp = Date.now();
-        img.src = `custom_icons/${pkg}.png?t=${timestamp}`;
+
+        try {
+            // 优先尝试获取 Base64 数据 (解决权限问题)
+            const base64Data = await invoke('get_app_icon_data', { package: pkg });
+            if (base64Data) {
+                console.log("Using Base64 icon for", pkg);
+                img.src = base64Data;
+                return;
+            }
+        } catch (e) {
+            console.warn("Failed to get base64 icon:", e);
+        }
+
+        // 降级: 使用标准路径 (仅作备用)
+        // img.src = customIconsDir
+        //     ? convertFileSrc(customIconsDir + (customIconsDir.endsWith('\\') || customIconsDir.endsWith('/') ? '' : '\\') + pkg + '.png') + `?t=${timestamp}`
+        //     : `custom_icons/${pkg}.png?t=${timestamp}`;
+
+        // 如果没有自定义图标，或者加载失败，尝试加载默认数据库图标
+        img.src = `app_icons/${pkg}.png?t=${timestamp}`;
 
         img.onerror = function () {
             this.onerror = null;
-            this.src = `app_icons/${pkg}.png?t=${timestamp}`;
-            this.onerror = function () {
-                this.style.visibility = 'hidden';
-            };
+            this.style.visibility = 'hidden';
         };
+
     } else {
         img.src = '';
         img.style.visibility = 'hidden';
     }
 }
+
 
 // 删除自定义图标
 async function deleteCustomIcon(e) {
@@ -952,9 +1009,16 @@ async function deleteCustomIcon(e) {
         const result = await invoke('delete_custom_icon', { package: pkg });
         showMessage(result);
         updateIconPreview(pkg);
+        // 刷新列表中的图标
+        const listIcon = $(`app-icon-${pkg}`);
+        if (listIcon) {
+            listIcon.src = `app_icons/${pkg}.png?t=` + Date.now();
+            listIcon.style.visibility = 'visible';
+        }
     } catch (e) {
         showMessage(e);
     }
+
 }
 
 function toggleResolutionFields() {
@@ -977,6 +1041,16 @@ function applyPreset() {
     $('use-custom-res').checked = true;
     toggleResolutionFields();
 }
+
+async function openCustomIconsDir(e) {
+    if (e) e.stopPropagation();
+    try {
+        await invoke('open_custom_icons_dir');
+    } catch (e) {
+        showMessage(`打开目录失败: ${e}`);
+    }
+}
+
 
 async function saveApp() {
     const pkg = $('app-package').value.trim();

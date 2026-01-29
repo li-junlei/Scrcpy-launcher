@@ -21,7 +21,8 @@
             "identifier": "fs:scope",
             "allow": [
                 "$RESOURCE/*",
-                "$RESOURCE/**"
+                "$RESOURCE/**",
+                "$APPDATA/**"
             ]
         }
     ]
