@@ -296,6 +296,14 @@
                 </div>
             </div>
 
+            <div class="form-section">
+                <h4>关于</h4>
+                <div class="form-row" style="justify-content: space-between; align-items: center;">
+                    <span>当前版本: <strong id="current-version">加载中...</strong></span>
+                    <button class="btn outline" id="check-update-btn">检查更新</button>
+                </div>
+            </div>
+
             <div class="modal-actions">
                 <button class="btn outline" id="settings-cancel-btn">取消</button>
                 <button class="btn primary" id="settings-save-btn">保存</button>
@@ -411,7 +419,9 @@
                         title="恢复默认图标" onclick="deleteCustomIcon(event)">↺</div>
                 </div>
                 <div style="position: absolute; top: 70px; left: 0; width: 64px; text-align: center;">
-                     <button id="open-icons-folder-btn" style="font-size: 10px; padding: 2px 4px; border: none; background: none; color: var(--primary-color); cursor: pointer; text-decoration: underline;" title="打开图标文件夹">打开文件夹</button>
+                    <button id="open-icons-folder-btn"
+                        style="font-size: 10px; padding: 2px 4px; border: none; background: none; color: var(--primary-color); cursor: pointer; text-decoration: underline;"
+                        title="打开图标文件夹">打开文件夹</button>
                 </div>
                 <div class="app-info-inputs" style="flex: 1; margin-left: 16px; position: relative;">
                     <div
@@ -426,7 +436,7 @@
                         style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; min-height: 18px;"></div>
                     <div class="form-row">
                         <input type="text" id="app-package" placeholder="包名">
-                        <button class="icon-btn" id="browse-apps-btn" title="从手机浏览应用">
+                        <button class="icon-btn" id="browse-apps-btn" title="从应用宝搜索">
                             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"
                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
@@ -489,17 +499,26 @@
         </div>
     </div>
 
-    <!-- 应用浏览对话框 -->
-    <div class="modal" id="browse-apps-modal">
+    <!-- 应用宝搜索对话框 -->
+    <div class="modal" id="yyb-search-modal">
         <div class="modal-content">
-            <h2>浏览设备应用</h2>
-            <input type="text" id="app-search" placeholder="搜索应用包名...">
-            <div class="apps-list" id="device-apps-list">
-                <p class="hint">点击"加载"按钮从手机获取应用列表</p>
+            <h2>从应用宝搜索</h2>
+            <div class="form-row">
+                <input type="text" id="yyb-search-input" placeholder="输入应用名称搜索..." autocomplete="off">
+                <button class="btn primary" id="yyb-search-btn">搜索</button>
+            </div>
+            <div class="yyb-search-status hidden" id="yyb-search-status">
+                <div class="spinner"
+                    style="width: 20px; height: 20px; border: 2px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;">
+                </div>
+                <span>正在搜索...</span>
+            </div>
+            <div class="yyb-results-list" id="yyb-results-list"
+                style="max-height: 300px; overflow-y: auto; margin-top: 12px;">
+                <p class="hint" style="text-align: center; padding: 20px;">输入关键词开始搜索</p>
             </div>
             <div class="modal-actions">
-                <button class="btn outline" id="browse-back-btn">返回</button>
-                <button class="btn primary" id="load-apps-btn">🔄 从手机加载</button>
+                <button class="btn outline" id="yyb-cancel-btn">取消</button>
             </div>
         </div>
     </div>
@@ -550,6 +569,27 @@
             <div class="modal-actions">
                 <button class="btn outline" id="preset-cancel-btn">取消</button>
                 <button class="btn primary" id="preset-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 更新提示对话框 -->
+    <div class="modal" id="update-modal">
+        <div class="modal-content small">
+            <h2>🎉 发现新版本</h2>
+            <div style="text-align: center; margin: 16px 0;">
+                <p style="margin-bottom: 8px;">当前版本: <strong id="update-current-ver"></strong></p>
+                <p style="margin-bottom: 16px;">最新版本: <strong id="update-latest-ver"
+                        style="color: var(--primary-color);"></strong></p>
+            </div>
+            <div id="update-notes"
+                style="max-height: 150px; overflow-y: auto; background: var(--bg-color-secondary); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 0.9em; white-space: pre-wrap;">
+            </div>
+            <div class="modal-actions" style="flex-wrap: wrap; gap: 8px;">
+                <button class="btn outline" id="update-skip-btn"
+                    style="flex: 1 1 100%; font-size: 0.85em; opacity: 0.7;">此版本不再提醒</button>
+                <button class="btn outline" id="update-later-btn" style="flex: 1;">稍后提醒</button>
+                <button class="btn primary" id="update-download-btn" style="flex: 1;">前往下载</button>
             </div>
         </div>
     </div>

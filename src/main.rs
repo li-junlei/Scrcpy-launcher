@@ -66,6 +66,9 @@ fn main() {
             commands::get_app_icon_data,
             commands::save_app_icon,
             commands::delete_custom_icon,
+            commands::search_yyb,
+            commands::download_yyb_icon,
+            commands::check_for_updates,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

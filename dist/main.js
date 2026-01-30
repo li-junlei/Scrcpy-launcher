@@ -17,6 +17,8 @@ let editingPresetName = null;
 let deletingAppPackage = null;
 let customIconsDir = null;
 let deviceApps = [];
+let updateDownloadUrl = '';
+let latestVersionForSkip = '';
 
 let appDatabase = [];
 let installedPackages = new Set();
@@ -177,6 +179,8 @@ function initUI() {
         if (config.adb_history.length > 0) {
             $('ip-input').value = config.adb_history[0];
         }
+        // 启动时静默检查更新
+        checkForUpdates(true);
     }
 }
 
@@ -242,6 +246,12 @@ function setupEventListeners() {
     // 设置
     bindClick('settings-cancel-btn', () => hideModal('settings-modal'));
     bindClick('settings-save-btn', saveSettings);
+    bindClick('check-update-btn', () => checkForUpdates(false));
+
+    // 更新弹窗
+    bindClick('update-later-btn', () => hideModal('update-modal'));
+    bindClick('update-download-btn', openUpdateDownload);
+    bindClick('update-skip-btn', skipThisUpdate);
 
     // Filter Installed Toggle (Global)
     const globalFilterInstalled = $('global-filter-installed');
@@ -268,7 +278,7 @@ function setupEventListeners() {
     bindClick('advanced-save-btn', saveAdvancedSettings);
 
     // 应用配置
-    bindClick('browse-apps-btn', () => showModal('browse-apps-modal'));
+    bindClick('browse-apps-btn', () => showModal('yyb-search-modal'));
     bindClick('manage-presets-btn', () => openPresetsModal());
 
     const presetSelect = $('preset-select');
@@ -295,12 +305,15 @@ function setupEventListeners() {
         });
     }
 
-    // 浏览应用
-    bindClick('browse-back-btn', () => hideModal('browse-apps-modal'));
-    bindClick('load-apps-btn', loadDeviceApps);
-
-    const appSearch = $('app-search');
-    if (appSearch) appSearch.oninput = filterDeviceApps;
+    // 应用宝搜索
+    bindClick('yyb-search-btn', searchYYB);
+    bindClick('yyb-cancel-btn', () => hideModal('yyb-search-modal'));
+    const yybSearchInput = $('yyb-search-input');
+    if (yybSearchInput) {
+        yybSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchYYB();
+        });
+    }
 
     // 预设管理
     bindClick('add-preset-btn', () => openPresetEditModal());
@@ -1128,44 +1141,70 @@ function handleAppNameInput() {
 }
 
 
-// ==================== 浏览设备应用 ====================
+// ==================== 应用宝搜索 ====================
 
-async function loadDeviceApps() {
-    setLoading('load-apps-btn', true);
+async function searchYYB() {
+    const keyword = $('yyb-search-input').value.trim();
+    if (!keyword) {
+        showMessage('请输入搜索关键词');
+        return;
+    }
+
+    const statusEl = $('yyb-search-status');
+    const resultsList = $('yyb-results-list');
+
+    statusEl.classList.remove('hidden');
+    resultsList.innerHTML = '';
+
     try {
-        deviceApps = await invoke('get_installed_apps');
-        deviceApps.sort();
-        renderDeviceApps(deviceApps);
-        showMessage(`成功加载 ${deviceApps.length} 个应用`);
+        const results = await invoke('search_yyb', { keyword });
+
+        if (results.length === 0) {
+            resultsList.innerHTML = '<p class="hint" style="text-align: center; padding: 20px;">未找到相关应用</p>';
+        } else {
+            resultsList.innerHTML = results.map(app => `
+                <div class="yyb-result-item" onclick="selectYYBApp('${app.package_name}', '${app.name.replace(/'/g, "\\'")}', '${app.icon_url}')" style="display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 8px; cursor: pointer; background: var(--bg-color-secondary); transition: all 0.2s;">
+                    <img src="${app.icon_url}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;" onerror="this.style.visibility='hidden'">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${app.name}</div>
+                        <div style="font-size: 0.8em; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${app.package_name}</div>
+                    </div>
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            `).join('');
+        }
     } catch (e) {
-        showMessage(`加载失败: ${e}`);
+        resultsList.innerHTML = `<p class="hint" style="text-align: center; padding: 20px; color: var(--danger-color);">搜索失败: ${e}</p>`;
+        showMessage(`搜索失败: ${e}`);
     } finally {
-        setLoading('load-apps-btn', false);
+        statusEl.classList.add('hidden');
     }
 }
 
-function renderDeviceApps(apps) {
-    const list = $('device-apps-list');
-    list.innerHTML = apps.map(pkg => `
-        <div class="apps-list-item" onclick="selectDeviceApp('${pkg}')">
-            <span>${pkg}</span>
-        </div>
-    `).join('');
-}
+async function selectYYBApp(packageName, appName, iconUrl) {
+    $('app-package').value = packageName;
+    $('app-name').value = appName;
+    hideModal('yyb-search-modal');
 
-function filterDeviceApps() {
-    const term = $('app-search').value.toLowerCase();
-    const filtered = deviceApps.filter(pkg => pkg.toLowerCase().includes(term));
-    renderDeviceApps(filtered);
-}
-
-function selectDeviceApp(pkg) {
-    $('app-package').value = pkg;
-    if (!$('app-name').value) {
-        $('app-name').value = pkg;
+    // 下载并保存图标
+    if (iconUrl) {
+        try {
+            showMessage('正在下载图标...');
+            await invoke('download_yyb_icon', { package: packageName, iconUrl: iconUrl });
+            showMessage('图标已保存');
+        } catch (e) {
+            console.warn('下载图标失败:', e);
+        }
     }
-    hideModal('browse-apps-modal');
+
+    // 更新图标预览
+    updateIconPreview(packageName);
 }
+
+// 暴露给全局 (HTML onclick)
+window.selectYYBApp = selectYYBApp;
 
 // ==================== 预设管理 ====================
 
@@ -1711,4 +1750,63 @@ function handleAppNameInput() {
         };
         suggestionsDiv.appendChild(item);
     });
+}
+
+// ==================== 更新检查 ====================
+
+async function checkForUpdates(silent = false) {
+    if (!silent) {
+        setLoading('check-update-btn', true);
+    }
+
+    try {
+        const result = await invoke('check_for_updates');
+
+        // 更新设置弹窗中的版本号
+        const versionEl = $('current-version');
+        if (versionEl) versionEl.textContent = result.current_version;
+
+        if (result.has_update) {
+            // 检查是否跳过了此版本
+            const skippedVersion = localStorage.getItem('skipped_update_version');
+            if (silent && skippedVersion === result.latest_version) {
+                console.log('Skipped update for version:', result.latest_version);
+                return;
+            }
+
+            // 显示更新弹窗
+            $('update-current-ver').textContent = result.current_version;
+            $('update-latest-ver').textContent = result.latest_version;
+            $('update-notes').textContent = result.release_notes || '暂无更新说明';
+            updateDownloadUrl = result.download_url;
+            latestVersionForSkip = result.latest_version;
+            showModal('update-modal');
+        } else if (!silent) {
+            showMessage('当前已是最新版本！');
+        }
+    } catch (e) {
+        if (!silent) {
+            showMessage(`检查更新失败: ${e}`);
+        }
+        console.warn('Update check failed:', e);
+    } finally {
+        if (!silent) {
+            setLoading('check-update-btn', false);
+        }
+    }
+}
+
+function openUpdateDownload() {
+    if (updateDownloadUrl) {
+        window.__TAURI__.shell.open(updateDownloadUrl);
+    }
+    hideModal('update-modal');
+}
+
+function skipThisUpdate() {
+    if (latestVersionForSkip) {
+        localStorage.setItem('skipped_update_version', latestVersionForSkip);
+        showMessage(`已跳过版本 ${latestVersionForSkip} 的更新提醒`);
+    }
+    hideModal('update-modal');
 }

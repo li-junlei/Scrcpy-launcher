@@ -1,6 +1,6 @@
 [package]
 name = "scrcpy-launcher"
-version = "2.5.0"
+version = "2.6.0"
 description = "A GUI launcher for scrcpy"
 authors = ["LiJunlei"]
 edition = "2021"
@@ -26,6 +26,9 @@ anyhow = "1.0"
 byteorder = "1.4"
 open = "5.3.3"
 base64 = "0.22.1"
+scraper = "0.20"
+reqwest = { version = "0.12", features = ["blocking", "json"] }
+urlencoding = "2.1"
 
 [target.'cfg(windows)'.dependencies]
 tauri-plugin-single-instance = "2"

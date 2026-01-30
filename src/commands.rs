@@ -231,10 +231,10 @@ pub fn delete_custom_icon(app: tauri::AppHandle, package: String) -> Result<Stri
 /// 获取应用图标数据 (Base64) - 解决权限/路径问题
 #[tauri::command]
 pub fn get_app_icon_data(app: tauri::AppHandle, package: String) -> Result<String, String> {
-    // 1. 尝试从 Custom Icons 读取
     let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
-    let custom_icon_path = app_data_dir.join("custom_icons").join(format!("{}.png", package));
     
+    // 1. 尝试从 Custom Icons 读取
+    let custom_icon_path = app_data_dir.join("custom_icons").join(format!("{}.png", package));
     if custom_icon_path.exists() {
         let mut file = std::fs::File::open(custom_icon_path).map_err(|e| e.to_string())?;
         let mut buffer = Vec::new();
@@ -243,7 +243,17 @@ pub fn get_app_icon_data(app: tauri::AppHandle, package: String) -> Result<Strin
         return Ok(format!("data:image/png;base64,{}", encoded));
     }
 
-    Ok("".to_string()) // 如果没有自定义图标，返回空字符串，前端将使用默认方式
+    // 2. 尝试从 Download Icons (应用宝下载) 读取
+    let download_icon_path = app_data_dir.join("download_icons").join(format!("{}.png", package));
+    if download_icon_path.exists() {
+        let mut file = std::fs::File::open(download_icon_path).map_err(|e| e.to_string())?;
+        let mut buffer = Vec::new();
+        file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
+        let encoded = BASE64_STANDARD.encode(buffer);
+        return Ok(format!("data:image/png;base64,{}", encoded));
+    }
+
+    Ok("".to_string()) // 如果没有自定义/下载图标，返回空字符串，前端将使用默认方式
 }
 
 /// 设置主题
@@ -379,8 +389,187 @@ pub async fn adb_push_file(window: tauri::Window, local_path: String, remote_pat
     })
 }
 
+/// 应用宝搜索结果结构
+#[derive(serde::Serialize)]
+pub struct YYBSearchResult {
+    pub name: String,
+    pub package_name: String,
+    pub icon_url: String,
+}
 
+/// 搜索应用宝
+#[tauri::command]
+pub async fn search_yyb(keyword: String) -> Result<Vec<YYBSearchResult>, String> {
+    use scraper::{Html, Selector};
+    
+    let url = format!("https://sj.qq.com/search?q={}", urlencoding::encode(&keyword));
+    
+    let client = reqwest::Client::builder()
+        .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        .build()
+        .map_err(|e| e.to_string())?;
+    
+    let response = client.get(&url)
+        .send()
+        .await
+        .map_err(|e| format!("请求失败: {}", e))?;
+    
+    let html_content = response.text().await.map_err(|e| e.to_string())?;
+    let document = Html::parse_document(&html_content);
+    
+    let mut results = Vec::new();
+    let mut seen_pkgs = std::collections::HashSet::new();
+    
+    // 直接查找 appdetail 链接
+    let link_selector = Selector::parse("a[href*='appdetail']").map_err(|e| format!("{:?}", e))?;
+    let name_selector = Selector::parse("[class*='GameCard_name'], [class*='GameCard_title'], [title]").map_err(|e| format!("{:?}", e))?;
+    let img_selector = Selector::parse("img").map_err(|e| format!("{:?}", e))?;
+    
+    for link in document.select(&link_selector) {
+        if results.len() >= 5 { break; }
+        
+        // 从 href 提取包名
+        let href = link.value().attr("href").unwrap_or("");
+        let package_name = href.split('/').last().unwrap_or("").to_string();
+        
+        if package_name.is_empty() || !package_name.contains('.') || seen_pkgs.contains(&package_name) { 
+            continue; 
+        }
+        seen_pkgs.insert(package_name.clone());
+        
+        // 尝试从链接内查找应用名
+        let name = link.select(&name_selector).next()
+            .map(|el| {
+                el.value().attr("title")
+                    .map(|s| s.to_string())
+                    .unwrap_or_else(|| el.text().collect::<String>().trim().to_string())
+            })
+            .filter(|s| !s.is_empty())
+            .unwrap_or_else(|| package_name.clone());
+        
+        // 获取图标
+        let icon_url = link.select(&img_selector).next()
+            .and_then(|img| img.value().attr("src"))
+            .unwrap_or("")
+            .to_string();
+        
+        results.push(YYBSearchResult {
+            name,
+            package_name,
+            icon_url,
+        });
+    }
+    
+    Ok(results)
+}
 
+/// 下载应用宝图标并保存到 AppData/download_icons/
+#[tauri::command]
+pub async fn download_yyb_icon(app: tauri::AppHandle, package: String, icon_url: String) -> Result<String, String> {
+    if icon_url.is_empty() {
+        return Err("图标 URL 为空".to_string());
+    }
+    
+    // 目标目录: AppData/download_icons/
+    let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let icons_dir = app_data_dir.join("download_icons");
+    
+    // 确保目录存在
+    if !icons_dir.exists() {
+        std::fs::create_dir_all(&icons_dir).map_err(|e| e.to_string())?;
+    }
+    
+    // 目标文件名: {package}.png
+    let dest = icons_dir.join(format!("{}.png", package));
+    
+    // 下载图标
+    let client = reqwest::Client::new();
+    let response = client.get(&icon_url)
+        .send()
+        .await
+        .map_err(|e| format!("下载图标失败: {}", e))?;
+    
+    let bytes = response.bytes().await.map_err(|e| e.to_string())?;
+    std::fs::write(&dest, &bytes).map_err(|e| format!("保存图标失败: {}", e))?;
+    
+    Ok(dest.to_string_lossy().to_string())
+}
 
+/// 当前应用版本
+const CURRENT_VERSION: &str = env!("CARGO_PKG_VERSION");
+/// GitHub API URL
+const GITHUB_RELEASES_API: &str = "https://api.github.com/repos/li-junlei/Scrcpy-launcher/releases/latest";
 
+/// 更新检查结果
+#[derive(serde::Serialize)]
+pub struct UpdateInfo {
+    pub has_update: bool,
+    pub current_version: String,
+    pub latest_version: String,
+    pub download_url: String,
+    pub release_notes: String,
+}
 
+/// 检查更新
+#[tauri::command]
+pub async fn check_for_updates() -> Result<UpdateInfo, String> {
+    let client = reqwest::Client::builder()
+        .user_agent("Scrcpy-Launcher-Update-Checker")
+        .build()
+        .map_err(|e| e.to_string())?;
+    
+    let response = client.get(GITHUB_RELEASES_API)
+        .send()
+        .await
+        .map_err(|e| format!("请求失败: {}", e))?;
+    
+    if !response.status().is_success() {
+        return Err(format!("GitHub API 返回错误: {}", response.status()));
+    }
+    
+    let json: serde_json::Value = response.json().await.map_err(|e| e.to_string())?;
+    
+    let latest_version = json["tag_name"].as_str()
+        .unwrap_or("")
+        .trim_start_matches('v')
+        .to_string();
+    
+    let download_url = json["html_url"].as_str()
+        .unwrap_or("")
+        .to_string();
+    
+    let release_notes = json["body"].as_str()
+        .unwrap_or("")
+        .to_string();
+    
+    // 简单版本比较 (假设格式为 x.y.z)
+    let has_update = compare_versions(&latest_version, CURRENT_VERSION);
+    
+    Ok(UpdateInfo {
+        has_update,
+        current_version: CURRENT_VERSION.to_string(),
+        latest_version,
+        download_url,
+        release_notes,
+    })
+}
+
+/// 比较版本号 (返回 true 如果 latest > current)
+fn compare_versions(latest: &str, current: &str) -> bool {
+    let parse_version = |v: &str| -> Vec<u32> {
+        v.split('.')
+            .filter_map(|s| s.parse::<u32>().ok())
+            .collect()
+    };
+    
+    let latest_parts = parse_version(latest);
+    let current_parts = parse_version(current);
+    
+    for i in 0..3 {
+        let l = latest_parts.get(i).copied().unwrap_or(0);
+        let c = current_parts.get(i).copied().unwrap_or(0);
+        if l > c { return true; }
+        if l < c { return false; }
+    }
+    false
+}
