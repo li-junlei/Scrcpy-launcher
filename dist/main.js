@@ -1355,6 +1355,7 @@ function openAdvancedModal() {
     $('opt-ime').checked = opts.local_ime;
     $('opt-max-size').value = opts.max_size || '';
     $('opt-max-fps').value = opts.max_fps || '';
+    $('opt-bitrate').value = opts.bitrate || 24;
 
     // 根据配置开启/关闭选项
     if (config.use_custom_args) {
@@ -1389,6 +1390,7 @@ function openAdvancedModal() {
     $('app-opt-ime').checked = appOpts.local_ime;
     $('app-opt-max-size').value = appOpts.max_size || '';
     $('app-opt-max-fps').value = appOpts.max_fps || '';
+    $('app-opt-bitrate').value = appOpts.bitrate || 24;
 
     showModal('advanced-modal');
 }
@@ -1424,6 +1426,7 @@ function restoreDefaults() {
     $('opt-ime').checked = false;
     $('opt-max-size').value = '';
     $('opt-max-fps').value = '';
+    $('opt-bitrate').value = 24;
     $('opt-filter-installed').checked = true; // Default to true
 
     $('use-app-stream-args').checked = true;
@@ -1442,6 +1445,7 @@ function restoreDefaults() {
     $('app-opt-ime').checked = true;
     $('app-opt-max-size').value = '';
     $('app-opt-max-fps').value = '';
+    $('app-opt-bitrate').value = 24;
 }
 
 async function saveAdvancedSettings() {
@@ -1456,6 +1460,7 @@ async function saveAdvancedSettings() {
         local_ime: $('opt-ime').checked,
         max_size: parseInt($('opt-max-size').value) || 0,
         max_fps: parseInt($('opt-max-fps').value) || 0,
+        bitrate: parseInt($('opt-bitrate').value) || 24,
     };
 
     const appOptions = {
@@ -1469,6 +1474,7 @@ async function saveAdvancedSettings() {
         local_ime: $('app-opt-ime').checked,
         max_size: parseInt($('app-opt-max-size').value) || 0,
         max_fps: parseInt($('app-opt-max-fps').value) || 0,
+        bitrate: parseInt($('app-opt-bitrate').value) || 24,
     };
 
     try {

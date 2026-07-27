@@ -91,6 +91,12 @@ pub struct ScrcpyOptions {
     pub local_ime: bool,
     pub max_size: u32,
     pub max_fps: u32,
+    #[serde(default = "default_bitrate")]
+    pub bitrate: u32,
+}
+
+fn default_bitrate() -> u32 {
+    24
 }
 
 impl Default for ScrcpyOptions {
@@ -106,6 +112,7 @@ impl Default for ScrcpyOptions {
             local_ime: false,
             max_size: 0,
             max_fps: 0,
+            bitrate: default_bitrate(),
         }
     }
 }
@@ -273,5 +280,29 @@ impl Config {
         }
         self.apps = new_apps;
         self.save();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scrcpy_options_without_bitrate_uses_default() {
+        let json = r#"{
+            "hid_keyboard": true,
+            "stay_awake": true,
+            "turn_screen_off": false,
+            "show_touches": false,
+            "always_on_top": false,
+            "borderless": false,
+            "power_off_on_close": false,
+            "local_ime": false,
+            "max_size": 0,
+            "max_fps": 0
+        }"#;
+
+        let options: ScrcpyOptions = serde_json::from_str(json).unwrap();
+        assert_eq!(options.bitrate, 24);
     }
 }

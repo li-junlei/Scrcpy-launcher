@@ -666,10 +666,15 @@ fn build_args_from_options(opts: &ScrcpyOptions) -> Vec<String> {
         args.push("--display-ime-policy=local".to_string());
     }
     if opts.max_size > 0 {
-        args.push(format!("-m {}", opts.max_size));
+        args.push("-m".to_string());
+        args.push(opts.max_size.to_string());
     }
     if opts.max_fps > 0 {
         args.push(format!("--max-fps={}", opts.max_fps));
+    }
+    if opts.bitrate > 0 {
+        args.push("-b".to_string());
+        args.push(format!("{}M", opts.bitrate));
     }
     
     args
@@ -729,15 +734,27 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
             args.push("--no-video".to_string());
         }
         LaunchMode::Mirror => {
-            let res_str = &config.global_settings.full_res;
-            if let Some(max_dim) = res_str
-                .split('x')
-                .filter_map(|s| s.parse::<u32>().ok())
-                .max()
-            {
-                args.push(format!("--max-size={}", max_dim));
-            } else {
-                args.push("--max-size=1920".to_string());
+            // 检查是否已存在 max-size 参数
+            let has_max_size = args
+                .iter()
+                .any(|a| a == "-m" || a == "--max-size" || a.starts_with("--max-size="));
+            if !has_max_size {
+                // 优先使用用户在高级设置中配置的 max_size
+                if config.scrcpy_options.max_size > 0 {
+                    args.push(format!("--max-size={}", config.scrcpy_options.max_size));
+                } else {
+                    // 只有当用户没有配置时才使用 full_res 计算
+                    let res_str = &config.global_settings.full_res;
+                    if let Some(max_dim) = res_str
+                        .split('x')
+                        .filter_map(|s| s.parse::<u32>().ok())
+                        .max()
+                    {
+                        args.push(format!("--max-size={}", max_dim));
+                    } else {
+                        args.push("--max-size=1920".to_string());
+                    }
+                }
             }
         }
         LaunchMode::App { package, settings, .. } => {
@@ -832,11 +849,15 @@ mod tests {
         let mut opts = ScrcpyOptions::default();
         opts.show_touches = true;
         opts.stay_awake = true;
+        opts.max_size = 1920;
         opts.max_fps = 60;
+        opts.bitrate = 12;
         
         let args = build_args_from_options(&opts);
         assert!(args.contains(&"--show-touches".to_string()));
         assert!(args.contains(&"--stay-awake".to_string()));
+        assert!(args.windows(2).any(|pair| pair == ["-m", "1920"]));
         assert!(args.contains(&"--max-fps=60".to_string()));
+        assert!(args.windows(2).any(|pair| pair == ["-b", "12M"]));
     }
 }
