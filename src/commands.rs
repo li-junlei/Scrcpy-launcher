@@ -68,6 +68,12 @@ pub fn kill_scrcpy() -> CommandResult {
     scrcpy::kill_scrcpy_processes()
 }
 
+/// 执行高级设置中配置的 ADB 快捷命令
+#[tauri::command]
+pub fn execute_adb_quick_action(command: String) -> CommandResult {
+    scrcpy::execute_adb_command(&command)
+}
+
 /// 扫描局域网设备
 #[tauri::command]
 pub async fn scan_tcp_devices() -> Vec<String> {
@@ -275,6 +281,10 @@ pub fn save_scrcpy_options(
     use_app_custom_args: bool,
     app_custom_args: String,
     app_options: ScrcpyOptions,
+    blank_screen_button_text: String,
+    blank_screen_command: String,
+    stop_blank_screen_button_text: String,
+    stop_blank_screen_command: String,
 ) {
     let mut config = Config::load();
     config.use_custom_args = use_custom;
@@ -284,6 +294,10 @@ pub fn save_scrcpy_options(
     config.use_app_custom_args = use_app_custom_args;
     config.app_custom_args = app_custom_args;
     config.app_stream_options = app_options;
+    config.blank_screen_button_text = blank_screen_button_text;
+    config.blank_screen_command = blank_screen_command;
+    config.stop_blank_screen_button_text = stop_blank_screen_button_text;
+    config.stop_blank_screen_command = stop_blank_screen_command;
     config.save();
 }
 

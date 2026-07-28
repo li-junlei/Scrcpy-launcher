@@ -1,10 +1,20 @@
 # Scrcpy Launcher (Rust) - AI 辅助开发指南
 
-> 最后更新：2026-01-30 11:40:00
-> 项目版本：v2.6.0
+> 最后更新：2026-07-28 00:00:00
+> 项目版本：v2.7.2
 > 扫描覆盖率：约 90%（核心模块全覆盖，新增功能文档完善）
 
 ## 变更记录 (Changelog)
+
+### 2026-07-28 (v2.7.1 ~ v2.7.2)
+- 设置中心统一化：合并「设置」与「高级设置」为单一设置中心，顶部分类标签：显示 / 托盘 / 高级 / 关于
+- 移除独立的「高级设置」弹窗与入口按钮，仅保留单个「设置」入口
+- 前端布局精修：修复高级设置在默认窗口下的横向滚动、option-tile 选中态高亮、数字三列网格、深色模式 hover 修复
+- 前端逻辑重构：新增 `openSettingsModal(tab)` / `switchSettingsTab` / `saveAllSettings` / `fillAdvancedFields`；移除 `openAdvancedModal` / `saveAdvancedSettings` / `saveSettings`
+
+### v2.7.0
+- 新增配置字段：scrcpy 选项新增 `bitrate`（码率，Mbps），全局与应用流转均支持
+- 前端：全局参数与应用流转专属参数新增码率、长边限制输入
 
 ### 2026-01-30 (增量更新 v2.6.0)
 - 新增功能：应用宝搜索（替代手机应用浏览）
@@ -105,8 +115,8 @@ graph TD
     Config --> Cargo["Cargo.toml - Rust 配置"]
     Config --> Build["build.rs - 构建脚本"]
 
-    click Src "./src/CLAUDE.md" "查看后端模块文档"
-    click Dist "./dist/CLAUDE.md" "查看前端模块文档"
+    click Src "./docs/backend_guide.md" "查看后端开发指南"
+    click Dist "./docs/frontend_guide.md" "查看前端开发指南"
     click Docs "./docs/" "查看开发者文档"
 ```
 
@@ -116,8 +126,8 @@ graph TD
 
 | 路径 | 职责 | 语言 | 状态 | 文档 |
 |------|------|------|------|------|
-| **src/** | Rust 后端核心逻辑 | Rust | ✅ 完整 | [CLAUDE.md](./src/CLAUDE.md) |
-| **dist/** | 前端界面（HTML/JS/CSS） | JavaScript | ✅ 完整 | [CLAUDE.md](./dist/CLAUDE.md) |
+| **src/** | Rust 后端核心逻辑 | Rust | ✅ 完整 | [backend_guide.md](./docs/backend_guide.md) |
+| **dist/** | 前端界面（HTML/JS/CSS） | JavaScript | ✅ 完整 | [frontend_guide.md](./docs/frontend_guide.md) |
 | **resources/** | 打包资源（ADB、Scrcpy、字体） | Binary | ⚠️ 二进制未读 | - |
 | **docs/** | 开发者指南文档 | Markdown | ✅ 已读 | [目录](./docs/) |
 | **根目录** | 配置文件、构建脚本 | TOML/Rust | ✅ 已读 | - |
@@ -127,9 +137,9 @@ graph TD
 #### src/ - Rust 后端模块
 
 **核心文件**：
-- `main.rs` - 应用入口、窗口事件、单实例限制、33 个 IPC 命令注册
-- `lib.rs` - 库导出声明（6 个模块）
-- `commands.rs` - Tauri IPC 命令接口（33+ 命令），含自定义图标管理
+- `main.rs` - 应用入口、窗口事件、单实例限制、36 个 IPC 命令注册
+- `lib.rs` - 库导出声明（5 个模块）
+- `commands.rs` - Tauri IPC 命令接口（36 个命令），含自定义图标管理
 - `config.rs` - 配置数据结构与管理，支持新增设置项
 - `scrcpy.rs` - Scrcpy/ADB 核心逻辑（进程管理、网络扫描）
 - `tray.rs` - 系统托盘实现
@@ -148,7 +158,7 @@ graph TD
 
 **核心文件**：
 - `index.html` - 主界面结构（ADB 连接、标签页、模态框）
-- `main.js` - 前端逻辑（1400+ 行），含智能联想和图标管理
+- `main.js` - 前端逻辑（1800+ 行），含智能联想、图标管理与设置中心
 - `styles.css` - 主样式表
 - `suggestions.css` - 自动补全建议列表样式
 - `app_database.json` - 应用包名数据库（常见应用预配置）
@@ -158,14 +168,19 @@ graph TD
 - 工具箱（文件传输）
 - 直接投屏标签页（镜像/音频启动）
 - 应用流转标签页（应用卡片网格、智能补全输入框）
-- 设置/高级设置模态框
+- 设置中心（统一弹窗：显示 / 托盘 / 高级 / 关于，顶部 Tab 切换）
 - 系统托盘菜单
 - **应用图标管理**：浏览、选择、删除自定义图标
 
-**v2.6.0 新增功能**：
+**v2.7.x 新增/调整**：
+- 设置中心统一化：合并设置与高级设置为单一弹窗（顶部 Tab 切换分类）
+- 布局精修：修复横向滚动、选项选中态、数字三列网格、深色模式适配
+- 码率与长边限制：全局/应用流转参数新增 bitrate、max-size 控制
+
+**v2.6.0 功能**：
 - 应用宝搜索：输入应用名称搜索腾讯应用宝获取包名和图标
 - 自动更新检查：启动时静默检查 GitHub Release 新版本
-- 设置页面新增"关于"区域，显示版本号和手动检查更新按钮
+- 设置页"关于"区域：显示版本号和手动检查更新按钮
 - 更新提示弹窗：显示版本号、更新说明，支持"此版本不再提醒"
 
 **v2.5.0 功能**：
@@ -384,22 +399,22 @@ fn default_my_field() -> String {
 
 ```
 src/
-├── main.rs          # 应用入口（73 行）
-├── lib.rs           # 库导出（8 行）
-├── commands.rs      # IPC 命令（340+ 行）
-├── config.rs        # 配置管理（280+ 行）
-├── scrcpy.rs        # 核心逻辑（780+ 行）
-├── tray.rs          # 系统托盘（125 行）
-└── adb_sync.rs      # ADB 传输（120 行）
+├── main.rs          # 应用入口（76 行）
+├── lib.rs           # 库导出（7 行）
+├── commands.rs      # IPC 命令（589 行，36 个命令）
+├── config.rs        # 配置管理（352 行）
+├── scrcpy.rs        # 核心逻辑（922 行）
+├── tray.rs          # 系统托盘（122 行）
+└── adb_sync.rs      # ADB 传输（116 行）
 ```
 
 ### 前端源码
 
 ```
 dist/
-├── index.html          # 主界面（350+ 行）
-├── main.js             # 前端逻辑（1400+ 行）
-├── styles.css          # 主样式
+├── index.html          # 主界面（656 行）
+├── main.js             # 前端逻辑（1868 行）
+├── styles.css          # 主样式（1015 行）
 ├── suggestions.css     # 联想样式（v2.5.0 新增）
 └── app_database.json   # 应用数据库（v2.5.0 增强）
 ```

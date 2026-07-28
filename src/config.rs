@@ -38,6 +38,22 @@ fn default_true() -> bool {
     true
 }
 
+fn default_blank_screen_button_text() -> String {
+    "模拟黑屏".to_string()
+}
+
+fn default_blank_screen_command() -> String {
+    "adb shell monkey -p net.tlfoxhuman.fakeblankscreen 1".to_string()
+}
+
+fn default_stop_blank_screen_button_text() -> String {
+    "关闭模拟黑屏".to_string()
+}
+
+fn default_stop_blank_screen_command() -> String {
+    "adb shell am force-stop net.tlfoxhuman.fakeblankscreen".to_string()
+}
+
 impl Default for GlobalSettings {
     fn default() -> Self {
         Self {
@@ -135,6 +151,14 @@ pub struct Config {
     pub tray_app_count: u32,
     pub tray_show_mirror: bool,
     pub tray_show_audio: bool,
+    #[serde(default = "default_blank_screen_button_text")]
+    pub blank_screen_button_text: String,
+    #[serde(default = "default_blank_screen_command")]
+    pub blank_screen_command: String,
+    #[serde(default = "default_stop_blank_screen_button_text")]
+    pub stop_blank_screen_button_text: String,
+    #[serde(default = "default_stop_blank_screen_command")]
+    pub stop_blank_screen_command: String,
 }
 
 impl Default for Config {
@@ -178,6 +202,10 @@ impl Default for Config {
             tray_app_count: 4,
             tray_show_mirror: true,
             tray_show_audio: true,
+            blank_screen_button_text: default_blank_screen_button_text(),
+            blank_screen_command: default_blank_screen_command(),
+            stop_blank_screen_button_text: default_stop_blank_screen_button_text(),
+            stop_blank_screen_command: default_stop_blank_screen_command(),
         }
     }
 }
@@ -304,5 +332,21 @@ mod tests {
 
         let options: ScrcpyOptions = serde_json::from_str(json).unwrap();
         assert_eq!(options.bitrate, 24);
+    }
+
+    #[test]
+    fn config_without_quick_actions_uses_defaults() {
+        let mut value = serde_json::to_value(Config::default()).unwrap();
+        let object = value.as_object_mut().unwrap();
+        object.remove("blank_screen_button_text");
+        object.remove("blank_screen_command");
+        object.remove("stop_blank_screen_button_text");
+        object.remove("stop_blank_screen_command");
+
+        let config: Config = serde_json::from_value(value).unwrap();
+        assert_eq!(config.blank_screen_button_text, "模拟黑屏");
+        assert_eq!(config.blank_screen_command, "adb shell monkey -p net.tlfoxhuman.fakeblankscreen 1");
+        assert_eq!(config.stop_blank_screen_button_text, "关闭模拟黑屏");
+        assert_eq!(config.stop_blank_screen_command, "adb shell am force-stop net.tlfoxhuman.fakeblankscreen");
     }
 }

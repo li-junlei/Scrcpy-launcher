@@ -20,6 +20,11 @@ let deviceApps = [];
 let updateDownloadUrl = '';
 let latestVersionForSkip = '';
 
+const DEFAULT_BLANK_SCREEN_TEXT = '模拟黑屏';
+const DEFAULT_BLANK_SCREEN_COMMAND = 'adb shell monkey -p net.tlfoxhuman.fakeblankscreen 1';
+const DEFAULT_STOP_BLANK_SCREEN_TEXT = '关闭模拟黑屏';
+const DEFAULT_STOP_BLANK_SCREEN_COMMAND = 'adb shell am force-stop net.tlfoxhuman.fakeblankscreen';
+
 let appDatabase = [];
 let installedPackages = new Set();
 let isInstalledAppsSynced = false;
@@ -146,6 +151,7 @@ async function loadConfig() {
     try {
         config = await invoke('get_config');
         applyTheme(config.global_settings.theme);
+        applyQuickActionConfig();
 
         // 应用全局图标显示设置
         const showIcons = config.global_settings.show_app_icons !== false; // 默认为 true
@@ -194,6 +200,8 @@ function setupEventListeners() {
     bindClick('history-btn', toggleHistoryDropdown);
     bindClick('tcpip-btn', enableTcpip);
     bindClick('disconnect-btn', disconnectAll);
+    bindClick('blank-screen-btn', () => runAdbQuickAction('blank-screen-btn', config.blank_screen_command));
+    bindClick('stop-blank-screen-btn', () => runAdbQuickAction('stop-blank-screen-btn', config.stop_blank_screen_command));
     bindClick('kill-btn', killScrcpy);
     bindClick('push-file-btn', pushFile);
     bindClick('pair-btn', openPairModal);
@@ -213,8 +221,7 @@ function setupEventListeners() {
     });
 
     // 直接投屏
-    bindClick('settings-btn', () => openSettingsModal());
-    bindClick('advanced-btn', openAdvancedModal);
+    bindClick('settings-btn', () => openSettingsModal('display'));
     bindClick('theme-toggle-btn', toggleTheme);
     bindClick('mirror-btn', launchMirror);
     bindClick('audio-btn', launchAudio);
@@ -243,10 +250,13 @@ function setupEventListeners() {
     // 首次运行
     bindClick('save-first-run-btn', saveFirstRunConfig);
 
-    // 设置
+    // 设置中心
     bindClick('settings-cancel-btn', () => hideModal('settings-modal'));
-    bindClick('settings-save-btn', saveSettings);
+    bindClick('settings-save-btn', saveAllSettings);
     bindClick('check-update-btn', () => checkForUpdates(false));
+    document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.onclick = () => switchSettingsTab(tab.dataset.tab);
+    });
 
     // 更新弹窗
     bindClick('update-later-btn', () => hideModal('update-modal'));
@@ -274,8 +284,6 @@ function setupEventListeners() {
     if (useAppCustomArgs) useAppCustomArgs.onchange = toggleAppCustomArgsMode;
 
     bindClick('advanced-defaults-btn', restoreDefaults);
-    bindClick('advanced-cancel-btn', () => hideModal('advanced-modal'));
-    bindClick('advanced-save-btn', saveAdvancedSettings);
 
     // 应用配置
     bindClick('browse-apps-btn', () => showModal('yyb-search-modal'));
@@ -535,6 +543,26 @@ async function killScrcpy() {
         showMessage(`失败: ${e}`);
     } finally {
         setLoading('kill-btn', false);
+    }
+}
+
+function applyQuickActionConfig() {
+    if (!config) return;
+    const blankButton = $('blank-screen-btn');
+    const stopButton = $('stop-blank-screen-btn');
+    if (blankButton) blankButton.textContent = config.blank_screen_button_text || DEFAULT_BLANK_SCREEN_TEXT;
+    if (stopButton) stopButton.textContent = config.stop_blank_screen_button_text || DEFAULT_STOP_BLANK_SCREEN_TEXT;
+}
+
+async function runAdbQuickAction(buttonId, command) {
+    setLoading(buttonId, true);
+    try {
+        const result = await invoke('execute_adb_quick_action', { command });
+        showMessage(result.message);
+    } catch (e) {
+        showMessage(`失败: ${e}`);
+    } finally {
+        setLoading(buttonId, false);
     }
 }
 
@@ -1299,32 +1327,92 @@ async function deletePreset(name) {
 
 // ==================== 设置 ====================
 
-function openSettingsModal() {
+function openSettingsModal(tab = 'display') {
+    // 显示设置
     $('global-dpi').value = config.global_settings.dpi;
     $('global-res').value = config.global_settings.full_res;
     $('global-show-icons').checked = config.global_settings.show_app_icons !== false;
     $('global-filter-installed').checked = config.global_settings.filter_installed_apps !== false;
 
+    // 托盘设置
     $('tray-count').value = config.tray_app_count;
     $('tray-mirror').checked = config.tray_show_mirror;
     $('tray-audio').checked = config.tray_show_audio;
+
+    // 高级设置
+    fillAdvancedFields();
+
+    switchSettingsTab(tab);
     showModal('settings-modal');
 }
 
-async function saveSettings() {
-    const dpi = parseInt($('global-dpi').value) || 400;
-    const fullRes = $('global-res').value || '1200x2670';
-    const showIcons = $('global-show-icons').checked;
-    const filterInstalled = $('global-filter-installed').checked;
+// 切换设置中心分类标签
+function switchSettingsTab(name) {
+    document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === name);
+    });
+    document.querySelectorAll('.settings-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.dataset.panel !== name);
+    });
+}
 
-    const trayCount = parseInt($('tray-count').value) || 4;
-    const showMirror = $('tray-mirror').checked;
-    const showAudio = $('tray-audio').checked;
-
+// 统一保存：显示 / 托盘 / 高级 三组配置
+async function saveAllSettings() {
     setLoading('settings-save-btn', true);
     try {
+        // 显示设置
+        const dpi = parseInt($('global-dpi').value) || 400;
+        const fullRes = $('global-res').value || '1200x2670';
+        const showIcons = $('global-show-icons').checked;
+        const filterInstalled = $('global-filter-installed').checked;
+        // 托盘设置
+        const trayCount = parseInt($('tray-count').value) || 4;
+        const showMirror = $('tray-mirror').checked;
+        const showAudio = $('tray-audio').checked;
+        // 高级：scrcpy 选项
+        const options = {
+            hid_keyboard: $('opt-hid').checked,
+            stay_awake: $('opt-awake').checked,
+            turn_screen_off: $('opt-screen-off').checked,
+            show_touches: $('opt-touches').checked,
+            always_on_top: $('opt-top').checked,
+            borderless: $('opt-borderless').checked,
+            power_off_on_close: $('opt-power-off').checked,
+            local_ime: $('opt-ime').checked,
+            max_size: parseInt($('opt-max-size').value) || 0,
+            max_fps: parseInt($('opt-max-fps').value) || 0,
+            bitrate: parseInt($('opt-bitrate').value) || 24,
+        };
+        const appOptions = {
+            hid_keyboard: $('app-opt-hid').checked,
+            stay_awake: $('app-opt-awake').checked,
+            turn_screen_off: $('app-opt-screen-off').checked,
+            show_touches: $('app-opt-touches').checked,
+            always_on_top: $('app-opt-top').checked,
+            borderless: $('app-opt-borderless').checked,
+            power_off_on_close: $('app-opt-power-off').checked,
+            local_ime: $('app-opt-ime').checked,
+            max_size: parseInt($('app-opt-max-size').value) || 0,
+            max_fps: parseInt($('app-opt-max-fps').value) || 0,
+            bitrate: parseInt($('app-opt-bitrate').value) || 24,
+        };
+
         await invoke('save_global_settings', { dpi, fullRes, showAppIcons: showIcons, filterInstalledApps: filterInstalled });
-        await invoke('save_tray_settings', { appCount: trayCount, showMirror: showMirror, showAudio: showAudio });
+        await invoke('save_tray_settings', { appCount: trayCount, showMirror, showAudio });
+        await invoke('save_scrcpy_options', {
+            useCustom: $('use-custom-args').checked,
+            customArgs: $('custom-args').value,
+            options,
+            useAppStreamArgs: $('use-app-stream-args').checked,
+            useAppCustomArgs: $('use-app-custom-args').checked,
+            appCustomArgs: $('app-custom-args').value,
+            appOptions,
+            blankScreenButtonText: $('blank-screen-button-text').value.trim() || DEFAULT_BLANK_SCREEN_TEXT,
+            blankScreenCommand: $('blank-screen-command').value.trim() || DEFAULT_BLANK_SCREEN_COMMAND,
+            stopBlankScreenButtonText: $('stop-blank-screen-button-text').value.trim() || DEFAULT_STOP_BLANK_SCREEN_TEXT,
+            stopBlankScreenCommand: $('stop-blank-screen-command').value.trim() || DEFAULT_STOP_BLANK_SCREEN_COMMAND,
+        });
+
         await loadConfig();
         renderApps(); // 重新渲染以应用图标设置
         hideModal('settings-modal');
@@ -1338,7 +1426,12 @@ async function saveSettings() {
 
 // ==================== 高级设置 ====================
 
-function openAdvancedModal() {
+function fillAdvancedFields() {
+    $('blank-screen-button-text').value = config.blank_screen_button_text || DEFAULT_BLANK_SCREEN_TEXT;
+    $('blank-screen-command').value = config.blank_screen_command || DEFAULT_BLANK_SCREEN_COMMAND;
+    $('stop-blank-screen-button-text').value = config.stop_blank_screen_button_text || DEFAULT_STOP_BLANK_SCREEN_TEXT;
+    $('stop-blank-screen-command').value = config.stop_blank_screen_command || DEFAULT_STOP_BLANK_SCREEN_COMMAND;
+
     // 全局选项
     $('use-custom-args').checked = config.use_custom_args;
     $('custom-args').value = config.custom_args;
@@ -1391,8 +1484,6 @@ function openAdvancedModal() {
     $('app-opt-max-size').value = appOpts.max_size || '';
     $('app-opt-max-fps').value = appOpts.max_fps || '';
     $('app-opt-bitrate').value = appOpts.bitrate || 24;
-
-    showModal('advanced-modal');
 }
 
 function toggleCustomArgsMode() {
@@ -1412,6 +1503,11 @@ function toggleAppCustomArgsMode() {
 }
 
 function restoreDefaults() {
+    $('blank-screen-button-text').value = DEFAULT_BLANK_SCREEN_TEXT;
+    $('blank-screen-command').value = DEFAULT_BLANK_SCREEN_COMMAND;
+    $('stop-blank-screen-button-text').value = DEFAULT_STOP_BLANK_SCREEN_TEXT;
+    $('stop-blank-screen-command').value = DEFAULT_STOP_BLANK_SCREEN_COMMAND;
+
     $('use-custom-args').checked = false;
     $('custom-args').value = '-K --stay-awake';
     toggleCustomArgsMode();
@@ -1427,7 +1523,8 @@ function restoreDefaults() {
     $('opt-max-size').value = '';
     $('opt-max-fps').value = '';
     $('opt-bitrate').value = 24;
-    $('opt-filter-installed').checked = true; // Default to true
+    const optFilterInstalled = $('opt-filter-installed');
+    if (optFilterInstalled) optFilterInstalled.checked = true; // Default to true
 
     $('use-app-stream-args').checked = true;
     $('use-app-custom-args').checked = false;
@@ -1446,53 +1543,6 @@ function restoreDefaults() {
     $('app-opt-max-size').value = '';
     $('app-opt-max-fps').value = '';
     $('app-opt-bitrate').value = 24;
-}
-
-async function saveAdvancedSettings() {
-    const options = {
-        hid_keyboard: $('opt-hid').checked,
-        stay_awake: $('opt-awake').checked,
-        turn_screen_off: $('opt-screen-off').checked,
-        show_touches: $('opt-touches').checked,
-        always_on_top: $('opt-top').checked,
-        borderless: $('opt-borderless').checked,
-        power_off_on_close: $('opt-power-off').checked,
-        local_ime: $('opt-ime').checked,
-        max_size: parseInt($('opt-max-size').value) || 0,
-        max_fps: parseInt($('opt-max-fps').value) || 0,
-        bitrate: parseInt($('opt-bitrate').value) || 24,
-    };
-
-    const appOptions = {
-        hid_keyboard: $('app-opt-hid').checked,
-        stay_awake: $('app-opt-awake').checked,
-        turn_screen_off: $('app-opt-screen-off').checked,
-        show_touches: $('app-opt-touches').checked,
-        always_on_top: $('app-opt-top').checked,
-        borderless: $('app-opt-borderless').checked,
-        power_off_on_close: $('app-opt-power-off').checked,
-        local_ime: $('app-opt-ime').checked,
-        max_size: parseInt($('app-opt-max-size').value) || 0,
-        max_fps: parseInt($('app-opt-max-fps').value) || 0,
-        bitrate: parseInt($('app-opt-bitrate').value) || 24,
-    };
-
-    try {
-        await invoke('save_scrcpy_options', {
-            useCustom: $('use-custom-args').checked,
-            customArgs: $('custom-args').value,
-            options: options,
-            useAppStreamArgs: $('use-app-stream-args').checked,
-            useAppCustomArgs: $('use-app-custom-args').checked,
-            appCustomArgs: $('app-custom-args').value,
-            appOptions: appOptions,
-        });
-        await loadConfig();
-        hideModal('advanced-modal');
-        showMessage('高级设置已保存！');
-    } catch (e) {
-        showMessage(`保存失败: ${e}`);
-    }
 }
 
 // ==================== 首次运行 ====================

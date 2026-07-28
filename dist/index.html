@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrcpy Launcher</title>
-    <link rel="stylesheet" href="styles.css?v=2.6.1">
+    <link rel="stylesheet" href="styles.css?v=2.7.2">
     <link rel="stylesheet" href="suggestions.css">
 </head>
 
@@ -56,7 +56,11 @@
                 <button class="btn danger" id="disconnect-btn">断开连接</button>
             </div>
 
-            <button class="btn outline full-width" id="kill-btn">关闭所有 Scrcpy 窗口</button>
+            <div class="button-row quick-actions">
+                <button class="btn outline" id="blank-screen-btn">模拟黑屏</button>
+                <button class="btn outline" id="stop-blank-screen-btn">关闭模拟黑屏</button>
+                <button class="btn outline" id="kill-btn">关闭所有 Scrcpy 窗口</button>
+            </div>
         </section>
 
         <!-- 工具箱区域 -->
@@ -89,7 +93,6 @@
         <section class="tab-content active" id="tab-mirror">
             <div class="button-row">
                 <button class="btn outline" id="settings-btn">设置</button>
-                <button class="btn outline" id="advanced-btn">高级设置</button>
             </div>
 
             <h3 class="section-title">启动模式</h3>
@@ -247,157 +250,197 @@
         </div>
     </div>
 
-    <!-- 设置对话框 -->
+    <!-- 设置中心对话框 -->
     <div class="modal" id="settings-modal">
-        <div class="modal-content">
-            <h2>设置</h2>
+        <div class="modal-content large">
+            <h2>⚙ 设置</h2>
 
-            <div class="form-section">
-                <h4>显示设置</h4>
-                <p class="hint">这些设置将作为默认值。DPI仅对'应用流转'模式生效。</p>
-                <div class="form-row">
-                    <label>DPI (密度)</label>
-                    <input type="number" id="global-dpi" value="400">
-                </div>
-                <div class="form-row">
-                    <label>完整分辨率</label>
-                    <input type="text" id="global-res" value="1200x2670" placeholder="如 1200x2670">
-                </div>
-                <div class="form-row">
-                    <label class="switch-label">
-                        <input type="checkbox" id="global-show-icons" checked>
-                        <span>显示应用图标</span>
-                    </label>
-                </div>
-                <div class="form-row">
-                    <label class="switch-label">
-                        <input type="checkbox" id="global-filter-installed" checked>
-                        <span>输入联想仅显示已安装应用</span>
-                    </label>
+            <!-- 分类标签栏 -->
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="display">显示</button>
+                <button class="settings-tab" data-tab="tray">托盘</button>
+                <button class="settings-tab" data-tab="advanced">高级</button>
+                <button class="settings-tab" data-tab="about">关于</button>
+            </div>
+
+            <!-- 显示 -->
+            <div class="settings-panel" data-panel="display">
+                <div class="form-section">
+                    <h4>显示设置</h4>
+                    <p class="hint">这些设置将作为默认值。DPI 仅对「应用流转」模式生效。</p>
+                    <div class="form-row">
+                        <label>DPI (密度)</label>
+                        <input type="number" id="global-dpi" value="400">
+                    </div>
+                    <div class="form-row">
+                        <label>完整分辨率</label>
+                        <input type="text" id="global-res" value="1200x2670" placeholder="如 1200x2670">
+                    </div>
+                    <div class="form-row">
+                        <label class="switch-label">
+                            <input type="checkbox" id="global-show-icons" checked>
+                            <span>显示应用图标</span>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label class="switch-label">
+                            <input type="checkbox" id="global-filter-installed" checked>
+                            <span>输入联想仅显示已安装应用</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-section">
-                <h4>托盘菜单设置</h4>
-                <p class="hint">设置右键托盘图标菜单的内容</p>
-                <div class="form-row">
-                    <label>显示应用数量</label>
-                    <input type="number" id="tray-count" value="4">
-                </div>
-                <div class="form-row">
-                    <label class="switch-label">
-                        <input type="checkbox" id="tray-mirror" checked>
-                        <span>显示屏幕镜像</span>
-                    </label>
-                    <label class="switch-label">
-                        <input type="checkbox" id="tray-audio" checked>
-                        <span>显示纯音频</span>
-                    </label>
+            <!-- 托盘 -->
+            <div class="settings-panel hidden" data-panel="tray">
+                <div class="form-section">
+                    <h4>托盘菜单设置</h4>
+                    <p class="hint">设置右键托盘图标菜单的内容</p>
+                    <div class="form-row">
+                        <label>显示应用数量</label>
+                        <input type="number" id="tray-count" value="4">
+                    </div>
+                    <div class="form-row">
+                        <label class="switch-label">
+                            <input type="checkbox" id="tray-mirror" checked>
+                            <span>显示屏幕镜像</span>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label class="switch-label">
+                            <input type="checkbox" id="tray-audio" checked>
+                            <span>显示纯音频</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-section">
-                <h4>关于</h4>
-                <div class="form-row" style="justify-content: space-between; align-items: center;">
-                    <span>当前版本: <strong id="current-version">加载中...</strong></span>
-                    <button class="btn outline" id="check-update-btn">检查更新</button>
+            <!-- 高级 -->
+            <div class="settings-panel hidden" data-panel="advanced">
+                <div class="form-section">
+                    <h4>ADB 快捷功能</h4>
+                    <p class="hint">可自定义首页按钮文字和 ADB 命令；命令开头的 adb 可以省略。</p>
+                    <div class="adb-cmd-group">
+                        <div class="adb-cmd-label">模拟黑屏</div>
+                        <div class="form-row">
+                            <input type="text" id="blank-screen-button-text" placeholder="按钮文字">
+                            <input type="text" id="blank-screen-command" placeholder="adb shell ...">
+                        </div>
+                    </div>
+                    <div class="adb-cmd-group">
+                        <div class="adb-cmd-label">关闭模拟黑屏</div>
+                        <div class="form-row">
+                            <input type="text" id="stop-blank-screen-button-text" placeholder="按钮文字">
+                            <input type="text" id="stop-blank-screen-command" placeholder="adb shell ...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <h4>全局参数</h4>
+                        <label class="switch-label">
+                            <input type="checkbox" id="use-custom-args">
+                            <span>自定义模式</span>
+                        </label>
+                    </div>
+
+                    <div id="global-options-grid" class="options-grid">
+                        <label class="option-tile"><input type="checkbox" id="opt-hid" checked><span>HID 键盘</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-awake" checked><span>保持唤醒</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-screen-off"><span>关闭设备屏幕</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-touches"><span>显示触摸点</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-top"><span>窗口置顶</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-borderless"><span>无边框</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-power-off"><span>退出时关屏</span></label>
+                        <label class="option-tile"><input type="checkbox" id="opt-ime"><span>本地输入法</span></label>
+                    </div>
+
+                    <div class="num-field-grid">
+                        <div class="num-field">
+                            <label>长边</label>
+                            <input type="number" id="opt-max-size" placeholder="1920">
+                        </div>
+                        <div class="num-field">
+                            <label>帧率</label>
+                            <input type="number" id="opt-max-fps" placeholder="60">
+                        </div>
+                        <div class="num-field">
+                            <label>码率</label>
+                            <input type="number" id="opt-bitrate" placeholder="24">
+                        </div>
+                    </div>
+                    <p class="hint">长边/帧率留空表示不限制；码率单位 Mbps。</p>
+
+                    <textarea id="custom-args" class="hidden" placeholder="如: -K --stay-awake -S">-K --stay-awake</textarea>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <h4>应用流转专属</h4>
+                        <label class="switch-label">
+                            <input type="checkbox" id="use-app-stream-args">
+                            <span>启用</span>
+                        </label>
+                    </div>
+                    <p class="hint">启用后，应用流转将使用独立的参数设置</p>
+
+                    <div id="app-options-container" class="hidden">
+                        <div class="section-header">
+                            <span></span>
+                            <label class="switch-label">
+                                <input type="checkbox" id="use-app-custom-args">
+                                <span>自定义模式</span>
+                            </label>
+                        </div>
+
+                        <div id="app-options-grid" class="options-grid">
+                            <label class="option-tile"><input type="checkbox" id="app-opt-hid" checked><span>HID 键盘</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-awake" checked><span>保持唤醒</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-screen-off"><span>关闭设备屏幕</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-touches"><span>显示触摸点</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-top"><span>窗口置顶</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-borderless"><span>无边框</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-power-off"><span>退出时关屏</span></label>
+                            <label class="option-tile"><input type="checkbox" id="app-opt-ime" checked><span>本地输入法</span></label>
+                        </div>
+
+                        <div class="num-field-grid">
+                            <div class="num-field">
+                                <label>长边</label>
+                                <input type="number" id="app-opt-max-size" placeholder="1920">
+                            </div>
+                            <div class="num-field">
+                                <label>帧率</label>
+                                <input type="number" id="app-opt-max-fps" placeholder="60">
+                            </div>
+                            <div class="num-field">
+                                <label>码率</label>
+                                <input type="number" id="app-opt-bitrate" placeholder="24">
+                            </div>
+                        </div>
+
+                        <textarea id="app-custom-args" class="hidden" placeholder="如: -K --stay-awake -S">-K --stay-awake --display-ime-policy=local</textarea>
+                    </div>
+                </div>
+
+                <button class="btn outline full-width" id="advanced-defaults-btn" style="margin-top: 4px;">恢复默认</button>
+            </div>
+
+            <!-- 关于 -->
+            <div class="settings-panel hidden" data-panel="about">
+                <div class="form-section">
+                    <h4>关于</h4>
+                    <div class="form-row" style="justify-content: space-between; align-items: center;">
+                        <span>当前版本: <strong id="current-version">加载中...</strong></span>
+                        <button class="btn outline" id="check-update-btn">检查更新</button>
+                    </div>
                 </div>
             </div>
 
             <div class="modal-actions">
                 <button class="btn outline" id="settings-cancel-btn">取消</button>
                 <button class="btn primary" id="settings-save-btn">保存</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 高级设置对话框 -->
-    <div class="modal" id="advanced-modal">
-        <div class="modal-content large">
-            <h2>🎛 高级设置</h2>
-
-            <div class="form-section">
-                <div class="section-header">
-                    <h4>全局参数</h4>
-                    <label class="switch-label">
-                        <input type="checkbox" id="use-custom-args">
-                        <span>自定义模式</span>
-                    </label>
-                </div>
-
-                <div id="global-options-grid" class="options-grid">
-                    <label class="option-tile"><input type="checkbox" id="opt-hid" checked><span>HID 键盘</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-awake" checked><span>保持唤醒</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-screen-off"><span>关闭设备屏幕</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-touches"><span>显示触摸点</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-top"><span>窗口置顶</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-borderless"><span>无边框</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-power-off"><span>退出时关屏</span></label>
-                    <label class="option-tile"><input type="checkbox" id="opt-ime"><span>本地输入法</span></label>
-                </div>
-
-                <div class="form-row">
-                    <input type="number" id="opt-max-size" placeholder="长边限制 (如 1920)">
-                    <input type="number" id="opt-max-fps" placeholder="帧率限制 (如 60)">
-                    <input type="number" id="opt-bitrate" placeholder="码率 (Mbps, 如 24)">
-                </div>
-
-                <textarea id="custom-args" class="hidden" placeholder="如: -K --stay-awake -S">-K --stay-awake</textarea>
-            </div>
-
-            <div class="form-section">
-                <div class="section-header">
-                    <h4>应用流转专属</h4>
-                    <label class="switch-label">
-                        <input type="checkbox" id="use-app-stream-args">
-                        <span>启用</span>
-                    </label>
-                </div>
-                <p class="hint">启用后，应用流转将使用独立的参数设置</p>
-
-                <div id="app-options-container" class="hidden">
-                    <div class="section-header">
-                        <span></span>
-                        <label class="switch-label">
-                            <input type="checkbox" id="use-app-custom-args">
-                            <span>自定义模式</span>
-                        </label>
-                    </div>
-
-                    <div id="app-options-grid" class="options-grid">
-                        <label class="option-tile"><input type="checkbox" id="app-opt-hid" checked><span>HID
-                                键盘</span></label>
-                        <label class="option-tile"><input type="checkbox" id="app-opt-awake"
-                                checked><span>保持唤醒</span></label>
-                        <label class="option-tile"><input type="checkbox"
-                                id="app-opt-screen-off"><span>关闭设备屏幕</span></label>
-                        <label class="option-tile"><input type="checkbox"
-                                id="app-opt-touches"><span>显示触摸点</span></label>
-                        <label class="option-tile"><input type="checkbox" id="app-opt-top"><span>窗口置顶</span></label>
-                        <label class="option-tile"><input type="checkbox"
-                                id="app-opt-borderless"><span>无边框</span></label>
-                        <label class="option-tile"><input type="checkbox"
-                                id="app-opt-power-off"><span>退出时关屏</span></label>
-                        <label class="option-tile"><input type="checkbox" id="app-opt-ime"
-                                checked><span>本地输入法</span></label>
-                    </div>
-
-                    <div class="form-row">
-                        <input type="number" id="app-opt-max-size" placeholder="长边限制 (如 1920)">
-                        <input type="number" id="app-opt-max-fps" placeholder="帧率限制 (如 60)">
-                        <input type="number" id="app-opt-bitrate" placeholder="码率 (Mbps, 如 24)">
-                    </div>
-
-                    <textarea id="app-custom-args" class="hidden"
-                        placeholder="如: -K --stay-awake -S">-K --stay-awake --display-ime-policy=local</textarea>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn outline" id="advanced-defaults-btn">恢复默认</button>
-                <div class="spacer"></div>
-                <button class="btn outline" id="advanced-cancel-btn">取消</button>
-                <button class="btn primary" id="advanced-save-btn">保存</button>
             </div>
         </div>
     </div>
@@ -607,7 +650,7 @@
         </svg>
     </button>
 
-    <script src="main.js?v=2.4.0"></script>
+    <script src="main.js?v=2.7.2"></script>
 </body>
 
 </html>

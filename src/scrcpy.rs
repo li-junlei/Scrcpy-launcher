@@ -861,3 +861,62 @@ mod tests {
         assert!(args.windows(2).any(|pair| pair == ["-b", "12M"]));
     }
 }
+
+/// 使用内置 ADB 执行用户配置的快捷命令。
+pub fn execute_adb_command(command: &str) -> CommandResult {
+    let mut parts = command.split_whitespace();
+    let first = match parts.next() {
+        Some(part) => part,
+        None => return CommandResult {
+            success: false,
+            message: "ADB 命令不能为空。".to_string(),
+        },
+    };
+
+    let args: Vec<&str> = if first.eq_ignore_ascii_case("adb") || first.eq_ignore_ascii_case("adb.exe") {
+        parts.collect()
+    } else {
+        std::iter::once(first).chain(parts).collect()
+    };
+
+    if args.is_empty() {
+        return CommandResult {
+            success: false,
+            message: "ADB 命令缺少参数。".to_string(),
+        };
+    }
+
+    let adb_path = get_adb_path();
+    match create_command(&adb_path)
+        .args(&args)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .output()
+    {
+        Ok(output) if output.status.success() => {
+            let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+            CommandResult {
+                success: true,
+                message: if stdout.is_empty() { "ADB 命令执行成功。".to_string() } else { stdout },
+            }
+        }
+        Ok(output) => {
+            let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
+            let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+            CommandResult {
+                success: false,
+                message: if !stderr.is_empty() {
+                    stderr
+                } else if !stdout.is_empty() {
+                    stdout
+                } else {
+                    "ADB 命令执行失败。".to_string()
+                },
+            }
+        }
+        Err(e) => CommandResult {
+            success: false,
+            message: format!("执行失败: {}", e),
+        },
+    }
+}

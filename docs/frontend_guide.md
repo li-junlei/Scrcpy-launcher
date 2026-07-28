@@ -2,13 +2,18 @@
 
 # dist/ - 前端模块
 
-> 最后更新：2026-01-27 00:02:27
+> 最后更新：2026-07-28 00:00:00
 > 语言：Vanilla JavaScript (ES6+), HTML5, CSS3
 > 状态：✅ 完整扫描
 
 ---
 
 ## 变更记录
+
+### 2026-07-28
+- 同步至 v2.7.2：更新各文件行数
+- 设置中心统一化：移除独立「高级设置」弹窗与入口按钮，合并为设置中心（顶部 Tab：显示 / 托盘 / 高级 / 关于）
+- 修正文档中不存在的 `overrides.css` 引用，改为实际的 `suggestions.css`
 
 ### 2026-01-27
 - 初始化模块文档
@@ -38,7 +43,7 @@
 
 ### index.html - 主界面
 
-**文件路径**：`dist/index.html` (300+ 行)
+**文件路径**：`dist/index.html` (656 行)
 
 **DOM 结构**：
 
@@ -88,7 +93,6 @@
     <!-- 直接投屏标签页 -->
     <section class="tab-content active" id="tab-mirror">
         <button id="settings-btn">设置</button>
-        <button id="advanced-btn">高级设置</button>
         <button id="mirror-btn">启动屏幕镜像</button>
         <button id="audio-btn">启动纯音频</button>
     </section>
@@ -103,7 +107,7 @@
 
 <!-- 模态框 -->
 <div id="settings-modal" class="modal">
-    <!-- 设置内容 -->
+    <!-- 设置中心：顶部 Tab（显示 / 托盘 / 高级 / 关于），已合并原「高级设置」弹窗 -->
 </div>
 
 <div id="app-config-modal" class="modal">
@@ -130,7 +134,7 @@
 
 ### Tauri API 调用
 
-**文件路径**：`dist/main.js` (1250+ 行)
+**文件路径**：`dist/main.js` (1868 行)
 
 **核心 API**：
 
@@ -175,7 +179,7 @@ await listen('tauri://drag-drop', async (event) => {
 
 ### main.js - 前端逻辑
 
-**文件路径**：`dist/main.js` (1250+ 行)
+**文件路径**：`dist/main.js` (1868 行)
 
 **全局状态**：
 
@@ -580,7 +584,7 @@ async function toggleTheme() {
 
 ### styles.css - 主样式表
 
-**文件路径**：`dist/styles.css` (行数未知)
+**文件路径**：`dist/styles.css` (1015 行)
 
 **设计特点**：
 - **CSS 变量**：主题色、间距、圆角等可配置
@@ -592,31 +596,34 @@ async function toggleTheme() {
 
 ```css
 :root {
-    --primary-color: #007bff;
-    --danger-color: #dc3545;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --bg-color: #f5f5f5;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --teal: #0d9488;
+    --danger: #ef4444;
+    --bg: #fafafa;
     --card-bg: #ffffff;
-    --text-color: #333333;
-    --border-color: #e0e0e0;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --radius: 8px;
+    --text: #1f2937;
+    --text-secondary: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+    --radius-sm: 8px;
 }
 
-[data-theme="dark"] {
-    --bg-color: #1e1e1e;
-    --card-bg: #2d2d2d;
-    --text-color: #e0e0e0;
-    --border-color: #404040;
+:root[data-theme="dark"] {
+    --bg: #111827;
+    --card-bg: #1f2937;
+    --text: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border: #374151;
+    --primary: #6366f1;
 }
 ```
 
-### overrides.css - 样式覆盖
+### suggestions.css - 自动补全样式
 
-**文件路径**：`dist/overrides.css` (行数未知)
+**文件路径**：`dist/suggestions.css` (45 行)
 
-**职责**：覆盖 `styles.css` 中的特定样式，提供定制化。
+**职责**：应用名输入自动补全建议列表（`.suggestions-list` / `.suggestion-item`）的样式。
 
 ---
 
@@ -701,7 +708,7 @@ test('连接无线设备', async ({ page }) => {
 **A**:
 
 1. 在 `index.html` 中添加 HTML 结构
-2. 在 `styles.css` 或 `overrides.css` 中添加样式
+2. 在 `styles.css` 中添加样式
 3. 在 `main.js` 中添加事件监听器
 
 示例：
@@ -796,10 +803,10 @@ $('app-search').oninput = (e) => {
 
 | 文件 | 行数 | 职责 |
 |------|------|------|
-| `index.html` | 300+ | 主界面结构 |
-| `main.js` | 1250+ | 前端逻辑 |
-| `styles.css` | 未知 | 主样式表 |
-| `overrides.css` | 未知 | 样式覆盖 |
+| `index.html` | 656 | 主界面结构 |
+| `main.js` | 1868 | 前端逻辑 |
+| `styles.css` | 1015 | 主样式表 |
+| `suggestions.css` | 45 | 自动补全样式 |
 
 ### 其他文件
 
@@ -878,6 +885,6 @@ const $ = (id) => document.getElementById(id);
 
 ---
 
-**最后扫描时间**：2026-01-27 00:02:27
-**文档版本**：v1.0
+**最后扫描时间**：2026-07-28 00:00:00
+**文档版本**：v2.7.2
 **作者**：AI 初始化助手

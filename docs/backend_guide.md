@@ -2,13 +2,17 @@
 
 # src/ - Rust 后端模块
 
-> 最后更新：2026-01-27 00:02:27
+> 最后更新：2026-07-28 00:00:00
 > 语言：Rust (Edition 2021)
 > 状态：✅ 完整扫描
 
 ---
 
 ## 变更记录
+
+### 2026-07-28
+- 同步至 v2.7.2：更新各文件行数与命令数（25+ → 36）
+- `ScrcpyOptions` 新增 `bitrate`（码率，Mbps）字段
 
 ### 2026-01-27
 - 初始化模块文档
@@ -21,7 +25,7 @@
 **src/** 是 Scrcpy Launcher 的核心后端模块，负责：
 
 1. **应用生命周期管理**：Tauri 应用初始化、窗口事件、单实例限制
-2. **IPC 接口层**：定义 25+ 个 Tauri 命令，供前端调用
+2. **IPC 接口层**：定义 36 个 Tauri 命令，供前端调用
 3. **配置管理**：配置序列化/反序列化、持久化存储
 4. **Scrcpy/ADB 交互**：进程管理、网络扫描、无线连接
 5. **系统托盘**：托盘图标、菜单、快捷操作
@@ -33,7 +37,7 @@
 
 ### main.rs - 应用入口
 
-**文件路径**：`src/main.rs` (67 行)
+**文件路径**：`src/main.rs` (76 行)
 
 **核心职责**：
 - Tauri 应用初始化与插件注册
@@ -71,7 +75,7 @@ fn main() {
             }
         })
         .invoke_handler(tauri::generate_handler![
-            // 注册 25+ 个 IPC 命令
+            // 注册 36 个 IPC 命令
             commands::get_config,
             commands::save_config,
             commands::check_adb_status,
@@ -95,7 +99,7 @@ fn main() {
 
 ### commands.rs - IPC 命令层
 
-**文件路径**：`src/commands.rs` (295 行)
+**文件路径**：`src/commands.rs` (589 行)
 
 **职责**：定义所有可从前端调用的 Tauri 命令
 
@@ -224,7 +228,7 @@ strip = true
 
 ### config.rs - 配置数据结构
 
-**文件路径**：`src/config.rs` (268 行)
+**文件路径**：`src/config.rs` (352 行)
 
 **核心数据结构**：
 
@@ -292,6 +296,7 @@ pub struct ScrcpyOptions {
     pub local_ime: bool,           // 本地输入法
     pub max_size: u32,             // 最大尺寸
     pub max_fps: u32,              // 最大帧率
+    pub bitrate: u32,              // 视频码率（Mbps，0 表示不限制）
 }
 ```
 
@@ -308,7 +313,7 @@ pub struct ScrcpyOptions {
 
 ### scrcpy.rs - Scrcpy/ADB 交互
 
-**文件路径**：`src/scrcpy.rs` (772 行)
+**文件路径**：`src/scrcpy.rs` (922 行)
 
 **核心功能**：
 
@@ -438,7 +443,7 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
 
 ### adb_sync.rs - 原生 ADB SYNC 协议
 
-**文件路径**：`src/adb_sync.rs` (117 行)
+**文件路径**：`src/adb_sync.rs` (116 行)
 
 **职责**：实现 ADB SYNC 协议，提供精准的文件传输进度反馈
 
@@ -535,7 +540,7 @@ impl AdbPusher {
 
 ### tray.rs - 系统托盘
 
-**文件路径**：`src/tray.rs` (123 行)
+**文件路径**：`src/tray.rs` (122 行)
 
 **职责**：创建系统托盘图标、菜单、事件处理
 
@@ -762,15 +767,15 @@ window.emit("adb-push-progress", serde_json::json!({
 
 | 文件 | 行数 | 职责 |
 |------|------|------|
-| `main.rs` | 67 | 应用入口、窗口事件、命令注册 |
-| `lib.rs` | 8 | 库导出声明 |
-| `commands.rs` | 295 | IPC 命令接口（25+ 命令） |
-| `config.rs` | 268 | 配置数据结构与管理 |
-| `scrcpy.rs` | 772 | Scrcpy/ADB 核心逻辑 |
-| `tray.rs` | 123 | 系统托盘实现 |
-| `adb_sync.rs` | 117 | ADB SYNC 协议实现 |
+| `main.rs` | 76 | 应用入口、窗口事件、命令注册 |
+| `lib.rs` | 7 | 库导出声明 |
+| `commands.rs` | 589 | IPC 命令接口（36 个命令） |
+| `config.rs` | 352 | 配置数据结构与管理 |
+| `scrcpy.rs` | 922 | Scrcpy/ADB 核心逻辑 |
+| `tray.rs` | 122 | 系统托盘实现 |
+| `adb_sync.rs` | 116 | ADB SYNC 协议实现 |
 
-**总行数**：~1650 行（不含注释和空行）
+**总行数**：~2184 行
 
 ---
 
@@ -798,6 +803,6 @@ window.emit("adb-push-progress", serde_json::json!({
 
 ---
 
-**最后扫描时间**：2026-01-27 00:02:27
-**文档版本**：v1.0
+**最后扫描时间**：2026-07-28 00:00:00
+**文档版本**：v2.7.2
 **作者**：AI 初始化助手

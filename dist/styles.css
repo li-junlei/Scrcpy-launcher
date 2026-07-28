@@ -16,6 +16,7 @@
     --radius: 12px;
     --radius-sm: 8px;
     --input-bg: #ffffff;
+    --hover-bg: #eef0f3;
 }
 
 :root[data-theme="dark"] {
@@ -28,6 +29,7 @@
     --primary: #6366f1;
     --primary-hover: #4f46e5;
     --input-bg: #374151;
+    --hover-bg: #374151;
 }
 
 .theme-toggle-btn {
@@ -122,6 +124,7 @@ input[type="number"],
 select,
 textarea {
     flex: 1;
+    min-width: 0;
     padding: 10px 14px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -627,6 +630,7 @@ textarea {
     max-width: 450px;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .modal-content.large {
@@ -710,19 +714,119 @@ textarea {
     gap: 8px;
     padding: 10px 12px;
     background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 13px;
-    transition: background 0.2s;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 .option-tile:hover {
-    background: #eeeeee;
+    background: var(--hover-bg);
+}
+
+/* 选中态高亮（纯 CSS，无需 JS） */
+.option-tile:has(input:checked) {
+    border-color: var(--primary);
+    background: rgba(79, 70, 229, 0.08);
 }
 
 .option-tile input {
     width: 16px;
     height: 16px;
+}
+
+/* 设置中心：分类标签栏 */
+.settings-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-tab {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.settings-tab:hover {
+    color: var(--text);
+}
+
+.settings-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 500;
+}
+
+/* 设置面板（每次只显示一个，显隐由 .hidden 控制） */
+.settings-panel {
+    min-width: 0;
+}
+
+/* 设置中心：分组卡片化（仅作用于设置弹窗，不影响其他弹窗） */
+#settings-modal .form-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+#settings-modal .form-section:last-of-type {
+    margin-bottom: 0;
+}
+
+#settings-modal .form-section h4 {
+    margin-bottom: 10px;
+}
+
+/* 数字输入：带小标签的三列网格 */
+.num-field-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.num-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.num-field label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    min-width: 0;
+}
+
+.num-field input {
+    width: 100%;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+/* ADB 快捷功能：命令分组小标题 */
+.adb-cmd-group {
+    margin-bottom: 10px;
+}
+
+.adb-cmd-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    padding-left: 2px;
 }
 
 /* 应用列表 */
@@ -902,4 +1006,10 @@ textarea {
     font-size: 12px;
     color: var(--text-secondary);
     text-align: right;
+}
+
+.quick-actions .btn {
+    flex: 1;
+    padding-left: 8px;
+    padding-right: 8px;
 }

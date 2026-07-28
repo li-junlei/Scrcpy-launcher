@@ -42,6 +42,7 @@ fn main() {
             commands::disconnect_all,
             commands::get_installed_apps,
             commands::kill_scrcpy,
+            commands::execute_adb_quick_action,
             commands::launch_mirror,
             commands::launch_audio,
             commands::launch_app,
