@@ -13,6 +13,7 @@ const { open } = window.__TAURI__.dialog;
 let config = null;
 let isSortingMode = false;
 let editingAppPackage = null;
+let sessionIconPackage = null; // 当前弹窗会话中图标实际绑定的包名 (与输入框包名解耦，保存时再迁移)
 let editingPresetName = null;
 let deletingAppPackage = null;
 let customIconsDir = null;
@@ -309,7 +310,7 @@ function setupEventListeners() {
     const appPackageInput = $('app-package');
     if (appPackageInput) {
         appPackageInput.addEventListener('input', function () {
-            updateIconPreview(this.value.trim());
+            updateIconPreview();
         });
     }
 
@@ -918,7 +919,7 @@ function openAppConfigModal(pkg = null) {
 
     $('app-config-title').textContent = isEdit ? '编辑应用' : '添加应用';
     $('app-package').value = pkg || '';
-    $('app-package').readOnly = isEdit;
+    $('app-package').readOnly = false; // 允许修改包名 (保存时统一处理图标迁移与旧配置清理)
     $('app-name').value = app.name || '';
 
 
@@ -952,8 +953,11 @@ function openAppConfigModal(pkg = null) {
     $('app-scrcpy-args').value = app.scrcpy_args || config.custom_args || '';
     toggleAppScrcpyArgs();
 
+    // 初始化会话图标包名: 编辑模式绑定原包名 (其图标已落盘), 新增模式为空
+    sessionIconPackage = pkg || null;
+
     // 更新图标预览
-    updateIconPreview(pkg || '');
+    updateIconPreview();
 
     showModal('app-config-modal');
 }
@@ -984,8 +988,11 @@ async function selectAppIcon() {
             });
             showMessage(result);
 
+            // 图标已绑定到当前包名 (保存时若包名再变更则统一迁移)
+            sessionIconPackage = pkg;
+
             // 刷新预览
-            updateIconPreview(pkg);
+            updateIconPreview();
         }
     } catch (e) {
         showMessage('选择图标失败: ' + e);
@@ -995,9 +1002,14 @@ async function selectAppIcon() {
 
 // 更新图标预览 (逻辑: 先尝试 custom，失败(onerror) 加载 database，再失败隐藏)
 // 更新图标预览
-async function updateIconPreview(pkg) {
+async function updateIconPreview() {
     const img = $('app-icon-preview');
     if (!img) return;
+
+    // 图标查找包名: 优先用会话绑定的包名 (用户选/下载图标的实际存储位置),
+    // 否则回退到输入框当前包名 (用于显示数据库默认图标)。
+    // 与输入框解耦: 改包名不会让已选/已下载的图标消失, 保存时再统一迁移。
+    const pkg = sessionIconPackage || $('app-package').value.trim();
 
     img.style.visibility = 'visible';
     img.onerror = null;
@@ -1046,10 +1058,15 @@ async function deleteCustomIcon(e) {
 
     if (!confirm('确定要恢复默认图标吗？(自定义图标将被删除)')) return;
 
+    // 删除图标实际存储位置对应的文件 (会话绑定的包名, 可能与输入框包名不同)
+    const iconPkg = sessionIconPackage || pkg;
+
     try {
-        const result = await invoke('delete_custom_icon', { package: pkg });
+        const result = await invoke('delete_custom_icon', { package: iconPkg });
         showMessage(result);
-        updateIconPreview(pkg);
+        // 清除会话图标绑定, 预览回退到数据库默认图标
+        sessionIconPackage = null;
+        updateIconPreview();
         // 刷新列表中的图标
         const listIcon = $(`app-icon-${pkg}`);
         if (listIcon) {
@@ -1123,7 +1140,14 @@ async function saveApp() {
     };
 
     try {
+        // 包名变更处理: 先迁移图标 → 存新配置 → 最后删旧配置 (任一步失败均最大化保留数据)
+        if (sessionIconPackage && sessionIconPackage !== pkg) {
+            await invoke('rename_app_icon', { oldPackage: sessionIconPackage, newPackage: pkg });
+        }
         await invoke('save_app', { package: pkg, appConfig });
+        if (editingAppPackage && editingAppPackage !== pkg) {
+            await invoke('delete_app', { package: editingAppPackage });
+        }
         await loadConfig();
         renderApps();
         hideModal('app-config-modal');
@@ -1157,7 +1181,7 @@ function handleAppNameInput() {
             item.onclick = () => {
                 input.value = app.name;
                 $('app-package').value = app.package;
-                updateIconPreview(app.package);
+                updateIconPreview();
                 suggestionsDiv.classList.add('hidden');
             };
             suggestionsDiv.appendChild(item);
@@ -1227,8 +1251,11 @@ async function selectYYBApp(packageName, appName, iconUrl) {
         }
     }
 
+    // 图标已下载并绑定到当前包名 (保存时若包名再变更则统一迁移)
+    sessionIconPackage = packageName;
+
     // 更新图标预览
-    updateIconPreview(packageName);
+    updateIconPreview();
 }
 
 // 暴露给全局 (HTML onclick)
@@ -1801,7 +1828,7 @@ function handleAppNameInput() {
             if (app.package_name) {
                 $('app-package').value = app.package_name;
             }
-            updateIconPreview(app.package_name);
+            updateIconPreview();
             suggestionsDiv.classList.add('hidden');
         };
         suggestionsDiv.appendChild(item);

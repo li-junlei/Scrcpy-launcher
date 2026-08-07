@@ -10,6 +10,10 @@
 
 ## 变更记录
 
+### 2026-07-28 (v2.7.3)
+- 新增命令 `rename_app_icon`：包名变更时迁移 `custom_icons` / `download_icons` 图标文件
+- `main.rs` invoke_handler 注册 `rename_app_icon`（命令数 36 → 37）
+
 ### 2026-07-28
 - 同步至 v2.7.2：更新各文件行数与命令数（25+ → 36）
 - `ScrcpyOptions` 新增 `bitrate`（码率，Mbps）字段
@@ -75,7 +79,7 @@ fn main() {
             }
         })
         .invoke_handler(tauri::generate_handler![
-            // 注册 36 个 IPC 命令
+            // 注册 37 个 IPC 命令
             commands::get_config,
             commands::save_config,
             commands::check_adb_status,
@@ -99,7 +103,7 @@ fn main() {
 
 ### commands.rs - IPC 命令层
 
-**文件路径**：`src/commands.rs` (589 行)
+**文件路径**：`src/commands.rs` (619 行)
 
 **职责**：定义所有可从前端调用的 Tauri 命令
 
@@ -767,15 +771,15 @@ window.emit("adb-push-progress", serde_json::json!({
 
 | 文件 | 行数 | 职责 |
 |------|------|------|
-| `main.rs` | 76 | 应用入口、窗口事件、命令注册 |
+| `main.rs` | 77 | 应用入口、窗口事件、命令注册 |
 | `lib.rs` | 7 | 库导出声明 |
-| `commands.rs` | 589 | IPC 命令接口（36 个命令） |
+| `commands.rs` | 619 | IPC 命令接口（37 个命令） |
 | `config.rs` | 352 | 配置数据结构与管理 |
 | `scrcpy.rs` | 922 | Scrcpy/ADB 核心逻辑 |
 | `tray.rs` | 122 | 系统托盘实现 |
 | `adb_sync.rs` | 116 | ADB SYNC 协议实现 |
 
-**总行数**：~2184 行
+**总行数**：~2215 行
 
 ---
 
@@ -804,5 +808,5 @@ window.emit("adb-push-progress", serde_json::json!({
 ---
 
 **最后扫描时间**：2026-07-28 00:00:00
-**文档版本**：v2.7.2
+**文档版本**：v2.7.3
 **作者**：AI 初始化助手
