@@ -234,6 +234,36 @@ pub fn delete_custom_icon(app: tauri::AppHandle, package: String) -> Result<Stri
     }
 }
 
+/// 重命名应用图标 (包名变更时迁移 custom_icons / download_icons 下的图标文件)
+#[tauri::command]
+pub fn rename_app_icon(app: tauri::AppHandle, old_package: String, new_package: String) -> Result<String, String> {
+    if old_package.is_empty() || new_package.is_empty() || old_package == new_package {
+        return Ok("包名未变化，无需迁移图标".to_string());
+    }
+
+    let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let mut migrated = 0u32;
+
+    // 同时迁移 custom_icons (用户自选) 与 download_icons (应用宝下载)
+    for dir_name in ["custom_icons", "download_icons"] {
+        let dir = app_data_dir.join(dir_name);
+        let old_path = dir.join(format!("{}.png", old_package));
+        let new_path = dir.join(format!("{}.png", new_package));
+
+        if old_path.exists() {
+            // Windows 下 std::fs::rename 若目标已存在会失败，先清除目标文件
+            if new_path.exists() {
+                let _ = std::fs::remove_file(&new_path);
+            }
+            std::fs::rename(&old_path, &new_path)
+                .map_err(|e| format!("迁移图标失败 ({}): {}", dir_name, e))?;
+            migrated += 1;
+        }
+    }
+
+    Ok(format!("已迁移 {} 个图标文件", migrated))
+}
+
 /// 获取应用图标数据 (Base64) - 解决权限/路径问题
 #[tauri::command]
 pub fn get_app_icon_data(app: tauri::AppHandle, package: String) -> Result<String, String> {
@@ -570,20 +600,13 @@ pub async fn check_for_updates() -> Result<UpdateInfo, String> {
 
 /// 比较版本号 (返回 true 如果 latest > current)
 fn compare_versions(latest: &str, current: &str) -> bool {
-    let parse_version = |v: &str| -> Vec<u32> {
-        v.split('.')
-            .filter_map(|s| s.parse::<u32>().ok())
-            .collect()
+    let parse = |v: &str| -> (u32, u32, u32) {
+        let mut parts = v.split('.').filter_map(|s| s.parse().ok());
+        (
+            parts.next().unwrap_or(0),
+            parts.next().unwrap_or(0),
+            parts.next().unwrap_or(0),
+        )
     };
-    
-    let latest_parts = parse_version(latest);
-    let current_parts = parse_version(current);
-    
-    for i in 0..3 {
-        let l = latest_parts.get(i).copied().unwrap_or(0);
-        let c = current_parts.get(i).copied().unwrap_or(0);
-        if l > c { return true; }
-        if l < c { return false; }
-    }
-    false
+    parse(latest) > parse(current)
 }
