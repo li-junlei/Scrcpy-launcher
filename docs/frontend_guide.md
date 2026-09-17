@@ -513,6 +513,9 @@ function openAppConfigModal(pkg = null) {
         $('app-landscape').checked = app.settings.is_landscape || false;
     }
 
+    // 自适应窗口开关 (旧配置条目无此字段 → undefined → false)
+    $('use-adaptive-window').checked = app.adaptive_window === true;
+
     showModal('app-config-modal');
 }
 
@@ -542,7 +545,8 @@ async function saveApp() {
     const appConfig = {
         name: $('app-name').value || pkg,
         settings: settings,
-        scrcpy_args: $('use-app-scrcpy-args').checked ? $('app-scrcpy-args').value : null
+        scrcpy_args: $('use-app-scrcpy-args').checked ? $('app-scrcpy-args').value : null,
+        adaptive_window: $('use-adaptive-window').checked
     };
 
     try {
