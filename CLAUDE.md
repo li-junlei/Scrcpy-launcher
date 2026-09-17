@@ -1,10 +1,17 @@
 # Scrcpy Launcher (Rust) - AI 辅助开发指南
 
-> 最后更新：2026-07-28 00:00:00
-> 项目版本：v2.7.3
+> 最后更新：2026-09-17 00:00:00
+> 项目版本：v2.8.0
 > 扫描覆盖率：约 90%（核心模块全覆盖，新增功能文档完善）
 
 ## 变更记录 (Changelog)
+
+### 2026-09-17 (v2.8.0)
+- 新增功能：应用流转「自适应窗口」开关：窗口可自由缩放，Android 虚拟屏幕实时跟随窗口大小（scrcpy `--flex-display`）
+- 新增配置字段：`AppConfig.adaptive_window`（bool，`#[serde(default)]`，兼容旧配置文件缺失字段，缺省 false）
+- 启动参数：初始尺寸仍按 专属分辨率 → 全局分辨率 回退；自适应参数追加时与专属启动参数去重（自定义参数已含 `--new-display` / `--flex-display` / `-x` / `--start-app` 时跳过对应追加项）
+- 升级内置 scrcpy v3.3.3 → v4.1：替换 `resources/bin` 全套文件，移除旧 SDL2.dll 与 av*-61/avutil-59/swresample-5 DLL 及 icon.png / scrcpy-console.bat，保留 adb.exe / AdbWinApi.dll / AdbWinUsbApi.dll
+- ⚠️ 上游行为变化（scrcpy v4.0 起）：普通投屏窗口拖动时默认锁定宽高比（不再出现黑边）
 
 ### 2026-07-28 (v2.7.3)
 - 修复应用流转应用保存后无法修改包名：编辑模式放开包名输入框只读限制

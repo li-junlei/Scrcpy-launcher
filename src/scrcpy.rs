@@ -589,6 +589,23 @@ fn build_args_from_options(opts: &ScrcpyOptions) -> Vec<String> {
     args
 }
 
+/// 追加应用流转显示参数。对自定义参数中已存在的 --new-display / --flex-display 去重（自定义参数优先）
+fn push_app_display_args(args: &mut Vec<String>, full_res: &str, dpi: u32, adaptive_window: bool) {
+    // --new-display 三种合法形态: --new-display=WxH/dpi、裸 --new-display、--new-display WxH/dpi（split 后即裸 flag）
+    let has_new_display = args.iter().any(|a| {
+        a == "--new-display" || a.starts_with("--new-display=")
+    });
+    if !has_new_display {
+        args.push(format!("--new-display={}/{}", full_res, dpi));
+    }
+    if adaptive_window {
+        let has_flex = args.iter().any(|a| a == "--flex-display" || a == "-x");
+        if !has_flex {
+            args.push("--flex-display".to_string());
+        }
+    }
+}
+
 /// 启动模式
 pub enum LaunchMode {
     Mirror,
@@ -667,14 +684,25 @@ pub fn launch_scrcpy(mode: LaunchMode) -> CommandResult {
             }
         }
         LaunchMode::App { package, settings, .. } => {
+            // 自适应开关从已加载的 Config 读取（不扩宽 LaunchMode，托盘/命令两条路径自动生效）
+            let adaptive_window = config.apps.get(package)
+                .map(|a| a.adaptive_window)
+                .unwrap_or(false);
             let (dpi, full_res) = if let Some(s) = settings {
                 (s.dpi, s.full_res.clone())
             } else {
+                // 专属分辨率未配置时回退全局分辨率
                 (config.global_settings.dpi, config.global_settings.full_res.clone())
             };
-            
-            args.push(format!("--new-display={}/{}", full_res, dpi));
-            args.push(format!("--start-app={}", package));
+
+            push_app_display_args(&mut args, &full_res, dpi, adaptive_window);
+            // 对自定义参数中已有的 --start-app 去重（自定义参数优先）
+            let has_start_app = args.iter().any(|a| {
+                a == "--start-app" || a.starts_with("--start-app=")
+            });
+            if !has_start_app {
+                args.push(format!("--start-app={}", package));
+            }
             args.push("--capture-orientation=0".to_string());
         }
     }
@@ -759,6 +787,47 @@ mod tests {
         assert!(args.windows(2).any(|pair| pair == ["-m", "1920"]));
         assert!(args.contains(&"--max-fps=60".to_string()));
         assert!(args.windows(2).any(|pair| pair == ["-b", "12M"]));
+    }
+
+    #[test]
+    fn test_push_app_display_args_appends_flags() {
+        let mut args = Vec::new();
+        push_app_display_args(&mut args, "1080x2400", 320, true);
+        assert!(args.contains(&"--new-display=1080x2400/320".to_string()));
+        assert!(args.contains(&"--flex-display".to_string()));
+    }
+
+    #[test]
+    fn test_push_app_display_args_without_adaptive() {
+        let mut args = Vec::new();
+        push_app_display_args(&mut args, "1080x2400", 320, false);
+        assert!(args.contains(&"--new-display=1080x2400/320".to_string()));
+        assert!(!args.contains(&"--flex-display".to_string()));
+    }
+
+    #[test]
+    fn test_push_app_display_args_dedupes_new_display_forms() {
+        // =WxH/dpi 形态
+        let mut args = vec!["--new-display=800x600/240".to_string()];
+        push_app_display_args(&mut args, "1080x2400", 320, true);
+        assert_eq!(args.iter().filter(|a| a.starts_with("--new-display")).count(), 1);
+        assert!(args.contains(&"--flex-display".to_string()));
+
+        // 裸 flag 形态（--new-display 空格传值 split 后的结果）
+        let mut args = vec!["--new-display".to_string()];
+        push_app_display_args(&mut args, "1080x2400", 320, false);
+        assert_eq!(args.iter().filter(|a| a.starts_with("--new-display")).count(), 1);
+        assert!(!args.contains(&"--flex-display".to_string()));
+    }
+
+    #[test]
+    fn test_push_app_display_args_dedupes_flex_forms() {
+        for existing in ["--flex-display", "-x"] {
+            let mut args = vec![existing.to_string()];
+            push_app_display_args(&mut args, "1080x2400", 320, true);
+            let flex_count = args.iter().filter(|a| *a == "--flex-display" || *a == "-x").count();
+            assert_eq!(flex_count, 1, "已有 {} 时不应重复追加", existing);
+        }
     }
 }
 

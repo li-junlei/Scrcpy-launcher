@@ -83,6 +83,10 @@ pub struct AppConfig {
     pub name: String,
     pub settings: Option<AppSettings>,
     pub scrcpy_args: Option<String>,
+    /// 自适应窗口: 窗口缩放时虚拟屏幕跟随窗口大小。必须带 serde(default)，
+    /// 否则旧 config.json 反序列化失败导致 Config::load() 整体回退默认配置
+    #[serde(default)]
+    pub adaptive_window: bool,
 }
 
 /// 分辨率预设
@@ -348,5 +352,29 @@ mod tests {
         assert_eq!(config.blank_screen_command, "adb shell monkey -p net.tlfoxhuman.fakeblankscreen 1");
         assert_eq!(config.stop_blank_screen_button_text, "关闭模拟黑屏");
         assert_eq!(config.stop_blank_screen_command, "adb shell am force-stop net.tlfoxhuman.fakeblankscreen");
+    }
+
+    #[test]
+    fn app_config_without_adaptive_window_defaults_false() {
+        let json = r#"{"name": "测试应用", "settings": null, "scrcpy_args": null}"#;
+        let app: AppConfig = serde_json::from_str(json).unwrap();
+        assert!(!app.adaptive_window);
+    }
+
+    #[test]
+    fn config_with_legacy_apps_still_loads() {
+        let mut value = serde_json::to_value(Config::default()).unwrap();
+        value["apps"] = serde_json::json!({
+            "com.example.app": {
+                "name": "旧格式应用",
+                "settings": null,
+                "scrcpy_args": null
+            }
+        });
+
+        let config: Config = serde_json::from_value(value).unwrap();
+        let app = config.apps.get("com.example.app").unwrap();
+        assert_eq!(app.name, "旧格式应用");
+        assert!(!app.adaptive_window);
     }
 }

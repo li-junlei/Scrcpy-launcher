@@ -270,6 +270,8 @@ pub struct AppConfig {
     pub name: String,
     pub settings: Option<AppSettings>,     // 分辨率设置
     pub scrcpy_args: Option<String>,       // 自定义 Scrcpy 参数
+    #[serde(default)]
+    pub adaptive_window: bool,             // 自适应窗口: 虚拟屏幕跟随窗口大小（--flex-display）
 }
 
 /// 应用分辨率设置

@@ -1,6 +1,6 @@
 [package]
 name = "scrcpy-launcher"
-version = "2.7.3"
+version = "2.8.0"
 description = "A GUI launcher for scrcpy"
 authors = ["LiJunlei"]
 edition = "2021"
