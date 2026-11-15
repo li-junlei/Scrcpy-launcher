@@ -1,0 +1,11 @@
+{
+  "identifier": "file-manager",
+  "description": "File manager window events",
+  "windows": [
+    "file-manager"
+  ],
+  "permissions": [
+    "core:default",
+    "core:window:allow-destroy"
+  ]
+}

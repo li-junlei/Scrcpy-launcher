@@ -34,7 +34,7 @@ fn get_resources_path() -> PathBuf {
 }
 
 /// 获取 ADB 可执行文件路径
-fn get_adb_path() -> PathBuf {
+pub(crate) fn get_adb_path() -> PathBuf {
     get_resources_path().join("bin").join("adb.exe")
 }
 

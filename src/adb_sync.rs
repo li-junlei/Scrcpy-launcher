@@ -12,6 +12,45 @@ pub struct AdbPusher {
 }
 
 impl AdbPusher {
+    /// 通过 SYNC RECV 下载单个文件，不经过命令行的路径转换。
+    pub async fn pull(&self, remote_path: &str, local_path: &Path, callback: Option<ProgressCallback>) -> Result<()> {
+        let mut stream = self.connect().await?;
+        self.send_packet(&mut stream, "sync:").await?;
+        self.read_status(&mut stream).await?;
+        stream.write_all(b"RECV").await?;
+        stream.write_u32_le(remote_path.len() as u32).await?;
+        stream.write_all(remote_path.as_bytes()).await?;
+        let mut file = tokio::fs::OpenOptions::new().write(true).create_new(true).open(local_path).await?;
+        let mut received = 0u64;
+        loop {
+            let mut id = [0; 4];
+            stream.read_exact(&mut id).await?;
+            let len = stream.read_u32_le().await? as usize;
+            if &id == b"DONE" { break; }
+            anyhow::ensure!(len <= 65536, "ADB 数据块过长");
+            let mut data = vec![0; len];
+            stream.read_exact(&mut data).await?;
+            if &id == b"FAIL" { bail!("{}", String::from_utf8_lossy(&data)); }
+            anyhow::ensure!(&id == b"DATA", "无效的下载响应");
+            file.write_all(&data).await?;
+            received += data.len() as u64;
+            if let Some(callback) = &callback { callback(received, 0); }
+        }
+        file.flush().await?;
+        Ok(())
+    }
+
+    /// 列出设备目录，SYNC 的长度字段允许文件名包含空格和换行。
+    pub async fn list(&self, path: &str) -> Result<Vec<(String, u32, u64)>> {
+        let mut stream = self.connect().await?;
+        self.send_packet(&mut stream, "sync:").await?;
+        self.read_status(&mut stream).await?;
+        stream.write_all(b"LIST").await?;
+        stream.write_u32_le(path.len() as u32).await?;
+        stream.write_all(path.as_bytes()).await?;
+        read_sync_entries(&mut stream).await
+    }
+
     pub fn new(serial: Option<String>) -> Self {
         Self { device_serial: serial }
     }
@@ -112,5 +151,72 @@ impl AdbPusher {
         }
 
         Ok(())
+    }
+}
+
+async fn read_sync_entries(
+    stream: &mut (impl tokio::io::AsyncRead + Unpin),
+) -> Result<Vec<(String, u32, u64)>> {
+    let mut entries = Vec::new();
+    loop {
+        let mut id = [0; 4];
+        stream.read_exact(&mut id).await?;
+        if &id == b"FAIL" {
+            let len = stream.read_u32_le().await? as usize;
+            anyhow::ensure!(len <= 65536, "ADB 错误响应过长");
+            let mut message = vec![0; len];
+            stream.read_exact(&mut message).await?;
+            bail!("{}", String::from_utf8_lossy(&message));
+        }
+        anyhow::ensure!(&id == b"DENT" || &id == b"DONE", "无效的目录响应");
+        let mode = stream.read_u32_le().await?;
+        let size = stream.read_u32_le().await?;
+        let _mtime = stream.read_u32_le().await?;
+        let len = stream.read_u32_le().await? as usize;
+        if &id == b"DONE" {
+            break;
+        }
+        anyhow::ensure!(len <= 65536, "文件名过长");
+        let mut name = vec![0; len];
+        stream.read_exact(&mut name).await?;
+        let name = String::from_utf8(name).context("文件名不是有效 UTF-8")?;
+        if name != "." && name != ".." {
+            entries.push((name, mode, size as u64));
+        }
+    }
+    Ok(entries)
+}
+
+#[cfg(test)]
+mod directory_tests {
+    use super::*;
+    #[tokio::test]
+    async fn list_preserves_unicode_and_newlines() {
+        let name = "文件 空格\n.txt";
+        let mut bytes = b"DENT".to_vec();
+        for value in [0o100644u32, 42, 0, name.len() as u32] {
+            bytes.extend(value.to_le_bytes());
+        }
+        bytes.extend(name.as_bytes());
+        bytes.extend(b"DONE");
+        bytes.extend([0; 16]);
+        let entries = read_sync_entries(&mut bytes.as_slice()).await.unwrap();
+        assert_eq!(entries, vec![(name.into(), 0o100644, 42)]);
+    }
+    #[tokio::test]
+    async fn list_reports_permission_errors_and_invalid_lengths() {
+        let mut bytes = b"FAIL".to_vec();
+        bytes.extend(6u32.to_le_bytes());
+        bytes.extend(b"denied");
+        assert!(read_sync_entries(&mut bytes.as_slice())
+            .await
+            .unwrap_err()
+            .to_string()
+            .contains("denied"));
+        let mut bytes = b"DENT".to_vec();
+        for value in [0u32, 0, 0, 100000] {
+            bytes.extend(value.to_le_bytes());
+        }
+        assert!(read_sync_entries(&mut bytes.as_slice()).await.is_err());
     }
 }

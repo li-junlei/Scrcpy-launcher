@@ -1,0 +1,33 @@
+body.file-manager { height: 100vh; min-height: 0; display: flex; flex-direction: column; gap: 16px; padding: 22px; overflow: hidden; }
+.file-manager header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.file-manager h1 { font-size: 23px; margin-bottom: 6px; }
+.file-manager p { color: var(--text-secondary); font-size: 13px; }
+.device-picker { display: flex; gap: 8px; align-items: center; }
+.device-picker select { max-width: 240px; }
+.panes { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.file-pane { min-width: 0; min-height: 0; border: 1px solid var(--border); background: var(--card-bg); border-radius: var(--radius); display: flex; flex-direction: column; padding: 16px; gap: 10px; }
+.file-pane h2 { font-size: 17px; }
+.path-bar { display: flex; gap: 8px; }
+.path-bar input { min-width: 0; flex: 1; font-size: 13px; padding: 8px 10px; color: var(--text); background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.file-pane nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.file-pane nav label { margin-left: auto; font-size: 13px; white-space: nowrap; }
+.file-manager input[type="checkbox"] { width: 16px; height: 16px; margin: 0; flex: 0 0 auto; accent-color: var(--primary); }
+.file-manager .btn { padding: 7px 11px; white-space: nowrap; font-size: 13px; }
+.file-list { flex: 1; min-height: 0; overflow: auto; border-top: 1px solid var(--border); }
+.file-row { display: flex; gap: 10px; align-items: center; padding: 9px 6px; border-bottom: 1px solid var(--border); }
+.file-row:has(input:checked) { background: var(--hover-bg); }
+.file-name { min-width: 0; flex: 1; overflow-wrap: anywhere; text-align: left; border: 0; color: var(--text); background: none; cursor: pointer; font: inherit; font-size: 13px; }
+.file-name:focus-visible { outline: 2px solid var(--primary); }
+.file-size { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+.file-pane footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.selection { color: var(--text-secondary); font-size: 12px; }
+.pane-status { min-height: 18px; overflow-wrap: anywhere; }
+.pane-status.error { color: var(--danger); }
+.transfer-status { flex: 0 0 auto; }
+.transfer-status progress { width: 100%; height: 9px; accent-color: var(--primary); }
+#transfer-results { max-height: 115px; overflow: auto; font-family: inherit; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 8px; user-select: text; }
+.file-manager button:disabled, .file-manager input:disabled { opacity: .5; cursor: default; }
+@media(max-width: 850px) { body.file-manager { padding: 12px; gap: 10px; } .file-manager header { align-items: flex-start; } .device-picker { flex-wrap: wrap; justify-content: flex-end; } .file-pane { padding: 10px; } .panes { gap: 10px; } }
+
+.byte-progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 5px; }
+#current-file { overflow-wrap: anywhere; margin-top: 5px; }

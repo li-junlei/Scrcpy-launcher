@@ -5,3 +5,4 @@ pub mod scrcpy;
 pub mod tray;
 pub mod commands;
 pub mod adb_sync;
+pub mod file_manager;

@@ -569,24 +569,9 @@ async function runAdbQuickAction(buttonId, command) {
 
 async function pushFile() {
     try {
-        const selected = await open({
-            multiple: false,
-            directory: false,
-        });
-
-        if (selected) {
-            setLoading('push-file-btn', true);
-            // 重置并显示进度条
-            updateProgressBar(0, '准备开始...');
-
-            // 默认推送到 /sdcard/Download/，后端已处理默认值
-            const result = await invoke('adb_push_file', { localPath: selected, remotePath: null });
-            showMessage(result.message);
-        }
-    } catch (e) {
-        showMessage(`操作失败: ${e}`);
-    } finally {
-        setLoading('push-file-btn', false);
+        await invoke('open_file_manager');
+    } catch (error) {
+        showMessage(`无法打开文件互传：${error}`);
     }
 }
 

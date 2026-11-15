@@ -4,7 +4,7 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use scrcpy_launcher_lib::{commands, tray};
+use scrcpy_launcher_lib::{commands, file_manager, tray};
 use tauri::Manager;
 
 fn main() {
@@ -28,9 +28,11 @@ fn main() {
         })
         .on_window_event(|window, event| {
             // 处理窗口关闭事件 - 最小化到托盘而不是退出
-            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                let _ = window.hide();
-                api.prevent_close();
+            if window.label() == "main" {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    let _ = window.hide();
+                    api.prevent_close();
+                }
             }
         })
         .invoke_handler(tauri::generate_handler![
@@ -60,6 +62,11 @@ fn main() {
             commands::save_first_run_config,
             commands::set_theme,
             commands::adb_push_file,
+            file_manager::open_file_manager,
+            file_manager::list_computer_files,
+            file_manager::list_phone_files,
+            file_manager::file_manager_devices,
+            file_manager::transfer_files,
             commands::pair_device,
             commands::scan_tcp_devices,
             commands::get_custom_icons_dir,

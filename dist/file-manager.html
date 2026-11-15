@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文件互传</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="file-manager.css">
+</head>
+<body class="file-manager">
+<header><div><h1>文件互传</h1><p>双击打开文件夹，勾选后传到另一侧当前目录。</p></div><div class="device-picker"><label for="device">手机设备</label><select id="device"></select><button id="devices-refresh" class="btn outline">刷新设备</button></div></header>
+<main class="panes">
+<section class="file-pane" data-side="computer" aria-label="电脑文件管理">
+<h2>电脑</h2><form class="path-bar"><input aria-label="电脑目录路径" placeholder="输入电脑目录路径"><button class="btn outline" type="submit">前往</button></form>
+<nav><button class="btn outline up">上级</button><button class="btn outline root">磁盘</button><button class="btn outline refresh">刷新</button><label><input type="checkbox" class="select-all"> 全选</label></nav>
+<p class="pane-status" role="status"></p><div class="file-list" role="group" aria-label="电脑文件列表"></div>
+<footer><span class="selection">未选择</span><button class="btn primary transfer">上传到手机 →</button></footer>
+</section>
+<section class="file-pane" data-side="phone" aria-label="手机文件管理">
+<h2>手机</h2><form class="path-bar"><input aria-label="手机目录路径" placeholder="例如 /sdcard/Download"><button class="btn outline" type="submit">前往</button></form>
+<nav><button class="btn outline up">上级</button><button class="btn outline root">根目录</button><button class="btn outline refresh">刷新</button><label><input type="checkbox" class="select-all"> 全选</label></nav>
+<p class="pane-status" role="status"></p><div class="file-list" role="group" aria-label="手机文件列表"></div>
+<footer><span class="selection">未选择</span><button class="btn primary transfer">← 下载到电脑</button></footer>
+</section>
+</main>
+<section class="transfer-status" aria-label="传输结果"><p id="transfer-message" role="status">同名目标自动跳过；文件夹递归传输。手机仅显示 ADB 有权访问的内容。</p><p id="current-file">当前文件：—</p>
+<div class="byte-progress-label"><span>单个文件 · <span id="file-speed">0 B/s</span></span><span id="file-progress-text">0%</span></div>
+<progress id="file-progress" aria-label="单个文件传输进度" max="100" value="0"></progress>
+<div class="byte-progress-label"><span>总进度 · <span id="total-speed">0 B/s</span></span><span id="total-progress-text">0%</span></div>
+<progress id="transfer-progress" aria-label="总传输进度" max="100" value="0"></progress><pre id="transfer-results" aria-live="polite"></pre></section>
+<script src="file-manager.js"></script>
+</body></html>
